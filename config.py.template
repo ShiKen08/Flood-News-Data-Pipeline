@@ -1,0 +1,94 @@
+# =============================================================================
+# config.py  ·  Flood Data Pipeline — Configuration
+# =============================================================================
+# SETUP INSTRUCTIONS:
+#   1. Copy this file:  cp config.py.template config.py
+#   2. Fill in the paths below for your local machine
+#   3. Never commit config.py to git (it's in .gitignore)
+# =============================================================================
+
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Root directories — adjust these for your local setup
+# ---------------------------------------------------------------------------
+
+# Where this repo lives on your machine
+BASE_DIR = Path(__file__).parent
+
+# Where WARC slices are cached locally (can be large — point to a disk with space)
+# Example: Path("/Volumes/external_drive/flood_cache")
+CACHE_DIR = BASE_DIR / "cache"
+
+# Where pipeline stage outputs (Parquet files) are written
+OUTPUT_DIR = BASE_DIR / "output"
+
+# Where raw CC index JSON responses are saved (Stage 02)
+RAW_INDEX_RESPONSES_DIR = BASE_DIR / "raw_index_responses"
+
+# Where log files are written
+LOGS_DIR = BASE_DIR / "logs"
+
+# Reference data
+DATA_DIR = BASE_DIR / "data"
+FLOOD_CRAWL_CSV = DATA_DIR / "flood_crawl.csv"
+
+# ---------------------------------------------------------------------------
+# Common Crawl URLs
+# ---------------------------------------------------------------------------
+CC_INDEX_URL  = "https://index.commoncrawl.org"
+CC_DATA_URL   = "https://data.commoncrawl.org"
+
+# ---------------------------------------------------------------------------
+# Crawl blocklist
+# Crawls that return HTTP 403 on all WARC requests (indexed but not yet
+# public on S3). Remove entries here once CC makes them accessible.
+# ---------------------------------------------------------------------------
+BLOCKED_CRAWLS = [
+    "CC-MAIN-2026-04",
+    "CC-MAIN-2026-08",
+]
+
+# ---------------------------------------------------------------------------
+# Pilot configuration
+# ---------------------------------------------------------------------------
+
+# The 7 flood IDs used for the Phase 1 pilot run
+PILOT_FLOOD_IDS = [1, 2, 3, 9, 12, 19, 34]
+
+# Max pointers to download per event in test/pilot mode
+PILOT_BATCH_SIZE = 100
+
+# Max pointers per event in full pilot mode (--full flag)
+BATCH_SIZE = 5000
+
+# ---------------------------------------------------------------------------
+# Download settings
+# ---------------------------------------------------------------------------
+MAX_RETRIES                  = 3
+RETRY_BACKOFF_BASE           = 2       # seconds — exponential backoff multiplier
+DOWNLOAD_SUCCESS_RATE_FLOOR  = 0.80    # pause and investigate if rate drops below this
+DOWNLOAD_INTER_REQUEST_SLEEP = 0.05    # seconds between requests (per thread)
+
+# ---------------------------------------------------------------------------
+# Stage 06 — Relevance filtering
+# ---------------------------------------------------------------------------
+RELEVANCE_FLOOD_HITS_MIN = 2   # minimum flood keyword matches to pass
+
+# ---------------------------------------------------------------------------
+# Output schemas (column order for Parquet files)
+# ---------------------------------------------------------------------------
+SCHEMA_WARC_FETCH_LOG = [
+    "pointer_id",
+    "flood_id",
+    "download_success",
+    "http_status",
+    "bytes_received",
+    "bytes_expected",
+    "bytes_match",
+    "error_type",
+    "error_message",
+    "retry_count",
+    "local_cache_path",
+    "fetched_at",
+]

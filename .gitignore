@@ -1,0 +1,54 @@
+# =============================================================================
+# Flood Pipeline — .gitignore
+# =============================================================================
+# Large pipeline data — store these in shared cloud storage, NOT git.
+# See README.md → "Shared Data Storage" for instructions.
+# =============================================================================
+
+# --- Pipeline data directories (can be GBs) ---
+cache/
+output/
+logs/
+raw_index_responses/
+
+# --- Large file types ---
+*.warc
+*.warc.gz
+*.parquet
+
+# --- Config with local paths (copy config.py.template → config.py) ---
+config.py
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- Secrets ---
+.env
+*.key
+*.pem

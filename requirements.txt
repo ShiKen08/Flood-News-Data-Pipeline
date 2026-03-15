@@ -1,0 +1,21 @@
+# Flood Pipeline — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# --- Core data ---
+pandas>=2.0.0
+pyarrow>=14.0.0          # Parquet read/write
+
+# --- HTTP / web ---
+requests>=2.31.0
+urllib3>=2.0.0
+
+# --- HTML extraction ---
+trafilatura>=1.8.0        # Primary article body extractor (Stage 05)
+beautifulsoup4>=4.12.0    # Fallback / utility parsing
+lxml>=5.0.0               # Parser backend for BS4 and trafilatura
+
+# --- Language detection ---
+langdetect>=1.0.9         # Stage 06 language detection
+
+# --- Progress / CLI ---
+tqdm>=4.66.0              # Progress bars

@@ -1,0 +1,614 @@
+# =============================================================================
+# stage_02b_query_cc_parquet.py  ·  Flood Data Pipeline — Query CC Parquet Index
+# =============================================================================
+# Drop-in alternative to stage_02_query_cc_index.py for use when
+# index.commoncrawl.org (the CDX API server) is down.
+#
+# HOW IT WORKS (different from stage_02):
+#   stage_02  → hits the CDX HTTP API at index.commoncrawl.org
+#   stage_02b → queries the columnar Parquet index hosted on data.commoncrawl.org
+#               (the same S3-backed CDN that serves WARC files — currently up)
+#               Uses DuckDB + httpfs to query remotely with predicate pushdown.
+#               DuckDB reads row-group statistics to skip most data — it does NOT
+#               download the full 250 GB of parquet files per crawl.
+#
+# EFFICIENCY NOTE:
+#   The Parquet files are sorted by url_surtkey (= SURT-form URL, sorted
+#   alphabetically by reversed domain). This means for any given registered
+#   domain the relevant rows are clustered in a small number of row groups.
+#   DuckDB skips all other row groups automatically via min/max statistics.
+#   Expect ~1–5 MB of actual data transferred per domain per crawl file,
+#   not the full 800 MB per file.
+#
+# OUTPUT:
+#   Identical schema to stage_02. Downstream stages (03, 04, 05, 06) are
+#   unaffected — just point them at the same cc_index_hits.parquet.
+#
+#   output/cc_index_hits.parquet       (same schema as stage_02)
+#   output/hit_count_summary.parquet   (same schema as stage_02)
+#   raw_index_responses/parquet_{crawl_id}_{flood_id}.jsonl   (raw saves)
+#   logs/stage_02b_query_cc_parquet.log
+#
+# DEPENDENCIES:
+#   pip install duckdb pandas pyarrow
+#   (boto3 NOT required — file listing uses CC's published HTTP manifest)
+#
+# Run:
+#   python stage_02b_query_cc_parquet.py              # pilot events only
+#   python stage_02b_query_cc_parquet.py --all        # Phase 2 full run
+#   python stage_02b_query_cc_parquet.py --flood-id 3 # single event debug
+#   python stage_02b_query_cc_parquet.py --crawl CC-MAIN-2024-46  # one crawl only
+#
+# SWITCHING BACK:
+#   To return to stage_02 once index.commoncrawl.org recovers:
+#     1. Delete raw_index_responses/   (or just let stage_02 overwrite)
+#     2. Run python stage_02_query_cc_index.py as normal
+#   The cc_index_hits.parquet schema is identical so nothing else changes.
+# =============================================================================
+
+import argparse
+import importlib.util
+import json
+import logging
+import sys
+import time
+import uuid
+from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Force-load local config.py (same pattern as stage_02)
+# ---------------------------------------------------------------------------
+_config_path = Path(__file__).parent / "config.py"
+_spec = importlib.util.spec_from_file_location("config", _config_path)
+_config = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_config)
+sys.modules["config"] = _config
+
+import pandas as pd
+from config import (
+    FLOOD_CSV,
+    LOGS_DIR,
+    OUTPUT_DIR,
+    PILOT_FLOOD_IDS,
+    RAW_INDEX_DIR,
+    SOURCE_DOMAIN_LIST,
+)
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler(LOGS_DIR / "stage_02b_query_cc_parquet.log", mode="a"),
+    ],
+)
+log = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+# Columnar Parquet index manifest — published per crawl by CC, lists all parquet file paths.
+# Different from cc-index.paths.gz (which lists CDX .gz files).
+CC_HTTPS_BASE     = "https://data.commoncrawl.org"
+CC_PARQUET_BATCH  = 50    # DuckDB files per read_parquet call — balance memory vs round-trips
+
+OPEN_WEB_FALLBACK_DOMAINS = [   # used when no country domain list exists (same as stage_02)
+    "reliefweb.int",
+    "floodlist.com",
+    "ifrc.org",
+    "unocha.org",
+    "preventionweb.net",
+    "gdacs.org",
+]
+
+# Parquet column → output column mapping
+# (columnar index schema: commoncrawl.org/blog/index-to-warc-files-and-urls-in-columnar-format)
+PARQUET_COL_MAP = {
+    "url":                      "url",
+    "fetch_time":               "timestamp",    # ISO string e.g. "2024-11-15T12:34:56Z"
+    "fetch_status":             "status",
+    "content_mime_type":        "mime",
+    "warc_filename":            "filename",
+    "warc_offset":              "offset",
+    "warc_length":              "length",
+    "content_digest":           "digest",
+    "url_host_registered_domain": "_domain_key",  # used for matching, then dropped
+}
+
+
+# =============================================================================
+# DuckDB setup — HTTPS only, no S3 credentials needed
+# =============================================================================
+
+def get_duckdb_conn():
+    """
+    DuckDB with httpfs for reading parquet files via HTTPS URLs.
+    DuckDB reads files as plain HTTPS GET requests to data.commoncrawl.org,
+    which is publicly accessible. File listing is handled separately via the
+    cc-index-table.paths.gz manifest (plain HTTP fetch).
+    """
+    try:
+        import duckdb
+    except ImportError:
+        log.error("duckdb not installed. Run:  pip install duckdb")
+        sys.exit(1)
+
+    con = duckdb.connect()
+    con.execute("INSTALL httpfs;")
+    con.execute("LOAD httpfs;")
+    return con
+
+
+# =============================================================================
+# File listing — CC published manifest (cc-index-table.paths.gz)
+# =============================================================================
+
+def list_parquet_files(crawl_id: str) -> list[str]:
+    """
+    Get the list of columnar Parquet files for a crawl using CC's published
+    cc-index-table.paths.gz manifest (distinct from cc-index.paths.gz which
+    lists CDX files — this one lists the columnar Parquet files).
+
+    URL: https://data.commoncrawl.org/crawl-data/{crawl_id}/cc-index-table.paths.gz
+
+    Returns list of HTTPS URLs for use with DuckDB httpfs.
+    Caches locally to avoid re-fetching on reruns.
+    """
+    import gzip
+    from urllib.request import urlopen
+    from urllib.error import URLError
+
+    # Check local cache first
+    cache_path = RAW_INDEX_DIR / f"_parquet_paths_{crawl_id.replace('-','_')}.txt"
+    if cache_path.exists():
+        paths = [p for p in cache_path.read_text().splitlines() if p.strip()]
+        if paths:
+            log.info(f"  Using cached file list: {len(paths)} files for {crawl_id}")
+            return paths
+
+    manifest_url = f"{CC_HTTPS_BASE}/crawl-data/{crawl_id}/cc-index-table.paths.gz"
+    log.info(f"  Fetching columnar index manifest: {manifest_url}")
+
+    try:
+        with urlopen(manifest_url, timeout=60) as resp:
+            raw = resp.read()
+    except URLError as e:
+        log.error(f"  Failed to fetch manifest for {crawl_id}: {e}")
+        log.error("  Check that the crawl ID is correct and data.commoncrawl.org is reachable.")
+        return []
+
+    try:
+        lines = gzip.decompress(raw).decode("utf-8").splitlines()
+    except Exception as e:
+        log.error(f"  Failed to decompress manifest: {e}")
+        return []
+
+    # Lines are relative S3 keys. Filter to subset=warc only —
+    # the manifest also includes crawldiagnostics and robotstxt subsets
+    # which return 403 and have a different schema.
+    https_urls = [
+        f"{CC_HTTPS_BASE}/{line.strip()}"
+        for line in lines
+        if "/subset=warc/" in line and line.strip().endswith(".parquet")
+    ]
+
+    if not https_urls:
+        log.warning(f"  No parquet files found in manifest for {crawl_id}")
+        log.warning("  cc-index-table.paths.gz exists but contained no .parquet entries.")
+        log.warning("  This crawl may not have a columnar index (available from ~2018 onwards).")
+        return []
+
+    log.info(f"  Found {len(https_urls)} parquet files for {crawl_id} (subset=warc)")
+    cache_path.write_text("\n".join(https_urls))
+    time.sleep(1.0)   # brief pause — fetching multiple manifests back-to-back triggers 403
+    return https_urls
+
+
+# =============================================================================
+# Core query — DuckDB reads HTTPS URLs (no S3 credentials required)
+# =============================================================================
+
+def query_parquet_for_crawl(
+    con,
+    crawl_id: str,
+    domains: list[str],
+    from_ts: str,
+    to_ts: str,
+) -> list[dict]:
+    """
+    Query the columnar Parquet index for a crawl.
+
+    File listing:  cc-index-table.paths.gz manifest (plain HTTPS fetch from data.commoncrawl.org)
+    File reading:  DuckDB httpfs   → GET https://data.commoncrawl.org/{key}
+                                     (public GetObject, no auth required)
+
+    DuckDB reads parquet footers first, then uses row-group min/max statistics
+    on url_host_registered_domain (which is sorted) to skip irrelevant row groups.
+    Typical download: a few MB per domain, not the full index.
+
+    from_ts / to_ts: ISO 8601 strings e.g. "2024-10-22T00:00:00+00:00"
+    """
+    if not domains:
+        return []
+
+    # Get file list (cached after first call per crawl)
+    https_files = list_parquet_files(crawl_id)
+    if not https_files:
+        return []
+
+    domain_list_sql = ", ".join(f"'{d}'" for d in domains)
+    all_results: list[dict] = []
+    total_batches = (len(https_files) + CC_PARQUET_BATCH - 1) // CC_PARQUET_BATCH
+
+    for batch_num, batch_start in enumerate(range(0, len(https_files), CC_PARQUET_BATCH), 1):
+        batch = https_files[batch_start : batch_start + CC_PARQUET_BATCH]
+        files_sql = "[" + ", ".join(f"'{u}'" for u in batch) + "]"
+
+        query = f"""
+            SELECT
+                url,
+                fetch_time::VARCHAR            AS timestamp,
+                fetch_status::VARCHAR          AS status,
+                content_mime_type              AS mime,
+                warc_filename                  AS filename,
+                warc_record_offset::BIGINT     AS offset,
+                warc_record_length::BIGINT     AS length,
+                content_digest                 AS digest,
+                url_host_registered_domain     AS _domain_key
+            FROM read_parquet({files_sql}, hive_partitioning=false, union_by_name=true)
+            WHERE
+                url_host_registered_domain IN ({domain_list_sql})
+                AND fetch_status = 200
+                AND content_mime_type = 'text/html'
+                AND fetch_time >= TIMESTAMPTZ '{from_ts}'
+                AND fetch_time <= TIMESTAMPTZ '{to_ts}'
+        """
+
+        try:
+            log.info(f"    Batch {batch_num}/{total_batches} ({len(batch)} files)...")
+            t0 = time.time()
+            result_df = con.execute(query).df()
+            elapsed = time.time() - t0
+            log.info(f"      → {len(result_df)} hits in {elapsed:.1f}s")
+            all_results.extend(result_df.to_dict(orient="records"))
+        except Exception as e:
+            log.warning(f"    Batch {batch_num} failed: {e}")
+            log.warning(f"    First file in batch: {batch[0].split('/')[-1]}")
+
+    return all_results
+
+
+# =============================================================================
+# Domain list helpers (same logic as stage_02)
+# =============================================================================
+
+def load_domain_list() -> dict:
+    if not SOURCE_DOMAIN_LIST.exists():
+        log.warning("source_domain_list.json not found — open-web fallback will be used for all events")
+        return {}
+    with open(SOURCE_DOMAIN_LIST) as f:
+        return json.load(f)
+
+
+def get_domains_for_iso(iso: str, domain_list: dict, strategy: str) -> list[str]:
+    """Return domains to query for a given ISO code and retrieval strategy."""
+    if "restricted" in strategy:
+        entry = domain_list.get(iso.upper(), {})
+        domains = (
+            entry.get("news_domains", []) +
+            entry.get("gov_domains",  []) +
+            entry.get("org_domains",  [])
+        )
+        if domains:
+            return domains
+        log.warning(f"  No domains for ISO={iso} — using open-web fallback")
+    return OPEN_WEB_FALLBACK_DOMAINS
+
+
+def build_flood_iso_map() -> dict[int, str]:
+    """flood_id → ISO code, built from flood_crawl.csv."""
+    df = pd.read_csv(FLOOD_CSV)
+    return dict(zip(df["Flood_ID"].astype(int), df["ISO"].astype(str)))
+
+
+# =============================================================================
+# Save raw results (mirrors stage_02's raw JSONL saves)
+# =============================================================================
+
+def save_raw_hits(hits: list[dict], flood_id: int, crawl_id: str) -> None:
+    """Save raw hit rows as JSONL — same purpose as stage_02's raw_response saves."""
+    safe_crawl = crawl_id.replace("-", "_")
+    path = RAW_INDEX_DIR / f"parquet_{flood_id}_{safe_crawl}.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        for hit in hits:
+            f.write(json.dumps(hit, default=str) + "\n")
+
+
+# =============================================================================
+# Per-crawl orchestration
+# =============================================================================
+
+def process_crawl(
+    crawl_id:     str,
+    crawl_specs:  pd.DataFrame,      # specs rows for this crawl only
+    domain_list:  dict,
+    flood_iso_map: dict[int, str],
+    con,                             # DuckDB connection
+) -> list[dict]:
+    """
+    For one crawl, query the parquet index for all relevant domains across
+    all events in crawl_specs. Returns list of enriched hit dicts ready for
+    cc_index_hits.parquet.
+
+    Strategy:
+      1. Collect all domains needed by all specs for this crawl
+      2. Determine the broadest time window spanning all events (min→max)
+      3. Query parquet files in batches with DuckDB
+      4. Match each raw hit back to the correct flood_id(s) + query_id(s)
+         by checking domain membership AND timestamp window overlap
+    """
+    log.info(f"  Processing crawl {crawl_id} — {len(crawl_specs)} specs, "
+             f"{crawl_specs['flood_id'].nunique()} events")
+
+    # ------------------------------------------------------------------
+    # Build domain → list of (flood_id, query_id, window_start, window_end) map
+    # ------------------------------------------------------------------
+    domain_to_events: dict[str, list[dict]] = defaultdict(list)
+
+    for _, spec in crawl_specs.iterrows():
+        flood_id = int(spec["flood_id"])
+        iso      = flood_iso_map.get(flood_id, "")
+        strategy = spec.get("retrieval_strategy", "restricted")
+        domains  = get_domains_for_iso(iso, domain_list, strategy)
+
+        for domain in domains:
+            domain_to_events[domain].append({
+                "flood_id":     flood_id,
+                "query_id":     spec["query_id"],
+                "window_start": spec["window_start"],  # ISO string
+                "window_end":   spec["window_end"],
+                "strategy":     strategy,
+            })
+
+    all_query_domains = list(domain_to_events.keys())
+    log.info(f"    Total unique domains to query: {len(all_query_domains)}")
+
+    if not all_query_domains:
+        log.warning(f"    No domains resolved for crawl {crawl_id} — skipping")
+        return []
+
+    # ------------------------------------------------------------------
+    # Compute broad time window (min start → max end across all events)
+    # ------------------------------------------------------------------
+    all_windows = [
+        (spec["window_start"], spec["window_end"])
+        for _, spec in crawl_specs.iterrows()
+    ]
+    global_from = min(w[0] for w in all_windows)
+    global_to   = max(w[1] for w in all_windows)
+    log.info(f"    Broad window: {global_from[:10]} → {global_to[:10]}")
+
+    # ------------------------------------------------------------------
+    # Query via DuckDB S3 glob — one call covers all parquet files for the crawl
+    # ------------------------------------------------------------------
+    raw_hits_all = query_parquet_for_crawl(
+        con        = con,
+        crawl_id   = crawl_id,
+        domains    = all_query_domains,
+        from_ts    = global_from,
+        to_ts      = global_to,
+    )
+    log.info(f"    Total raw hits for {crawl_id}: {len(raw_hits_all)}")
+
+    # ------------------------------------------------------------------
+    # Match raw hits → (flood_id, query_id) records
+    # ------------------------------------------------------------------
+    enriched: list[dict] = []
+    fetched_at = datetime.now(timezone.utc).isoformat()
+
+    for hit in raw_hits_all:
+        domain_key = hit.get("_domain_key", "")
+        hit_ts     = str(hit.get("timestamp", ""))  # ISO string
+
+        matched_events = domain_to_events.get(domain_key, [])
+
+        for event in matched_events:
+            # Check timestamp within this specific event's window
+            if event["window_start"] <= hit_ts <= event["window_end"]:
+                enriched.append({
+                    "hit_id":             str(uuid.uuid4()),
+                    "flood_id":           event["flood_id"],
+                    "query_id":           event["query_id"],
+                    "crawl_id":           crawl_id,
+                    "url":                str(hit.get("url", "")),
+                    "timestamp":          hit_ts,
+                    "status":             str(hit.get("status", "")),
+                    "mime":               str(hit.get("mime", "")),
+                    "filename":           str(hit.get("filename", "")),
+                    "offset":             hit.get("offset", 0),
+                    "length":             hit.get("length", 0),
+                    "digest":             str(hit.get("digest", "")),
+                    "domain":             domain_key,
+                    "retrieval_strategy": event["strategy"],
+                    "fetched_at":         fetched_at,
+                })
+
+    log.info(f"    Enriched hits (after event matching): {len(enriched)}")
+
+    # Save raw for audit trail
+    for flood_id in crawl_specs["flood_id"].unique():
+        flood_hits = [h for h in enriched if h["flood_id"] == int(flood_id)]
+        if flood_hits:
+            save_raw_hits(flood_hits, int(flood_id), crawl_id)
+
+    return enriched
+
+
+# =============================================================================
+# Spot-check summary (identical to stage_02)
+# =============================================================================
+
+def print_hit_summary(hits_df: pd.DataFrame) -> None:
+    log.info("--- Spot-check: hit counts per event / variant ---")
+    if hits_df.empty:
+        log.warning("No hits at all — investigate before proceeding to Stage 3")
+        return
+
+    hits_df = hits_df.copy()
+    hits_df["variant"] = hits_df["query_id"].str.extract(r"_([A-D])$")
+
+    summary = (
+        hits_df.groupby(["flood_id", "variant", "crawl_id"])
+        .size()
+        .reset_index(name="hit_count")
+        .sort_values(["flood_id", "variant"])
+    )
+
+    for _, row in summary.iterrows():
+        log.info(
+            f"  Flood #{int(row['flood_id']):>3}  variant={row.get('variant','?')}  "
+            f"crawl={row['crawl_id']}  hits={row['hit_count']}"
+        )
+
+    total_per_event = hits_df.groupby("flood_id").size()
+    zero_hit = [fid for fid, cnt in total_per_event.items() if cnt == 0]
+    if zero_hit:
+        log.warning(f"Zero-hit events (investigate before Stage 3): {zero_hit}")
+    else:
+        log.info("All events have at least 1 hit ✓")
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Stage 02b — Query CC columnar Parquet index (CDX server bypass)"
+    )
+    parser.add_argument("--all",      action="store_true", help="Process all events (Phase 2)")
+    parser.add_argument("--flood-id", type=int,            help="Single flood_id debug")
+    parser.add_argument("--crawl",    type=str,            help="Restrict to one crawl_id only")
+    args = parser.parse_args()
+
+    log.info("=" * 70)
+    log.info("STAGE 02b — QUERY CC COLUMNAR PARQUET INDEX (CDX bypass)")
+    log.info("  data.commoncrawl.org  →  DuckDB httpfs  →  cc_index_hits.parquet")
+    mode = f"flood_id={args.flood_id}" if args.flood_id else ("ALL" if args.all else "PILOT")
+    log.info(f"Mode: {mode}")
+    log.info("=" * 70)
+
+    # ------------------------------------------------------------------
+    # Load inputs
+    # ------------------------------------------------------------------
+    specs_path = OUTPUT_DIR / "event_query_specs.parquet"
+    if not specs_path.exists():
+        log.error("event_query_specs.parquet not found — run stage_01 first")
+        sys.exit(1)
+
+    specs_df    = pd.read_parquet(specs_path)
+    domain_list = load_domain_list()
+    flood_iso_map = build_flood_iso_map()
+
+    # ------------------------------------------------------------------
+    # Filter to events to process
+    # ------------------------------------------------------------------
+    if args.flood_id:
+        specs_df = specs_df[specs_df["flood_id"] == args.flood_id]
+    elif not args.all:
+        specs_df = specs_df[specs_df["flood_id"].isin(PILOT_FLOOD_IDS)]
+
+    if args.crawl:
+        specs_df = specs_df[specs_df["crawl_id"] == args.crawl]
+
+    if specs_df.empty:
+        log.error("No matching specs after filtering — nothing to do")
+        sys.exit(1)
+
+    log.info(f"Specs to process : {len(specs_df)} rows")
+    log.info(f"Events           : {sorted(specs_df['flood_id'].unique().tolist())}")
+    log.info(f"Crawls           : {sorted(specs_df['crawl_id'].unique().tolist())}")
+
+    # ------------------------------------------------------------------
+    # Set up DuckDB connection (shared across all crawl queries)
+    # ------------------------------------------------------------------
+    log.info("Initialising DuckDB + httpfs...")
+    con = get_duckdb_conn()
+    log.info("DuckDB ready ✓")
+
+    # ------------------------------------------------------------------
+    # Process per crawl — one DuckDB query batch per crawl
+    # ------------------------------------------------------------------
+    all_hits: list[dict] = []
+
+    for crawl_id, crawl_specs in specs_df.groupby("crawl_id"):
+        log.info(f"\n{'─' * 60}")
+        log.info(f"Crawl: {crawl_id}  ({len(crawl_specs)} specs)")
+        t0 = time.time()
+
+        crawl_hits = process_crawl(
+            crawl_id      = crawl_id,
+            crawl_specs   = crawl_specs,
+            domain_list   = domain_list,
+            flood_iso_map = flood_iso_map,
+            con           = con,
+        )
+        all_hits.extend(crawl_hits)
+        elapsed = time.time() - t0
+        log.info(f"  Crawl {crawl_id} done — {len(crawl_hits)} hits in {elapsed:.0f}s")
+
+    con.close()
+
+    # ------------------------------------------------------------------
+    # Assemble and save outputs (identical schema to stage_02)
+    # ------------------------------------------------------------------
+    if not all_hits:
+        log.error("No hits collected across all crawls.")
+        log.error("Possible causes:")
+        log.error("  • Crawl doesn't cover the event time windows")
+        log.error("  • Domains in source_domain_list not present in CC for these crawls")
+        log.error("  • S3 glob path wrong or crawl not yet in columnar index (pre-2018 crawls)")
+        sys.exit(1)
+
+    hits_df = pd.DataFrame(all_hits)
+
+    hits_df["flood_id"] = hits_df["flood_id"].astype(int)
+    hits_df["offset"]   = pd.to_numeric(hits_df["offset"], errors="coerce")
+    hits_df["length"]   = pd.to_numeric(hits_df["length"], errors="coerce")
+
+    hits_path = OUTPUT_DIR / "cc_index_hits.parquet"
+    hits_df.to_parquet(hits_path, index=False)
+    log.info(f"\nSaved cc_index_hits → {hits_path}  ({len(hits_df)} rows)")
+
+    hits_df["variant"] = hits_df["query_id"].str.extract(r"_([A-D])$")
+    summary_df = (
+        hits_df.groupby(["flood_id", "query_id", "variant", "crawl_id"])
+        .size()
+        .reset_index(name="hit_count")
+    )
+    summary_path = OUTPUT_DIR / "hit_count_summary.parquet"
+    summary_df.to_parquet(summary_path, index=False)
+    log.info(f"Saved hit_count_summary → {summary_path}")
+
+    # ------------------------------------------------------------------
+    # Spot-check + final summary
+    # ------------------------------------------------------------------
+    print_hit_summary(hits_df)
+
+    log.info("=" * 70)
+    log.info(f"Total hits collected  : {len(hits_df)}")
+    log.info(f"Unique events         : {hits_df['flood_id'].nunique()}")
+    log.info(f"Unique URLs           : {hits_df['url'].nunique()}")
+    log.info(f"Raw responses saved to: {RAW_INDEX_DIR}/parquet_*.jsonl")
+    log.info("Next: run stage_03_validate_pointers.py")
+    log.info("=" * 70)
+
+
+if __name__ == "__main__":
+    main()

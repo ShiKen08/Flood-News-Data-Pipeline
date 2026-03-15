@@ -1,0 +1,6282 @@
+{
+  "1": [
+    {
+      "name": "syrian arab republic",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "syria",
+        "syrian republic"
+      ]
+    },
+    {
+      "name": "syria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "syrian republic",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "idleb",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lattaquié",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hama",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "2": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "greater jakarta area and the indramayu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "greater jakarta area and the indramayu regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "3": [
+    {
+      "name": "colombia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cordoba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sucre",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cauca",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la guajira",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chocó",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and antioquia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "narino",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "departments",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "4": [
+    {
+      "name": "tunisia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "laghouat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "blida",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "djelfa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mascara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "el bayadh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "boumerdes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tunis",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ariana",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "manouba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ben arous",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bizerte",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nabeul",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sousse",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "monastir",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mahdia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sfax",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "béja",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jendouba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and kef",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "5": [
+    {
+      "name": "algeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "laghouat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "blida",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "djelfa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mascara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "el bayadh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "boumerdes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "relizane",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chlef",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "alger",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiaret",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tissemsilt",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "médéa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tipaza",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and aïn defla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and aïn defla provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "6": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sitaro islands",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sitaro islands regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sumbawa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "north sulawesi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "north sulawesi province"
+      ]
+    },
+    {
+      "name": "and halmahera island",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "7": [
+    {
+      "name": "afghanistan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "herat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "badghis",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and faryab",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and faryab provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "8": [
+    {
+      "name": "zimbabwe",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "masvingo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "manicaland",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "midlands",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and mashonaland east",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and mashonaland east provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "9": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "santa barbara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "santa barbara county"
+      ]
+    },
+    {
+      "name": "ventura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ventura county"
+      ]
+    },
+    {
+      "name": "los angeles",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "los angeles county",
+        "la county"
+      ]
+    },
+    {
+      "name": "and san bernardino counties",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "10": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west nusa tenggara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "north sulawesi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "north sulawesi province"
+      ]
+    },
+    {
+      "name": "north sumatra",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and east java",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and east java provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "11": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sampang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jember regencies",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "banyuwangi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "banjar regencies",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "12": [
+    {
+      "name": "iran (islamic republic of)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "iran",
+        "persia",
+        "islamic republic of iran"
+      ]
+    },
+    {
+      "name": "iran",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "persia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "islamic republic of iran",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ardabil",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "azarbayejan sharghi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "east azerbaijan",
+        "east azarbaijan"
+      ]
+    },
+    {
+      "name": "bushehr",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chaharmahal and bakhtiari",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "esfahan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "isfahan"
+      ]
+    },
+    {
+      "name": "fars",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ghom",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "golestan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hamedan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hormozgan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kerman",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khorasan jonoubi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khorasan razavi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "razavi khorasan"
+      ]
+    },
+    {
+      "name": "khorasan shomali",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khuzestan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kohgiluyeh va boyerahma",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kohgiluyeh and boyer-ahmad"
+      ]
+    },
+    {
+      "name": "kurdistan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "markazi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mazandaran",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "semnan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sistan-o baluchestan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "sistan and baluchestan",
+        "sistan-baluchestan"
+      ]
+    },
+    {
+      "name": "yazd",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zanjan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "13": [
+    {
+      "name": "morocco",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "safi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "safi province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tinghir",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tinghir province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "14": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "terengganu and pahang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "15": [
+    {
+      "name": "bolivia (plurinational state of)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "bolivia"
+      ]
+    },
+    {
+      "name": "bolivia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "el torno",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la guardia and cotoca municipalities",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "beni",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cochabamba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "16": [
+    {
+      "name": "iraq",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ninawa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sulaymaniyah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "erbil",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and kirkuk",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and kirkuk governorates",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "17": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sabah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "sabah state"
+      ]
+    },
+    {
+      "name": "sarawak kelantan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "perlis",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "perak",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "selangor",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kedah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "penang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "terengganu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "trengganu"
+      ]
+    },
+    {
+      "name": "and pahang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and pahang states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "18": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phra nakhon si ayutthaya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ayutthaya"
+      ]
+    },
+    {
+      "name": "phra nakhon si ayutthaya province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tha din daeng subdistrict in bangkok",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chaiya and kathu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chaiya and kathu districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hitsanulok",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nakhon sawan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "uthai thani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sing buri",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chainat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ang thong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "suphan buri",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pathum thani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nonthaburi and nakhon pathom",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nonthaburi and nakhon pathom provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "surat thani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nakhon si thammarat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "nakhon si thammarat province"
+      ]
+    },
+    {
+      "name": "trang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phatthalung",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "satun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "songkhla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pattani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "yala",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "narathiwat prachuap khiri khan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chumphon",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "krabi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "19": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kinshasa capital",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kinshasa capital city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "20": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nduga",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nduga district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "21": [
+    {
+      "name": "costa rica",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "alajuela",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cartago",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cuajiniquil",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "santa cruz veintisiete de abril",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "santa cruz",
+      "level": "subnational",
+      "ambiguous": true,
+      "aliases": []
+    },
+    {
+      "name": "tempate",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tamarindo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nosara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nicoya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sierpe de osa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puerto jiménez",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bahía drake",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "corredor",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "corredores",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "guaycará",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "golfito",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jacó",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "garabito",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "22": [
+    {
+      "name": "honduras",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "francisco morazán",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la paz",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "intibucá",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and lempira",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and lempira departments",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "23": [
+    {
+      "name": "mexico",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "veracruz",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puebla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hidalgo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "san luis potosí",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and querétaro",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and querétaro states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "24": [
+    {
+      "name": "nepal",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ilam",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ilam district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jhapa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jhapa district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "25": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "darjeeling",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bihar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bihar states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "26": [
+    {
+      "name": "bulgaria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "elenite",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "27": [
+    {
+      "name": "cambodia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mondulkiri and ratanakiri",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mondulkiri and ratanakiri provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "28": [
+    {
+      "name": "ukraine",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "odesa city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "29": [
+    {
+      "name": "georgia",
+      "level": "country",
+      "ambiguous": true,
+      "aliases": []
+    },
+    {
+      "name": "lagodekhi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "30": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ayutthaya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phichit",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and phetchabun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "31": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "central papua and east java",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "32": [
+    {
+      "name": "haiti",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chansolme",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "port-de-paix",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "port-de-paix communes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "33": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dehradun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "champawat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "haridwar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pauri garhwal",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bageshwar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pithoragarh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nainital",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and udham singh nagar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and udham singh nagar districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "34": [
+    {
+      "name": "gambia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "north bank",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "north bank region",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "35": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sarawak and sabah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sarawak and sabah states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "36": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gianyar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "karangasem",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jembrana",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tabanan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "klungkung",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and badung",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "with denpasar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "flores",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "37": [
+    {
+      "name": "sierra leone",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bonthe",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kenema",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "moyamba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kono",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "falaba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and koinadugu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "38": [
+    {
+      "name": "gambia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west coast",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west coast region",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lower river",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lower river regions",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and kanifing",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and kanifing municipality",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "39": [
+    {
+      "name": "sudan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "river nile",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sennar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sennar states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "40": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kalehe territory",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "41": [
+    {
+      "name": "uganda",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bulambuli",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sironko",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mbale districts and mbale city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "42": [
+    {
+      "name": "china",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ordos",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ordos city"
+      ]
+    },
+    {
+      "name": "bayannnur city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "43": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "punjab",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "punjab state",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "44": [
+    {
+      "name": "pakistan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bunner",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bhattagram",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bajur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and swat districts gilgit-baltistan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sindh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "azad jammu and kashmir",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ajk",
+        "azad kashmir"
+      ]
+    },
+    {
+      "name": "azad jammu and kashmir provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "45": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kishtwar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "46": [
+    {
+      "name": "republic of korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "south korea",
+        "korea"
+      ]
+    },
+    {
+      "name": "south korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "incheon",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gimpo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and pocheon cities",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "seoul",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "47": [
+    {
+      "name": "central african republic",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "moyenne sido",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "48": [
+    {
+      "name": "cabo verde",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "são vicente and santo antão islands",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "49": [
+    {
+      "name": "china",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "yuzhong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "yuzhong county"
+      ]
+    },
+    {
+      "name": "yuzhong county",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "50": [
+    {
+      "name": "japan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kagoshima",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kagoshima prefecture"
+      ]
+    },
+    {
+      "name": "toyama",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "akita",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ishikawa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ishikawa prefecture"
+      ]
+    },
+    {
+      "name": "kumamoto",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kumamoto prefecture"
+      ]
+    },
+    {
+      "name": "fukuoaka",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "fukuoaka prefectures",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "51": [
+    {
+      "name": "myanmar",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "laiza",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "laiza city"
+      ]
+    }
+  ],
+  "52": [
+    {
+      "name": "equatorial guinea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "malabo and luba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "53": [
+    {
+      "name": "taiwan (province of china)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "taiwan"
+      ]
+    },
+    {
+      "name": "taiwan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "54": [
+    {
+      "name": "romania",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "suceava",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "suceava county"
+      ]
+    },
+    {
+      "name": "neamt counties",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "55": [
+    {
+      "name": "nigeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "yola",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "yola city"
+      ]
+    }
+  ],
+  "56": [
+    {
+      "name": "china",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "yanqing",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "beijing",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hebei",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "hopei"
+      ]
+    },
+    {
+      "name": "hebei province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "shanxi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "shansi"
+      ]
+    },
+    {
+      "name": "shanxi province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "shandong province.",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "57": [
+    {
+      "name": "china, hong kong special administrative region",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "hong kong",
+        "hksar"
+      ]
+    },
+    {
+      "name": "hong kong",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hksar",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "58": [
+    {
+      "name": "lao people's democratic republic",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "laos",
+        "lao pdr",
+        "lao"
+      ]
+    },
+    {
+      "name": "laos",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lao pdr",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lao",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "vientiane",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bolikhamxay",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "luang prabang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "xayaboury",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "xieng khouang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "huaphan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "xaysomboun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khammouane",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and bokeo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "59": [
+    {
+      "name": "republic of korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "south korea",
+        "korea"
+      ]
+    },
+    {
+      "name": "south korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "korea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "south chungcheong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "naju",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gwangju",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kwangju"
+      ]
+    },
+    {
+      "name": "seoul",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "honseong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and gyeonggi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and gyeonggi provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "60": [
+    {
+      "name": "mexico",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la martinica",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "61": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "new york",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "middlesex",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "union",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and somerset",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "washington dc",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "petersburg",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maryland",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "for lancaster",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "for lancaster county",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "62": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ruidoso",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "63": [
+    {
+      "name": "bangladesh",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "feni",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cumilla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "banderban",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lakshmipur and barishal",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "64": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bogor",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west java and east jakarta",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "65": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kerr",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kerr county",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "66": [
+    {
+      "name": "afghanistan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maidan wardak and logar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maidan wardak and logar provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "67": [
+    {
+      "name": "pakistan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khyber pakhtunkhwa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kpk",
+        "nwfp"
+      ]
+    },
+    {
+      "name": "punjab",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "azad jammu and kashmir",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ajk",
+        "azad kashmir"
+      ]
+    },
+    {
+      "name": "sindh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and balochistan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "68": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "himachal pradesh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "hp"
+      ]
+    },
+    {
+      "name": "uttarakhand",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "uttaranchal"
+      ]
+    }
+  ],
+  "69": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ngaliema",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ngaliema commune"
+      ]
+    },
+    {
+      "name": "masina",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lemba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "matete",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "matete communes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "70": [
+    {
+      "name": "south africa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "eastern cape and kwazulu-natal",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "eastern cape and kwazulu-natal provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "71": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "san antonio",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "72": [
+    {
+      "name": "viet nam",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "vietnam",
+        "viet-nam"
+      ]
+    },
+    {
+      "name": "vietnam",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "viet-nam",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lai châu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hà giang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and lào cai",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "73": [
+    {
+      "name": "philippines",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zamboanga peninsula region and luzon islands",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "74": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "assam",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "arunachal pradesh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mizoram",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "manipur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sikkim",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "meghalaya nagaland",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tripura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "meghalaya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "meghalaya states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "75": [
+    {
+      "name": "nigeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mokwa city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "76": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "77": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "arfak mountains",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "arfak mountains regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "78": [
+    {
+      "name": "bangladesh",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sylhet",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sunamganj",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "moulvibazar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "netrokona",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "khagrachari",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "habiganj",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "noakhali",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bhola",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bandarban",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and rangamati.",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "79": [
+    {
+      "name": "united republic of tanzania",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "tanzania"
+      ]
+    },
+    {
+      "name": "tanzania",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kyela",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kyela district"
+      ]
+    },
+    {
+      "name": "rungwe",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and ileje",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and ileje districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "80": [
+    {
+      "name": "algeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "laghouat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiaret",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "djelfa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "m'sila",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "81": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nakhon sawan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phichit",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phitsanulok",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phetchabun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kalasin",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "amnat charoen",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nakhon ratchasima",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and sa kaeo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and sa kaeo provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "82": [
+    {
+      "name": "somalia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kahda and daynile",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kahda and daynile districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mogadiscio",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "mogadishu",
+        "mogadiscio"
+      ]
+    },
+    {
+      "name": "balcad and jowhar in hirshabelle",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "balcad and jowhar in hirshabelle state",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and gaalkacyo in mudug region and afgooye",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puntland",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "puntland state"
+      ]
+    },
+    {
+      "name": "puntland state",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "83": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kasaba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kasaba territory"
+      ]
+    }
+  ],
+  "84": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lampung",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lampung province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "85": [
+    {
+      "name": "somalia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puntland and south west",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puntland and south west states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jowhar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jowhar district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "middle shabelle",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "middle shabelle region",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "86": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tanganyika",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tanganyika province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "tanganyika"
+      ]
+    }
+  ],
+  "87": [
+    {
+      "name": "democratic republic of the congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "drc",
+        "dr congo",
+        "congo-kinshasa",
+        "zaire",
+        "rd congo",
+        "republique democratique du congo",
+        "rdc"
+      ]
+    },
+    {
+      "name": "drc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dr congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "congo-kinshasa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "zaire",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rd congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "republique democratique du congo",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rdc",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kinshasa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "kinshasa capital city",
+        "kinshasa city"
+      ]
+    },
+    {
+      "name": "kinshasa capital city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "88": [
+    {
+      "name": "brazil",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "petrópolis",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "petropolis"
+      ]
+    },
+    {
+      "name": "angra dos reis",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "são paulo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "sao paulo"
+      ]
+    },
+    {
+      "name": "rio de janeiro",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "rio"
+      ]
+    }
+  ],
+  "89": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sulawesi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "celebes"
+      ]
+    },
+    {
+      "name": "north sumatra",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "north maluku and east java",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "90": [
+    {
+      "name": "croatia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "dubrovnik",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "dubrovnik city"
+      ]
+    },
+    {
+      "name": "dubrovnik city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "91": [
+    {
+      "name": "bosnia and herzegovina",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "bosnia",
+        "bih"
+      ]
+    },
+    {
+      "name": "bosnia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bih",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "prijedor and sanski",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "92": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "johor bahru",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kulai",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pontian",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kota tinggi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kluang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "batu pahat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and iskandar puteri",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sabah and sarawak",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sabah and sarawak states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "93": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "madiun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "madiun regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west java",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "94": [
+    {
+      "name": "italy",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "florence",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "firenze"
+      ]
+    },
+    {
+      "name": "prato",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "prato city"
+      ]
+    },
+    {
+      "name": "pisa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and livorno",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "emilia-romagna",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "emilia romagna"
+      ]
+    }
+  ],
+  "95": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tenom",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "beaufort",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "membakut",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and soo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "96": [
+    {
+      "name": "iraq",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "anbar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "diyala",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "erbil",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "qadisiyah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "thi-qar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "97": [
+    {
+      "name": "argentina",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bahia blanca",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "bahía blanca"
+      ]
+    },
+    {
+      "name": "bahia blanca city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "98": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bogor",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bogor regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukabumi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukabumi regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "banten",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jakarta",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west java",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "south kalimantan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west sumatra",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "west sumatra provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "99": [
+    {
+      "name": "peru",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "amazonas",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "áncash",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "apurímac",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "arequipa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ayacucho",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cusco",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "huancavelica",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "huánuco",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ica",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "junín",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la libertad",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lima",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "moquegua",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pasco",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "piura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tacna",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tumbes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and ucayali",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and ucayali provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "100": [
+    {
+      "name": "namibia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kunene",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "omusati",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "oshana",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ohangwena",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and zambezi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and zambezi regions",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "101": [
+    {
+      "name": "afghanistan",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "farah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "farah region",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pushtkoh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pushtkoh district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kandahar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kandahar province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "helmand",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "helmand province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "102": [
+    {
+      "name": "botswana",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gaborone",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gaborone city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kgatleng",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ghanzi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tlokweng",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "francistown",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kweneng",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and boteti",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "103": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pahang and negeri sembilan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pahang and negeri sembilan states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "104": [
+    {
+      "name": "peru",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiquillaca",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiquillaca district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "105": [
+    {
+      "name": "madagascar",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "analamanga",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "analamanga region"
+      ]
+    },
+    {
+      "name": "analamanga region",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "106": [
+    {
+      "name": "madagascar",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "antananarivo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "antananarivo city"
+      ]
+    },
+    {
+      "name": "antananarivo city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "107": [
+    {
+      "name": "philippines",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mimaropa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "eastern visayas",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and bicol",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and bicol regions",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "108": [
+    {
+      "name": "bolivia (plurinational state of)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "bolivia"
+      ]
+    },
+    {
+      "name": "bolivia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chuquisaca",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la paz",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tarija",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cochabamba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "santa cruz and potosí",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "109": [
+    {
+      "name": "malaysia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sabah and sarawak",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sabah and sarawak states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "110": [
+    {
+      "name": "brazil",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "carapicuíba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "carapicuiba"
+      ]
+    }
+  ],
+  "111": [
+    {
+      "name": "haiti",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "grand'anse",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "grande anse",
+        "grand anse"
+      ]
+    },
+    {
+      "name": "nippes and north-west",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nippes and north-west departments",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "112": [
+    {
+      "name": "libya",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tarhuna city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bani walid city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bani walid",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bani walid district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gharyan city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jabal al gharbi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jabal al gharbi district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "qasr akhyar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ain zara",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "113": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukabumi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukabumi regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "114": [
+    {
+      "name": "kenya",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "115": [
+    {
+      "name": "haiti",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "grand-anse department and the south",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "grand-anse department and the south department",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "116": [
+    {
+      "name": "malawi",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "117": [
+    {
+      "name": "gabon",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mouila",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "port-gentil",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tchibanga and grand libreville",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "118": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chumphon",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phatthalung",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ranong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "satun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "surat thani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nakhon si thammarat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "nakhon si thammarat province"
+      ]
+    },
+    {
+      "name": "songkhla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pattani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "narathiwat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and yala",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and yala provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "119": [
+    {
+      "name": "united republic of tanzania",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "tanzania"
+      ]
+    },
+    {
+      "name": "tanzania",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tarime",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tarime district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "120": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "karo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "south tapanuli",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "padang lawas and deli serdang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "padang lawas and deli serdang districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "121": [
+    {
+      "name": "bolivia (plurinational state of)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "bolivia"
+      ]
+    },
+    {
+      "name": "bolivia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la paz capital",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la paz capital city area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "122": [
+    {
+      "name": "spain",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "álora",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "alora"
+      ]
+    },
+    {
+      "name": "cártama",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "alhaurín de la torre",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pizarra municipalities and malaga city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "catalonia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "catalonia province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "123": [
+    {
+      "name": "costa rica",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "guanacaste",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puntarenas",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "124": [
+    {
+      "name": "dominican republic",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "duarte",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "el seibo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "espaillat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "hato mayor",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "la altagracia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maria trinidad sanches",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "puerto plata",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "samanà",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "125": [
+    {
+      "name": "haiti",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "les cayes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "torbeck",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "saint-louis-du-sud",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maniche and port-salut municipalities",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "126": [
+    {
+      "name": "spain",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "alaquàs",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "albal",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "aldaya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "alfafar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "algemesí",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "benerússer",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "catarroja",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "llocnou de la corona",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "massanassa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "paiporta",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "picanya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sedaví",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "utiel and la torre municipalties",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "letur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lbacete",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lbacete provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "castilla-la mancha communities",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "andalusia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "murcia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and the balearic islands",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "catalonia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "127": [
+    {
+      "name": "south africa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "eastern cape",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "eastern cape province",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "128": [
+    {
+      "name": "united states of america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "usa",
+        "united states",
+        "us",
+        "america"
+      ]
+    },
+    {
+      "name": "usa",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "united states",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "us",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "america",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "roswell",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "129": [
+    {
+      "name": "france",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rhône",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "rhone"
+      ]
+    },
+    {
+      "name": "loire",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "haute-loire",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "haute loire"
+      ]
+    },
+    {
+      "name": "lozère",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ardèche",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "ardeche"
+      ]
+    },
+    {
+      "name": "alpes-maritimes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "alpes maritimes"
+      ]
+    },
+    {
+      "name": "paris area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "130": [
+    {
+      "name": "bangladesh",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sherpur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sherpur district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "131": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "meghalaya",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "132": [
+    {
+      "name": "bosnia and herzegovina",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "bosnia",
+        "bih"
+      ]
+    },
+    {
+      "name": "bosnia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bih",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "donja jablanica",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "jablanica"
+      ]
+    },
+    {
+      "name": "konjic",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "buturovic polje",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "fojnica",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kiseljak and kreševo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "133": [
+    {
+      "name": "iran (islamic republic of)",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": [
+        "iran",
+        "persia",
+        "islamic republic of iran"
+      ]
+    },
+    {
+      "name": "iran",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "persia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "islamic republic of iran",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "jiroft",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "134": [
+    {
+      "name": "nepal",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kathmandu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kavrepalanchowk",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lalitpur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bagmati",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gandak",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "135": [
+    {
+      "name": "sierra leone",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bumbuna dam in bumbuna town",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bonthe",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bombali",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "falaba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kambia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "moyamba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "port loko",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "pujehun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and the western area",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and the western area districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "136": [
+    {
+      "name": "nigeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maiduguri",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "maiduguri city"
+      ]
+    }
+  ],
+  "137": [
+    {
+      "name": "morocco",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tata",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiznit",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "errachidia",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tinghir and taroudant",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tinghir and taroudant provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "138": [
+    {
+      "name": "algeria",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "béchar",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "elbayadh",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "beni abbes",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tamanrasset",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiaret",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tindouf",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and naama",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "139": [
+    {
+      "name": "yemen",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "al-mahwit",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "mahwit",
+        "al mahwit"
+      ]
+    },
+    {
+      "name": "al-mahwit governorate",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "140": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "gujarat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maharashtra",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tripura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tripura states",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "141": [
+    {
+      "name": "indonesia",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ternate",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ternate regency",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "143": [
+    {
+      "name": "bangladesh",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lakshmipur",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "cumilla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "feni",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and noakhali",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and noakhali districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "144": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tripura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tripura state",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "146": [
+    {
+      "name": "thailand",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phetchabun",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chiang rai",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chiang mai",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nan",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phayao",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lampang",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phrae",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "udon thani",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "rayong",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "phuket",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukhothai and prae",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sukhothai and prae provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "147": [
+    {
+      "name": "china",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ridi village",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "148": [
+    {
+      "name": "cameroon",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "logone et chari and the mayo-danay divisions",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "149": [
+    {
+      "name": "chad",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "batha",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "batha region"
+      ]
+    },
+    {
+      "name": "chari-baguirmi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "chari baguirmi"
+      ]
+    },
+    {
+      "name": "logone oriental",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "logone oriental region"
+      ]
+    },
+    {
+      "name": "mayo-kebbi ouest",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sila",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "logone occidental",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "n'djamena city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lake",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kanem",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tibesti",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "lac",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mayo-kebbi est",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mandoul",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tandjilé",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "batah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "guera",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "salamat",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ennedi west",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "borkou",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ennedi east",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "150": [
+    {
+      "name": "india",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "mandi",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kullu",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "shimla",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "shimla districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "151": [
+    {
+      "name": "guinea",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "btn",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "bolibana",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sigurikoura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "nankoda",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kokomo",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "heremakonon",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "chinese city",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "tiguibiry",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "konoba",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "abatoire",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "setceur tp",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "téléladji",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ors1",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and mandé",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "and mandé districts",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kintinian",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "kinièbakoura",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "niandankoro sub-prefectures",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ],
+  "152": [
+    {
+      "name": "yemen",
+      "level": "country",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "maqbanah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "maqbanah district"
+      ]
+    },
+    {
+      "name": "maqbanah district",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sadaa",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "sadaa provinces",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "al hudaydah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": [
+        "hudaydah",
+        "hodeidah"
+      ]
+    },
+    {
+      "name": "al hajjah",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ma'rib",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    },
+    {
+      "name": "ma'rib governorates",
+      "level": "subnational",
+      "ambiguous": false,
+      "aliases": []
+    }
+  ]
+}
