@@ -525,7 +525,7 @@ def save_rejects(new_rejects: pd.DataFrame) -> None:
         existing        = existing[~existing["flood_id"].isin(current_ids)]
         new_rejects     = pd.concat([existing, new_rejects], ignore_index=True)
     new_rejects.to_parquet(path, index=False)
-    log.info(f"Saved rejects → {path}  ({len(new_rejects)} total rows)")
+    log.info(f"Saved rejects -> {path}  ({len(new_rejects)} total rows)")
 
 
 # =============================================================================
@@ -711,7 +711,7 @@ def main():
         # ------------------------------------------------------------------
         out_path = OUTPUT_DIR / "clean_text.parquet"
         clean_df.to_parquet(out_path, index=False)
-        log.info(f"Saved clean_text → {out_path}  ({len(clean_df)} rows)")
+        log.info(f"Saved clean_text -> {out_path}  ({len(clean_df)} rows)")
 
         save_rejects(all_rejects)
         clear_checkpoint()

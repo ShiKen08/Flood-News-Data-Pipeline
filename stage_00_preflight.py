@@ -197,7 +197,7 @@ def run_crawl_lag_check(df: pd.DataFrame, crawls: list[dict]) -> pd.DataFrame:
 
     out_path = OUTPUT_DIR / "crawl_coverage.parquet"
     coverage_df.to_parquet(out_path, index=False)
-    log.info(f"Saved crawl_coverage → {out_path}")
+    log.info(f"Saved crawl_coverage -> {out_path}")
     return coverage_df
 
 
@@ -254,7 +254,7 @@ def run_language_assignments(df: pd.DataFrame) -> pd.DataFrame:
 
     out_path = OUTPUT_DIR / "language_assignments.parquet"
     lang_df.to_parquet(out_path, index=False)
-    log.info(f"Saved language_assignments → {out_path}")
+    log.info(f"Saved language_assignments -> {out_path}")
     return lang_df
 
 
@@ -291,7 +291,7 @@ AMBIGUOUS_LOCATION_NAMES = {
     "congo",      # DRC AND Republic of Congo
 }
 
-# ── Full alias map — canonical lowercase → known alternate spellings ──────────
+# ── Full alias map — canonical lowercase -> known alternate spellings ──────────
 # Covers all pilot events + common variants. Extend after pilot review.
 KNOWN_ALIASES: dict[str, list[str]] = {
     # Countries
@@ -468,7 +468,7 @@ def build_location_dictionary(df: pd.DataFrame) -> pd.DataFrame:
     loc_df   = pd.DataFrame(records)
     out_path = OUTPUT_DIR / "location_dictionary.parquet"
     loc_df.to_parquet(out_path, index=False)
-    log.info(f"Saved location_dictionary → {out_path}  ({len(loc_df)} location rows)")
+    log.info(f"Saved location_dictionary -> {out_path}  ({len(loc_df)} location rows)")
     return loc_df
 
 

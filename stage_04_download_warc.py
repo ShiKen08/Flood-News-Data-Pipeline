@@ -22,9 +22,9 @@
 #   ┌─────────────────────────────────────────────────────┐
 #   │  Phase 1 — PRIMARY PASS (PRIMARY_TIMEOUT = 30s)     │
 #   │  50 coroutines pull from primary_queue in parallel  │
-#   │  ├─ Success / permanent failure → record result     │
-#   │  ├─ Timeout → push to deferred_queue (not a failure)│
-#   │  └─ 403/503 burst → pause all workers briefly       │
+#   │  ├─ Success / permanent failure -> record result     │
+#   │  ├─ Timeout -> push to deferred_queue (not a failure)│
+#   │  └─ 403/503 burst -> pause all workers briefly       │
 #   ├─────────────────────────────────────────────────────┤
 #   │  Phase 2 — DEFERRED PASS (DEFERRED_TIMEOUT = 300s)  │
 #   │  Runs only after Phase 1 fully drains               │
@@ -386,11 +386,11 @@ async def download_one(
     Download one WARC pointer with retry on transient failures.
 
     Decision tree after each attempt:
-        success          → return result immediately
-        404              → permanent failure, no retry
-        Timeout          → return immediately (no inline retry; caller defers)
-        403/503          → exponential backoff + retry up to MAX_RETRIES
-        other error      → exponential backoff + retry up to MAX_RETRIES
+        success          -> return result immediately
+        404              -> permanent failure, no retry
+        Timeout          -> return immediately (no inline retry; caller defers)
+        403/503          -> exponential backoff + retry up to MAX_RETRIES
+        other error      -> exponential backoff + retry up to MAX_RETRIES
 
     The semaphore slot is held ONLY during the actual HTTP request, not during
     sleeps — other coroutines can use the slot while we wait.
@@ -435,7 +435,7 @@ async def download_one(
         last_result = result
         if result["download_success"]:
             # Small polite delay after each success. asyncio.sleep(0) was triggering
-            # CC's silent throttle (~2100 req burst → hung connections, not 403s).
+            # CC's silent throttle (~2100 req burst -> hung connections, not 403s).
             # 0.2s with 50 coroutines = ~25 req/s sustained, which CC tolerates.
             await asyncio.sleep(INTER_REQUEST_SLEEP)
             return result
@@ -688,7 +688,7 @@ async def run_batch(
                     deferred_rows.append(row)
                     n_deferred += 1
                     consec_timeout += 1
-                    log.debug(f"  → Deferred {row['pointer_id']} (timeout streak={consec_timeout})")
+                    log.debug(f"  -> Deferred {row['pointer_id']} (timeout streak={consec_timeout})")
                     await _maybe_pause_timeout_burst()
                 else:
                     consec_timeout = 0
@@ -952,7 +952,7 @@ def main():
     # ------------------------------------------------------------------
     combined = save_fetch_log(all_results, existing_logs, fetch_log_path)
     n_saved  = len(combined) if combined is not None else 0
-    log.info(f"\nSaved warc_fetch_log → {fetch_log_path}  ({n_saved} total rows)")
+    log.info(f"\nSaved warc_fetch_log -> {fetch_log_path}  ({n_saved} total rows)")
 
     # Overall stats
     total        = len(all_results)

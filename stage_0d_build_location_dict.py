@@ -109,7 +109,7 @@ AMBIGUOUS_NAMES = {
 }
 
 # ── Alias map ──────────────────────────────────────────────────────────────────
-# Maps canonical lowercase name → list of known alternate spellings.
+# Maps canonical lowercase name -> list of known alternate spellings.
 # Seeded for all countries + high-priority subnational names in the dataset.
 # EXTEND THIS as pilot documents surface new spellings.
 ALIAS_MAP = {
@@ -383,7 +383,7 @@ def print_summary(location_dict: dict):
     for fid in pilot_ids:
         entries = location_dict.get(fid, [])
         names   = [e['name'] for e in entries]
-        print(f"  #{fid:>3}  {len(entries):>3} entries  →  {names[:5]}{'...' if len(names) > 5 else ''}")
+        print(f"  #{fid:>3}  {len(entries):>3} entries  ->  {names[:5]}{'...' if len(names) > 5 else ''}")
     print()
 
 
@@ -406,4 +406,4 @@ if __name__ == "__main__":
     with open(args.out, 'w', encoding='utf-8') as f:
         json.dump(out_data, f, ensure_ascii=False, indent=2)
 
-    print(f"Saved → {args.out}")
+    print(f"Saved -> {args.out}")
