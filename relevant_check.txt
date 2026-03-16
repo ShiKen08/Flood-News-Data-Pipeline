@@ -1,0 +1,18 @@
+python3 -c "
+import pandas as pd
+df = pd.read_parquet('output/clean_text.parquet')
+
+# Change flood_id to whichever event you want
+fid = 127  
+relevant = df[(df['flood_id'] == fid) & (df['is_relevant'] == True)]
+relevant_sorted = relevant.sort_values('flood_term_hits', ascending=False)
+
+print(f'Flood #{fid} — {len(relevant_sorted)} relevant docs')
+print()
+for _, row in relevant_sorted.head(5).iterrows():
+    print(f'flood_hits={row[\"flood_term_hits\"]}  loc_hits={row[\"location_term_hits\"]}')
+    print(f'title: {row[\"page_title\"]}')
+    print(f'url:   {row.get(\"url\", \"N/A\")}')
+    print(f'text:  {row[\"clean_text\"][:300]}')
+    print()
+"
