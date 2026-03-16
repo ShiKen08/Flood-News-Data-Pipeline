@@ -56,6 +56,8 @@ import uuid
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Force-load local config.py (same pattern as stage_02)

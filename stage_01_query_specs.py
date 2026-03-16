@@ -30,6 +30,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 sys.path.insert(0, str(Path(__file__).parent))
 from config import (

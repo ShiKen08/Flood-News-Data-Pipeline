@@ -46,6 +46,8 @@ from pathlib import Path
 import chardet
 import pandas as pd
 from bs4 import BeautifulSoup
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 try:
     from tqdm import tqdm

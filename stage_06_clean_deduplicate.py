@@ -48,6 +48,8 @@ import uuid
 from pathlib import Path
 
 import pandas as pd
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 try:
     import langid

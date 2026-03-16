@@ -30,6 +30,8 @@ from pathlib import Path
 
 import pandas as pd
 import requests
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Bootstrap — make sure config.py is importable when running from any cwd

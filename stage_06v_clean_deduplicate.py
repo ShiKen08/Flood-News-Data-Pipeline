@@ -59,6 +59,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Language detection — langid (stateless, no deadlock, ~1k docs/s per thread)

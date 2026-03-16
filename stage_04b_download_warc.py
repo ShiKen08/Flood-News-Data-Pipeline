@@ -48,6 +48,8 @@ import pandas as pd
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Force-load local config.py

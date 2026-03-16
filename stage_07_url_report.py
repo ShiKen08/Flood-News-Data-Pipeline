@@ -37,7 +37,8 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 # ---------------------------------------------------------------------------
 # Force-load local config.py
 # ---------------------------------------------------------------------------

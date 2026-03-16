@@ -66,6 +66,8 @@ from pathlib import Path
 
 import aiohttp
 import pandas as pd
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Force-load local config.py (works regardless of cwd)

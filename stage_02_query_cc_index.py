@@ -41,6 +41,8 @@ from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ---------------------------------------------------------------------------
 # Force-load local config.py

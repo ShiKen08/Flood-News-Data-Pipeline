@@ -14,6 +14,8 @@ import json
 import re
 import argparse
 from pathlib import Path
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Country-level names ────────────────────────────────────────────────────────
 # Built from the Country column of all 150 rows.
