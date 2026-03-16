@@ -602,7 +602,7 @@ def main():
             pd.DataFrame(reject_rows).to_parquet(ckpt_reject_path, index=False)
         import json as _json
         ckpt_progress_path.write_text(_json.dumps({"last_doc_id": str(last_doc_id), "clean": len(clean_rows), "rejected": len(reject_rows)}))
-        log.info(f"  ✓ Checkpoint saved — clean={len(clean_rows)}  rejected={len(reject_rows)}  last_doc_id={last_doc_id}")
+        log.info(f"  [OK] Checkpoint saved — clean={len(clean_rows)}  rejected={len(reject_rows)}  last_doc_id={last_doc_id}")
 
     def clear_checkpoint():
         for p in (ckpt_clean_path, ckpt_reject_path, ckpt_progress_path):

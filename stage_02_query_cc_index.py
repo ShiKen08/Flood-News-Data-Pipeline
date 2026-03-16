@@ -441,7 +441,7 @@ def print_hit_summary(hits_df: pd.DataFrame) -> None:
     if zero_hit:
         log.warning(f"Zero-hit events — investigate before Stage 3: {zero_hit}")
     else:
-        log.info("All events have at least 1 hit ✓")
+        log.info("All events have at least 1 hit [OK]")
 
     return summary
 

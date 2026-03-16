@@ -531,7 +531,7 @@ def run_batch(
         if completed % CHECKPOINT_EVERY == 0:
             save_fetch_log(all_results, existing_logs, fetch_log_path, schema)
             log.info(
-                f"  ✓ Checkpoint at {completed}/{n_pointers}  "
+                f"  [OK] Checkpoint at {completed}/{n_pointers}  "
                 f"workers={throttle.workers}  deferred={n_deferred}"
             )
 
@@ -816,7 +816,7 @@ def main():
     if success_rate < DOWNLOAD_SUCCESS_RATE_FLOOR:
         log.warning(f"⚠ Overall success rate {success_rate:.1%} below {DOWNLOAD_SUCCESS_RATE_FLOOR:.0%} floor")
     else:
-        log.info(f"Success rate {success_rate:.1%} ✓")
+        log.info(f"Success rate {success_rate:.1%} [OK]")
     log.info("Next: run stage_05_extract_text.py")
     log.info("=" * 70)
 

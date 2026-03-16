@@ -561,7 +561,7 @@ async def run_batch(
         # Checkpoint flush
         if completed % CHECKPOINT_EVERY == 0:
             save_fetch_log(all_results, existing_logs, fetch_log_path)
-            log.info(f"  ✓ Checkpoint: {completed}/{n_total} complete, {n_deferred} deferred")
+            log.info(f"  [OK] Checkpoint: {completed}/{n_total} complete, {n_deferred} deferred")
 
         # Progress line every 100 completions
         if completed % 100 == 0 or completed == n_total:
@@ -765,7 +765,7 @@ async def run_batch(
                 return_exceptions=True,
             )
         elif not deferred_rows:
-            log.info(f"  [{label}] Phase 2 — no deferred items ✓")
+            log.info(f"  [{label}] Phase 2 — no deferred items [OK]")
 
     return results
 
@@ -976,7 +976,7 @@ def main():
             f"{DOWNLOAD_SUCCESS_RATE_FLOOR:.0%} floor — investigate before stage_05"
         )
     else:
-        log.info(f"✓ Success rate {success_rate:.1%} is above the floor")
+        log.info(f"[OK] Success rate {success_rate:.1%} is above the floor")
     log.info("Next: python stage_05_extract_text.py")
     log.info("=" * 70)
 
