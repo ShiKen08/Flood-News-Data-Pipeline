@@ -594,6 +594,7 @@ async def run_batch(
         Only one coroutine should do this at a time; others will just wait on
         rate_limit_evt.wait() in download_one().
         """
+        nonlocal consec_rl
         if consec_rl >= RATE_LIMIT_THRESHOLD and rate_limit_evt.is_set():
             rate_limit_evt.clear()
             log.warning(
@@ -602,7 +603,9 @@ async def run_batch(
             )
             save_fetch_log(all_results, existing_logs, fetch_log_path)
             await asyncio.sleep(RATE_LIMIT_PAUSE)
+            consec_rl = 0
             log.info("  ↑ Resuming after rate-limit pause")
+            rate_limit_evt.set()   # BUG FIX: was missing — all coroutines deadlocked here
 
     async def _maybe_pause_timeout_burst():
         """
@@ -630,9 +633,13 @@ async def run_batch(
         limit=CONCURRENT_DOWNLOADS,        # one connection per coroutine — no pool surplus
         ttl_dns_cache=300,                 # cache DNS for 5 minutes
         enable_cleanup_closed=True,
-        force_close=True,                  # never reuse connections — prevents hung CC
-                                           # connections from staying in pool and blocking
-                                           # the next request before wait_for even starts
+        keepalive_timeout=30,              # PERF FIX: was force_close=True which forced a full
+                                           # TCP+TLS handshake (~150-300ms) on every single request.
+                                           # keepalive_timeout=30 reuses connections that are still
+                                           # alive but expires idle ones promptly so stale CC
+                                           # connections don't linger in the pool. sock_read=35
+                                           # in session_timeout is the backstop for any per-request
+                                           # hang — no need to pay the handshake cost on every req.
     )
     session_timeout = aiohttp.ClientTimeout(
         total=None,         # we control overall timeout via asyncio.wait_for
@@ -704,12 +711,20 @@ async def run_batch(
 
         async def _watchdog():
             nonlocal consec_timeout
+            # BUG FIX: stall_ticks accumulates across iterations so the elapsed
+            # stall time is stall_ticks * WATCHDOG_INTERVAL. The old code set
+            # stall_s = WATCHDOG_INTERVAL on every iteration (always 5), so
+            # 5 >= WATCHDOG_STALL_SECS (40) was permanently False — watchdog
+            # never fired regardless of how long the pipeline was stuck.
+            stall_ticks = 0
             await asyncio.sleep(WATCHDOG_INTERVAL)
             while not primary_q.empty() or primary_q._unfinished_tasks > 0:
                 await asyncio.sleep(WATCHDOG_INTERVAL)
                 if completed == _last_completed[0] and completed < n_total:
-                    stall_s = WATCHDOG_INTERVAL
+                    stall_ticks += 1
+                    stall_s = stall_ticks * WATCHDOG_INTERVAL
                     if stall_s >= WATCHDOG_STALL_SECS and rate_limit_evt.is_set():
+                        stall_ticks = 0
                         rate_limit_evt.clear()
                         log.warning(
                             f"  ⏱ Watchdog: no progress for {stall_s}s — "
@@ -721,6 +736,8 @@ async def run_batch(
                         consec_timeout = 0
                         log.info("  ↑ Watchdog: resuming after stall pause")
                         rate_limit_evt.set()
+                else:
+                    stall_ticks = 0   # progress seen — reset streak
                 _last_completed[0] = completed
 
         await asyncio.gather(

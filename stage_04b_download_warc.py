@@ -206,11 +206,20 @@ class AdaptiveThrottle:
 # Cache helpers
 # =============================================================================
 
+# Directories created this session — avoids a blocking mkdir syscall on every
+# cache_path_for() call. is_cached() is called once per row at startup across
+# potentially tens of thousands of rows; without this, mkdir fires for every
+# single one even though the directory already exists after the first call.
+_CREATED_DIRS: set = set()
+
+
 def cache_path_for(flood_id: int, pointer_id: str) -> Path:
     """Returns the local cache path for a WARC slice."""
-    flood_dir = CACHE_DIR / str(flood_id)
-    flood_dir.mkdir(parents=True, exist_ok=True)
-    return flood_dir / f"{pointer_id}.warc.gz"
+    if flood_id not in _CREATED_DIRS:
+        flood_dir = CACHE_DIR / str(flood_id)
+        flood_dir.mkdir(parents=True, exist_ok=True)
+        _CREATED_DIRS.add(flood_id)
+    return CACHE_DIR / str(flood_id) / f"{pointer_id}.warc.gz"
 
 
 def is_cached(flood_id: int, pointer_id: str, expected_length: int = 0) -> bool:
@@ -371,7 +380,9 @@ def _download_attempt(row: pd.Series, attempt: int, timeout: tuple = DOWNLOAD_TI
             log.debug(f"  Non-response WARC type={warc_type} for {pointer_id}")
 
         cache_file.write_bytes(warc_data)
-        time.sleep(DOWNLOAD_INTER_REQUEST_SLEEP)
+        # NOTE: the polite inter-request sleep was here previously, but that held
+        # the throttle slot during the sleep — see download_warc_slice for the
+        # corrected placement (sleep runs after throttle.release()).
 
         return _build_result(pointer_id, flood_id, cache_file, length,
                               http_status, bytes_received, bytes_match, attempt,
@@ -410,7 +421,10 @@ def download_warc_slice(row: pd.Series, throttle: "AdaptiveThrottle", timeout: t
                               200, length, True, 0)
 
     last_result = None
-    for attempt in range(MAX_RETRIES):
+    # BUG FIX: was range(MAX_RETRIES) which gives MAX_RETRIES total attempts
+    # (e.g. 0,1,2 for MAX_RETRIES=3). Should be range(MAX_RETRIES + 1) to match
+    # stage_04 and give MAX_RETRIES+1 total attempts (0,1,2,3).
+    for attempt in range(MAX_RETRIES + 1):
         throttle.acquire()
         try:
             result = _download_attempt(row, attempt, timeout=timeout)
@@ -420,6 +434,12 @@ def download_warc_slice(row: pd.Series, throttle: "AdaptiveThrottle", timeout: t
         last_result = result
 
         if result["download_success"]:
+            # BUG FIX: polite inter-request sleep moved here — AFTER throttle.release().
+            # Previously this sleep was inside _download_attempt, which meant the
+            # throttle slot was held during the sleep. With 8 workers and 2s sleep
+            # that was a hard ceiling of 8/2.0 = 4 req/s regardless of network speed.
+            # Now the slot is free immediately after the HTTP work completes.
+            time.sleep(DOWNLOAD_INTER_REQUEST_SLEEP)
             return result
 
         http_status = result.get("http_status", 0)
@@ -439,7 +459,7 @@ def download_warc_slice(row: pd.Series, throttle: "AdaptiveThrottle", timeout: t
             wait = RETRY_BACKOFF_BASE ** (attempt + 3)
         else:
             wait = RETRY_BACKOFF_BASE ** attempt
-        log.debug(f"  Retry {attempt+1}/{MAX_RETRIES} for {pointer_id} in {wait:.0f}s")
+        log.debug(f"  Retry {attempt+1}/{MAX_RETRIES + 1} for {pointer_id} in {wait:.0f}s")
         time.sleep(wait)
 
     return last_result
@@ -505,7 +525,11 @@ def run_batch(
         primary_queue.put(row)
 
     def _record(result):
-        """Record a completed result and update counters/checkpoints. Call with results_lock held."""
+        """
+        Record a completed result and update counters. Call with results_lock held.
+        Returns True if a checkpoint save is needed — caller does the actual write
+        AFTER releasing the lock so workers aren't blocked during disk I/O.
+        """
         nonlocal completed, failed, consecutive_403, total_bytes
 
         results.append(result)
@@ -513,15 +537,15 @@ def run_batch(
         completed += 1
         total_bytes += result.get("bytes_received", 0) or 0
 
+        needs_checkpoint = False
         if not result["download_success"]:
             failed += 1
             if result.get("http_status") in (403, 503):
                 consecutive_403 += 1
                 if consecutive_403 >= RATE_LIMIT_THRESHOLD:
                     throttle.report_rate_limit()
-                    save_fetch_log(all_results, existing_logs, fetch_log_path, schema)
-                    log.info(f"  Checkpoint saved ({len(all_results)} results)")
                     consecutive_403 = 0
+                    needs_checkpoint = True   # PERF FIX: save happens outside the lock
             else:
                 consecutive_403 = 0
         else:
@@ -529,11 +553,7 @@ def run_batch(
             throttle.report_success()
 
         if completed % CHECKPOINT_EVERY == 0:
-            save_fetch_log(all_results, existing_logs, fetch_log_path, schema)
-            log.info(
-                f"  [OK] Checkpoint at {completed}/{n_pointers}  "
-                f"workers={throttle.workers}  deferred={n_deferred}"
-            )
+            needs_checkpoint = True           # PERF FIX: save happens outside the lock
 
         if completed % 100 == 0 or completed == n_pointers:
             success_rate  = (completed - failed) / completed
@@ -557,6 +577,8 @@ def run_batch(
                     f"    ⚠ Success rate {success_rate:.1%} below floor "
                     f"{DOWNLOAD_SUCCESS_RATE_FLOOR:.0%} — investigate before continuing"
                 )
+
+        return needs_checkpoint
 
     def worker():
         nonlocal n_deferred
@@ -587,7 +609,12 @@ def run_batch(
                 continue
 
             with results_lock:
-                _record(result)
+                needs_ckpt = _record(result)
+            # PERF FIX: checkpoint save runs outside the lock — workers aren't
+            # blocked during the parquet concat+write (~1-2s at 3000 rows).
+            if needs_ckpt:
+                save_fetch_log(all_results, existing_logs, fetch_log_path, schema)
+                log.info(f"  [OK] Checkpoint at {completed}/{n_pointers}  workers={throttle.workers}  deferred={n_deferred}")
             primary_queue.task_done()
 
         # ---- Pass 2: deferred queue ----
@@ -601,7 +628,10 @@ def run_batch(
 
             result = download_warc_slice(row, throttle, timeout=DEFERRED_TIMEOUT)
             with results_lock:
-                _record(result)
+                needs_ckpt = _record(result)
+            if needs_ckpt:
+                save_fetch_log(all_results, existing_logs, fetch_log_path, schema)
+                log.info(f"  [OK] Checkpoint at {completed}/{n_pointers}  workers={throttle.workers}  deferred={n_deferred}")
             deferred_queue.task_done()
 
     # Start workers

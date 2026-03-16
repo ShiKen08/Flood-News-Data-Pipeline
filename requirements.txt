@@ -19,3 +19,6 @@ langdetect>=1.0.9         # Stage 06 language detection
 
 # --- Progress / CLI ---
 tqdm>=4.66.0              # Progress bars
+
+# --- Async HTTP (for Stage 05) ---
+aiohttp>=3.9.0             # Async HTTP client (Stage 05)
