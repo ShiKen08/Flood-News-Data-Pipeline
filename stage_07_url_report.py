@@ -5,7 +5,7 @@
 #
 # Key formatting rules:
 #   - doc_num column: sequential 1-based number per report (easy row reference)
-#   - clean_text_relevant: newlines stripped → single cell per document
+#   - clean_text_relevant: newlines stripped -> single cell per document
 #     (embedded newlines are what cause CSV row-splitting in Excel/Sheets)
 #   - Paragraphs preserved as " || " separator so text is still readable
 #   - Text only included for docs with flood_hits >= 2 AND loc_hits >= 1
@@ -159,7 +159,7 @@ def build_report(
         rel_mask  = df["is_relevant"].fillna(False).astype(bool)
         df        = df[~(kept_mask & ~rel_mask)].copy()
 
-    # Sort: flood_id → relevant first → flood_term_hits desc
+    # Sort: flood_id -> relevant first -> flood_term_hits desc
     sort_cols = ["flood_id"]
     ascending = [True]
     if "is_relevant" in df.columns:
@@ -315,7 +315,7 @@ def main():
         # quoting=csv.QUOTE_ALL ensures cells with commas/newline remnants stay intact
         import csv
         report_df.to_csv(out_path, index=False, quoting=csv.QUOTE_ALL)
-        print(f"Saved → {out_path}  ({len(report_df)} rows, {len(report_df.columns)} columns)")
+        print(f"Saved -> {out_path}  ({len(report_df)} rows, {len(report_df.columns)} columns)")
         if args.include_text:
             text_filled = (report_df[TEXT_COL].str.len() > 0).sum() if TEXT_COL in report_df else 0
             print(f"  Text column populated for {text_filled} / {len(report_df)} rows")

@@ -144,9 +144,9 @@ def validate_pointers(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 def apply_size_filter(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Flag pointers by byte length:
-      TOO_SMALL (<500 bytes)   → add to rejects table
-      TOO_LARGE (>5MB)         → set aside for separate review (not fully rejected)
-      VALID                    → proceed to dedup
+      TOO_SMALL (<500 bytes)   -> add to rejects table
+      TOO_LARGE (>5MB)         -> set aside for separate review (not fully rejected)
+      VALID                    -> proceed to dedup
     Returns (all_df_with_flag, too_small_df)
     """
     log.info(f"--- Step 2: Size filter  (min={POINTER_MIN_BYTES}B, max={POINTER_MAX_BYTES}B) ---")
@@ -166,8 +166,8 @@ def apply_size_filter(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     counts = df["size_filter_status"].value_counts().to_dict()
     log.info(f"  VALID     : {counts.get('VALID', 0)}")
-    log.info(f"  TOO_SMALL : {counts.get('TOO_SMALL', 0)}  → moved to rejects")
-    log.info(f"  TOO_LARGE : {counts.get('TOO_LARGE', 0)}  → flagged for separate review")
+    log.info(f"  TOO_SMALL : {counts.get('TOO_SMALL', 0)}  -> moved to rejects")
+    log.info(f"  TOO_LARGE : {counts.get('TOO_LARGE', 0)}  -> flagged for separate review")
 
     # TOO_SMALL goes straight to rejects; TOO_LARGE stays in but is flagged
     too_small_df = df[df["size_filter_status"] == "TOO_SMALL"].copy()
@@ -192,7 +192,7 @@ def deduplicate_pointers(df: pd.DataFrame) -> pd.DataFrame:
       Step 2 — Digest dedup within flood_id
                key = (flood_id, crawl_id, digest) where digest is not null
       Step 3 — Cross-event flag
-               URLs in multiple flood_id partitions → cross_event_shared = TRUE
+               URLs in multiple flood_id partitions -> cross_event_shared = TRUE
                Never drop — a URL can be valid for multiple events.
     """
     log.info("--- Step 3: Deduplication ---")
@@ -310,7 +310,7 @@ def deduplicate_urls(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     log.info(f"  Pointers with URL   : {total_has_url}")
     log.info(f"  Unique (flood,url)  : {unique_count}")
-    log.info(f"  URL duplicates      : {dup_count}  → moved to rejects")
+    log.info(f"  URL duplicates      : {dup_count}  -> moved to rejects")
 
     if dup_count > 0:
         dup_rate = dup_count / total_has_url
@@ -395,7 +395,7 @@ def main():
 
     # ------------------------------------------------------------------
     # Add join keys (flood_id, query_id, crawl_id already present from stage_02)
-    # Rename hit_id → pointer_id for this stage onward
+    # Rename hit_id -> pointer_id for this stage onward
     # ------------------------------------------------------------------
     hits_df = hits_df.rename(columns={"hit_id": "pointer_id"})
 
@@ -479,7 +479,7 @@ def main():
         log.info("No existing validated_pointers.parquet — creating fresh file")
 
     validated_df.to_parquet(out_path, index=False)
-    log.info(f"Saved validated_pointers → {out_path}  ({len(validated_df)} rows total)")
+    log.info(f"Saved validated_pointers -> {out_path}  ({len(validated_df)} rows total)")
 
     # ------------------------------------------------------------------
     # Build rejects table
@@ -509,7 +509,7 @@ def main():
             rejects_df = pd.concat([kept_rej, rejects_df], ignore_index=True)
 
         rejects_df.to_parquet(rejects_path, index=False)
-        log.info(f"Saved rejects → {rejects_path}  ({len(rejects_df)} rows total)")
+        log.info(f"Saved rejects -> {rejects_path}  ({len(rejects_df)} rows total)")
     else:
         log.info("No rejects — rejects.parquet not written (check this is expected)")
 

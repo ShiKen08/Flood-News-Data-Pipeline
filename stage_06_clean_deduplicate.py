@@ -95,7 +95,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Langdetect ISO 639-1 → ISO 639-3 mapping (for languages in our dataset)
+# Langdetect ISO 639-1 -> ISO 639-3 mapping (for languages in our dataset)
 # ---------------------------------------------------------------------------
 LANG_1_TO_3 = {
     "ar": "arb", "zh-cn": "cmn", "zh-tw": "cmn", "zh": "cmn",
@@ -852,7 +852,7 @@ def main():
     # ------------------------------------------------------------------
     out_path = OUTPUT_DIR / "clean_text.parquet"
     clean_df.to_parquet(out_path, index=False)
-    log.info(f"Saved clean_text → {out_path}  ({len(clean_df)} rows)")
+    log.info(f"Saved clean_text -> {out_path}  ({len(clean_df)} rows)")
 
     # Clear checkpoint — run completed successfully
     clear_checkpoint()
@@ -868,7 +868,7 @@ def main():
             existing = existing[~existing["flood_id"].isin(current_flood_ids)]
             reject_df = pd.concat([existing, reject_df], ignore_index=True)
         reject_df.to_parquet(existing_rejects_path, index=False)
-        log.info(f"Saved rejects → {existing_rejects_path}  ({len(reject_df)} total rows)")
+        log.info(f"Saved rejects -> {existing_rejects_path}  ({len(reject_df)} total rows)")
 
     # ------------------------------------------------------------------
     # Final summary

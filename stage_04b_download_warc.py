@@ -6,7 +6,7 @@
 # Per valid pointer:
 #   - Build WARC URL: https://data.commoncrawl.org/{filename}
 #   - Issue HTTP Range GET: bytes={offset}-{offset+length-1}
-#   - Verify bytes_received == length → flag PARTIAL if mismatch
+#   - Verify bytes_received == length -> flag PARTIAL if mismatch
 #   - Decompress if gzip-encoded
 #   - Parse WARC record headers to confirm record type
 #   - Store raw WARC slice to local cache (avoids re-downloading)
@@ -189,7 +189,7 @@ class AdaptiveThrottle:
                 for _ in range(reduction):
                     self._semaphore.acquire()
                 log.warning(
-                    f"  ↓ Throttling down — workers {self._workers + reduction} → {self._workers}. "
+                    f"  ↓ Throttling down — workers {self._workers + reduction} -> {self._workers}. "
                     f"Pausing {RATE_LIMIT_PAUSE}s..."
                 )
                 time.sleep(RATE_LIMIT_PAUSE)
@@ -485,7 +485,7 @@ def run_batch(
       DEFERRED_TIMEOUT (10s connect, 300s read) — run to completion, no more deferral.
       Whatever happens here is the final result.
     """
-    log.info(f"  Downloading {len(batch_df)} pointers [{label}]  (workers={WORKER_THREADS_MAX} → adaptive)")
+    log.info(f"  Downloading {len(batch_df)} pointers [{label}]  (workers={WORKER_THREADS_MAX} -> adaptive)")
     n_pointers      = len(batch_df)
     results         = []
     results_lock    = threading.Lock()
@@ -574,12 +574,12 @@ def run_batch(
             result = download_warc_slice(row, throttle, timeout=DOWNLOAD_TIMEOUT)
             elapsed = time.time() - t0
 
-            # Timed out on primary pass → defer, don't record failure yet
+            # Timed out on primary pass -> defer, don't record failure yet
             if not result["download_success"] and result["error_type"] == "Timeout":
                 with results_lock:
                     n_deferred += 1
                 log.debug(
-                    f"  → Deferred {row['pointer_id']} (timed out after {elapsed:.0f}s, "
+                    f"  -> Deferred {row['pointer_id']} (timed out after {elapsed:.0f}s, "
                     f"total deferred={n_deferred})"
                 )
                 deferred_queue.put(row)
@@ -618,7 +618,7 @@ def run_batch(
         if n_deferred > 0:
             log.info(
                 f"  ↳ Primary pass complete. {n_deferred} slow items deferred "
-                f"→ starting deferred pass (timeout={DEFERRED_TIMEOUT[1]}s)..."
+                f"-> starting deferred pass (timeout={DEFERRED_TIMEOUT[1]}s)..."
             )
         else:
             log.info("  ↳ Primary pass complete. No items deferred.")
@@ -796,7 +796,7 @@ def main():
     # ------------------------------------------------------------------
     combined_log = save_fetch_log(all_results, existing_logs, fetch_log_path, SCHEMA_WARC_FETCH_LOG)
     n_saved = len(combined_log) if combined_log is not None else 0
-    log.info(f"Saved warc_fetch_log → {fetch_log_path}  ({n_saved} total rows)")
+    log.info(f"Saved warc_fetch_log -> {fetch_log_path}  ({n_saved} total rows)")
 
     # ------------------------------------------------------------------
     # Final summary

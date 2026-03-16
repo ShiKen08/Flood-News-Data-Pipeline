@@ -1,5 +1,5 @@
 # =============================================================================
-# stage_05_extract_text.py  ·  Flood Data Pipeline — Extract HTML → Plaintext
+# stage_05_extract_text.py  ·  Flood Data Pipeline — Extract HTML -> Plaintext
 # =============================================================================
 # Checklist Stage 5 (pilot phase)
 #
@@ -411,7 +411,7 @@ def load_checkpoint(ckpt_path: Path) -> tuple[list[dict], set]:
         df = pd.read_parquet(ckpt_path)
         results = df.to_dict("records")
         done_ids = set(str(r["pointer_id"]) for r in results)
-        log.info(f"Checkpoint loaded: {len(done_ids)} already processed → resuming")
+        log.info(f"Checkpoint loaded: {len(done_ids)} already processed -> resuming")
         return results, done_ids
     except Exception as e:
         log.warning(f"Could not load checkpoint ({e}) — starting fresh")
@@ -545,7 +545,7 @@ def main():
     ckpt_path = OUTPUT_DIR / "stage05_ckpt.parquet"
 
     log.info("=" * 70)
-    log.info("STAGE 05 — EXTRACT HTML → PLAINTEXT")
+    log.info("STAGE 05 — EXTRACT HTML -> PLAINTEXT")
     log.info(f"Extractor : {'trafilatura (article body only)' if TRAFILATURA_AVAILABLE else 'bs4 fallback'}")
     log.info(f"Workers   : {args.workers}")
     log.info(f"Checkpoint: {ckpt_path}")
@@ -723,7 +723,7 @@ def main():
     log.info(f"Truncated (is_truncated=True) : {trunc_count}  ({trunc_count/total:.1%})" if total else "")
     log.info(f"Skipped (non-HTML)    : {skip_count}")
     log.info(f"Errors                : {total - success_count - skip_count}")
-    log.info(f"Saved → {out_path}")
+    log.info(f"Saved -> {out_path}")
     log.info("Next: run stage_06_clean_deduplicate.py")
     log.info("=" * 70)
 

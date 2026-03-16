@@ -101,7 +101,7 @@ def load_domain_list() -> dict:
 def ts_to_cc_format(iso_ts: str) -> str:
     """
     Convert ISO timestamp string to CC CDX 14-digit format: YYYYMMDDHHmmss
-    e.g. '2026-02-03T00:00:00+00:00' → '20260203000000'
+    e.g. '2026-02-03T00:00:00+00:00' -> '20260203000000'
     """
     dt = datetime.fromisoformat(iso_ts)
     return dt.strftime("%Y%m%d%H%M%S")
@@ -418,7 +418,7 @@ def print_hit_summary(hits_df: pd.DataFrame) -> None:
         log.warning("No hits at all — investigate before proceeding to Stage 3")
         return
 
-    # Extract variant from query_id  e.g. "3_C" → "C"
+    # Extract variant from query_id  e.g. "3_C" -> "C"
     hits_df = hits_df.copy()
     hits_df["variant"] = hits_df["query_id"].str.extract(r"_([A-D])$")
 
@@ -473,7 +473,7 @@ def main():
     specs_df = pd.read_parquet(specs_path)
     domain_list = load_domain_list()
 
-    # Build flood → ISO map
+    # Build flood -> ISO map
     from config import FLOOD_CSV
     _build_flood_iso_map(specs_df, FLOOD_CSV)
 
@@ -509,7 +509,7 @@ def main():
 
             hits = process_query_spec_row(spec_row, domain_list)
             all_hits.extend(hits)
-            log.info(f"    → {len(hits)} hits")
+            log.info(f"    -> {len(hits)} hits")
 
         # After primary phase: spot-check before running secondary
         if phase_label.startswith("PRIMARY") and all_hits:
@@ -520,8 +520,8 @@ def main():
             if zero_events:
                 log.warning(
                     f"Events with 0 hits after primary queries: {zero_events}\n"
-                    f"  → Check time windows and CC coverage before continuing.\n"
-                    f"  → Consider switching to open-web strategy for these events."
+                    f"  -> Check time windows and CC coverage before continuing.\n"
+                    f"  -> Consider switching to open-web strategy for these events."
                 )
 
     # ------------------------------------------------------------------
@@ -571,14 +571,14 @@ def main():
 
         log.info(
             f"Additive merge: {before} existing + {len(hits_df)} fetched "
-            f"→ {new_count} genuinely new rows added  ({len(combined)} total)"
+            f"-> {new_count} genuinely new rows added  ({len(combined)} total)"
         )
         hits_df = combined
     else:
         log.info("No existing cc_index_hits.parquet — creating fresh file")
 
     hits_df.to_parquet(hits_path, index=False)
-    log.info(f"Saved cc_index_hits → {hits_path}  ({len(hits_df)} rows total)")
+    log.info(f"Saved cc_index_hits -> {hits_path}  ({len(hits_df)} rows total)")
 
     # Save hit count summary
     hits_df["variant"] = hits_df["query_id"].str.extract(r"_([A-D])$")
@@ -589,7 +589,7 @@ def main():
     )
     summary_path = OUTPUT_DIR / "hit_count_summary.parquet"
     summary_df.to_parquet(summary_path, index=False)
-    log.info(f"Saved hit_count_summary → {summary_path}")
+    log.info(f"Saved hit_count_summary -> {summary_path}")
 
     # ------------------------------------------------------------------
     # Final summary

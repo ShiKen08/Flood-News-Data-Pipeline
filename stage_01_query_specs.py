@@ -399,7 +399,7 @@ def main():
     log.info(f"Variants breakdown    :")
     for variant, count in specs_df["query_id"].str.extract(r"_([A-D])$")[0].value_counts().items():
         log.info(f"    Variant {variant} : {count} rows")
-    log.info(f"Saved → {out_path}")
+    log.info(f"Saved -> {out_path}")
     log.info("Next: run stage_02_query_cc_index.py")
     log.info("=" * 70)
 
