@@ -74,7 +74,7 @@ def load_lexicon() -> dict:
     if not KEYWORD_LEXICON.exists():
         log.error(f"keyword_lexicon.json not found at {KEYWORD_LEXICON}")
         sys.exit(1)
-    with open(KEYWORD_LEXICON) as f:
+    with open(KEYWORD_LEXICON, encoding='utf-8') as f:
         return json.load(f)
 
 
