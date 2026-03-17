@@ -67,7 +67,7 @@ which stages are complete so you don't re-download files unnecessarily.
 Each stage has its own script. Run them in order:
 
 ```bash
-# Pilot mode — 7 hand-picked events, 100 pointers each (fast, for validation)
+# Pilot mode — 7 hand-picked events, 200000 pointers each 
 python stage_00_preflight.py
 python stage_01_query_specs.py
 python stage_02_cc_index.py
