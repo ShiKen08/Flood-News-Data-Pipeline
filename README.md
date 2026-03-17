@@ -24,7 +24,7 @@ Stage 06  Clean & Filter    Clean text, detect language, deduplicate, score rele
 ### 1. Clone and run setup
 
 ```bash
-git clone https://github.com/your-org/flood-pipeline.git
+git clone https://github.com/ShiKen08/Flood-News-Data-Pipeline
 cd flood-pipeline
 python setup.py
 ```
