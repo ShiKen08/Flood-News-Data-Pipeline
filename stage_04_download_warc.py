@@ -124,7 +124,7 @@ TIMEOUT_BURST_PAUSE     = 60      # seconds to pause on silent CC throttle (hung
 TIMEOUT_BURST_THRESHOLD = 20      # consecutive primary-pass timeouts before pausing
 INTER_REQUEST_SLEEP     = 0.3     # polite delay per coroutine — keeps rate ~25/s sustained
 WATCHDOG_INTERVAL       = 5       # watchdog polls every N seconds
-WATCHDOG_STALL_SECS     = 40      # if completed hasn't moved in this long, all slots are hung
+WATCHDOG_STALL_SECS     = 300      # if completed hasn't moved in this long, all slots are hung
 CHUNK_SIZE              = 65_536  # 64 KB read chunks from aiohttp response
 
 # ---------------------------------------------------------------------------
