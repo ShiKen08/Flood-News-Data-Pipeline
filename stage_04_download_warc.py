@@ -583,7 +583,7 @@ async def run_batch(
             )
             if completed >= 20 and success_rate < DOWNLOAD_SUCCESS_RATE_FLOOR:
                 log.warning(
-                    f"    ⚠ Success rate {success_rate:.1%} below "
+                    f"     Success rate {success_rate:.1%} below "
                     f"floor {DOWNLOAD_SUCCESS_RATE_FLOOR:.0%} — check for pipeline issues"
                 )
 
@@ -617,7 +617,7 @@ async def run_batch(
         if consec_timeout >= TIMEOUT_BURST_THRESHOLD and rate_limit_evt.is_set():
             rate_limit_evt.clear()
             log.warning(
-                f"  ↓ {consec_timeout} consecutive timeouts — CC is silently throttling. "
+                f"   {consec_timeout} consecutive timeouts — CC is silently throttling. "
                 f"Pausing all coroutines for {TIMEOUT_BURST_PAUSE}s..."
             )
             save_fetch_log(all_results, existing_logs, fetch_log_path)
@@ -727,7 +727,7 @@ async def run_batch(
                         stall_ticks = 0
                         rate_limit_evt.clear()
                         log.warning(
-                            f"  ⏱ Watchdog: no progress for {stall_s}s — "
+                            f"  Watchdog: no progress for {stall_s}s — "
                             f"all {CONCURRENT_DOWNLOADS} slots appear hung. "
                             f"Pausing {TIMEOUT_BURST_PAUSE}s to let CC recover..."
                         )
