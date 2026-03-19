@@ -921,7 +921,7 @@ def main():
             log.info(f"Checkpoint saved — {len(all_results)} results written.")
         else:
             log.info("No results to save yet.")
-        os._exit(0)
+        sys.exit(0)
 
     signal.signal(signal.SIGINT,  _handle_shutdown)
     signal.signal(signal.SIGTERM, _handle_shutdown)

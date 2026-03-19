@@ -686,13 +686,13 @@ def main():
     # ------------------------------------------------------------------
     # Signal handler — save checkpoint then exit cleanly on Ctrl+C / kill
     # ------------------------------------------------------------------
-    import signal, os as _os
+    import signal
 
     def _handle_shutdown(signum, frame):
         log.info("Shutdown signal received — saving checkpoint and exiting...")
         save_checkpoint(clean_rows, reject_rows, "interrupted")
         log.info("Checkpoint saved. Re-run without --fresh to resume.")
-        _os._exit(0)
+        sys.exit(0)
 
     signal.signal(signal.SIGINT,  _handle_shutdown)
     signal.signal(signal.SIGTERM, _handle_shutdown)

@@ -57,7 +57,7 @@ STAGE_OUTPUT_FILES = {
     3: OUTPUT_DIR / "validated_pointers.parquet",
     4: OUTPUT_DIR / "warc_fetch_log.parquet",
     5: OUTPUT_DIR / "extracted_text.parquet",
-    6: OUTPUT_DIR / "usable_docs.parquet",
+    6: OUTPUT_DIR / "clean_text.parquet",
 }
 
 
@@ -102,7 +102,7 @@ def stages_complete_for(flood_id: int) -> list[int]:
         except Exception:
             pass
 
-    # Stage 6: check usable_docs for this flood_id
+    # Stage 6: check clean_text for this flood_id
     ud_path = STAGE_OUTPUT_FILES[6]
     if ud_path.exists():
         try:
