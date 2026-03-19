@@ -398,7 +398,6 @@
       "thezimbabwean.co",
       "zimeye.net",
       "pindula.co.zw",
-      "techzim.co.zw",
       "kubatana.net",
       "chronicle.co.zw",
       "hmetro.co.zw",
@@ -966,7 +965,6 @@
       "ticotimes.net",
       "qcostarica.com",
       "news.co.cr",
-      "relocationtours.com",
       "gaceta.go.cr",
       "icom.ucr.ac.cr",
       "sulabatsu.com",
@@ -1142,7 +1140,6 @@
     "news_domains": [
       "khabarhub.com",
       "sharesansar.com",
-      "techpana.com",
       "kathmandupost.com",
       "thehimalayantimes.com",
       "myrepublica.nagariknetwork.com",
@@ -1303,12 +1300,10 @@
       "novinite.com",
       "bta.bg",
       "bnr.bg",
-      "bulgariatravelnews.com",
       "plovdiv24.bg",
       "moreto.net",
       "burgasnews.com",
       "economic.bg",
-      "sportal.bg",
       "actualno.com",
       "banker.bg",
       "legalworld.bg",
@@ -1603,7 +1598,6 @@
       "whatson-gambia.com",
       "gambiatimes.gm",
       "voicegambia.com",
-      "gamsports.com",
       "kibaaro.com",
       "starfm.gm",
       "sudfm.net",
@@ -1902,7 +1896,6 @@
       "kawishonline.com",
       "wahdatnews.com",
       "dailyazadi.com",
-      "cricwick.com",
       "pakpassion.net",
       "jang.com.pk",
       "express.com.pk",
@@ -2045,7 +2038,9 @@
       "beafrika.com",
       "rjdh.net",
       "acapcentrafrique.com",
-      "aib.bf"
+      "aib.bf",
+      "acap.cf",
+      "centrafrique-presse.com"
     ],
     "gov_domains": [
       "centrafrique.cf"
@@ -2088,7 +2083,6 @@
       "rtc.cv",
       "praianews.com",
       "sapo.cv",
-      "criolosports.com",
       "mindelonline.com",
       "a-semana.com"
     ],
@@ -2156,10 +2150,8 @@
       "ryukyushimpo.jp",
       "sponichi.co.jp",
       "hochi.co.jp",
-      "nikkansports.com",
       "itmedia.co.jp",
       "famitsu.com",
-      "4gamer.net",
       "news.tv-asahi.co.jp",
       "fnn.jp",
       "news.tbs.co.jp",
@@ -2264,7 +2256,6 @@
       "afriquemedia.tv",
       "jeuneafrique.com",
       "equatonews.com",
-      "akonibetv.com",
       "radiomacuto.com",
       "ahoraeg.com",
       "diariorombe.es",
@@ -2273,7 +2264,8 @@
       "malabopress.com",
       "tvge.net",
       "radiotelevisiondeguineaecuatorial.com",
-      "guineainfos.com"
+      "guineainfos.com",
+      "gabonreview.com"
     ],
     "gov_domains": [
       "guinea-equatorial.com"
@@ -2396,8 +2388,7 @@
       "unica.ro",
       "g4media.ro",
       "stiripesurse.ro",
-      "ziare.com",
-      "prosport.ro"
+      "ziare.com"
     ],
     "gov_domains": [
       "igsu.ro",
@@ -2503,7 +2494,13 @@
       "thestandard.com.hk",
       "on.cc",
       "oriental.com.hk",
-      "hkcd.com"
+      "hkcd.com",
+      "etnet.com.hk",
+      "hkej.com",
+      "news.gov.hk",
+      "post852.com",
+      "takungpao.com",
+      "tvb.com"
     ],
     "gov_domains": [
       "hko.gov.hk",
@@ -3201,8 +3198,6 @@
       "ilmattino.it",
       "ilgazzettino.it",
       "altoadige.it",
-      "tuttosport.com",
-      "corrieredellosport.it",
       "gazzetta.it",
       "leggo.it",
       "ilmessaggero.it",
@@ -3599,7 +3594,6 @@
       "eldoret.co.ke",
       "kituinow.co.ke",
       "kij.co.ke",
-      "kenyatech.co.ke",
       "kenyaenvironment.co.ke",
       "kenyaeducation.co.ke",
       "tuko.co.ke",
@@ -3710,8 +3704,7 @@
       "gabonoverseas.com",
       "gabonews.ga",
       "infos241.com",
-      "gabontribune.com",
-      "africatopsports.com"
+      "gabontribune.com"
     ],
     "gov_domains": [
       "meteo.ga",
@@ -3901,8 +3894,6 @@
       "sudouest.fr",
       "lavoixdunord.fr",
       "ledauphine.com",
-      "rmcsport.bfmtv.com",
-      "francefootball.fr",
       "leparisien.fr",
       "lequipe.fr",
       "20minutes.fr",
@@ -4072,7 +4063,8 @@
       "lavoixdutchad.com",
       "chaddailynews.com",
       "ialtchad.com",
-      "voixdufezzan.com"
+      "voixdufezzan.com",
+      "sahel-intelligence.com"
     ],
     "gov_domains": [
       "gouvernement.td",
@@ -4111,7 +4103,10 @@
       "journaldeguinee.com",
       "rtnguinee.net",
       "aguipel.gn",
-      "guinee7.com"
+      "guinee7.com",
+      "aminata.com",
+      "ledjely.com",
+      "mosaiqueguinee.com"
     ],
     "gov_domains": [
       "anpc.gov.gn",
