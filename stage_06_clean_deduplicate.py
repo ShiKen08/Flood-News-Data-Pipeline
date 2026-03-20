@@ -46,7 +46,7 @@ import re
 import sys
 import uuid
 from pathlib import Path
-from config import KEYWORD_LEXICON_PATH
+from config import KEYWORD_LEXICON
 import pandas as pd
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
@@ -617,7 +617,7 @@ def main():
     lang_df      = pd.read_parquet(OUTPUT_DIR / "language_assignments.parquet")
     loc_df       = pd.read_parquet(OUTPUT_DIR / "location_dictionary.parquet")
 
-    with open(KEYWORD_LEXICON_PATH, encoding='utf-8') as f:
+    with open(KEYWORD_LEXICON, encoding='utf-8') as f:
         lexicon = json.load(f)
 
     # Load event windows for pub_date filtering
