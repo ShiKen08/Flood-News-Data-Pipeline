@@ -553,7 +553,7 @@ def main():
     lang_df      = pd.read_parquet(OUTPUT_DIR / "language_assignments.parquet")
     loc_df       = pd.read_parquet(OUTPUT_DIR / "location_dictionary.parquet")
 
-    with open(KEYWORD_LEXICON) as f:
+    with open(lexicon_path, encoding='utf-8') as f:
         lexicon = json.load(f)
 
     specs_path = OUTPUT_DIR / "event_query_specs.parquet"
