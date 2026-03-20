@@ -56,7 +56,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date as _date
 from pathlib import Path
-
+from config import KEYWORD_LEXICON_PATH
 import numpy as np
 import pandas as pd
 import sys
@@ -553,7 +553,7 @@ def main():
     lang_df      = pd.read_parquet(OUTPUT_DIR / "language_assignments.parquet")
     loc_df       = pd.read_parquet(OUTPUT_DIR / "location_dictionary.parquet")
 
-    with open(lexicon_path, encoding='utf-8') as f:
+    with open(KEYWORD_LEXICON_PATH, encoding='utf-8') as f:
         lexicon = json.load(f)
 
     specs_path = OUTPUT_DIR / "event_query_specs.parquet"
