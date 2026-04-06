@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "v5",
-    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume. | v6: USA enrichment — added local/regional news and gov domains for pilot events 61 (NY/NJ/DC/VA/MD/PA), 62+128 (New Mexico), 65+71 (Texas)."
+    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume. | v6: USA enrichment — added local/regional news and gov domains for pilot events 61 (NY/NJ/DC/VA/MD/PA), 62+128 (New Mexico), 65+71 (Texas). | v7: USA org_domains replaced — removed global humanitarian outlets (unocha, reliefweb, thenewhumanitarian etc.) that do not cover US domestic floods; replaced with US disaster-response orgs (redcross, nvoad, nfip)."
   },
   "SYR": {
     "country": "Syrian Arab Republic",
@@ -503,25 +503,10 @@
       "sanantonio.gov"
     ],
     "org_domains": [
-      "reliefweb.int",
-      "unocha.org",
-      "ifrc.org",
-      "unhcr.org",
-      "wfp.org",
-      "unicef.org",
-      "fao.org",
-      "msf.org",
-      "care.org",
-      "oxfam.org",
-      "thenewhumanitarian.org",
-      "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
-      "dw.com",
-      "rfi.fr",
-      "voanews.com",
+      "redcross.org",
+      "nvoad.org",
       "apnews.com",
-      "aljazeera.com"
+      "nfip.org"
     ]
   },
   "IRN": {
