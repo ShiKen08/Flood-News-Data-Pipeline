@@ -370,8 +370,19 @@ def _score_one(text_lower: str, flood_terms: list, loc_entries: list) -> dict:
             if level != "country":
                 subnational_hits += 1
     specificity = (subnational_hits / loc_hits) if loc_hits > 0 else 0.0
-    has_locs    = bool(loc_entries)
-    is_relevant = (flood_hits >= 2 and loc_hits >= 1) if has_locs else (flood_hits >= 2)
+    has_locs             = bool(loc_entries)
+    has_subnational_locs = any(level != "country" for _, level, _ in loc_entries)
+    # Require a subnational hit (city/county/state) when the flood has subnational entries.
+    # Country-level terms (e.g. "united states", "usa") are too broad — any US article
+    # would satisfy loc_hits >= 1 without being about this specific flood's location.
+    # Falls back to loc_hits >= 1 only when the flood has no subnational entries at all.
+    if has_locs:
+        if has_subnational_locs:
+            is_relevant = flood_hits >= 2 and subnational_hits >= 1
+        else:
+            is_relevant = flood_hits >= 2 and loc_hits >= 1
+    else:
+        is_relevant = flood_hits >= 2
     return {
         "is_relevant":                is_relevant,
         "flood_mentioned":            flood_hits >= 1,
