@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "v5",
-    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume. | v6: USA enrichment — added local/regional news and gov domains for pilot events 61 (NY/NJ/DC/VA/MD/PA), 62+128 (New Mexico), 65+71 (Texas). | v7: USA org_domains replaced — removed global humanitarian outlets (unocha, reliefweb, thenewhumanitarian etc.) that do not cover US domestic floods; replaced with US disaster-response orgs (redcross, nvoad, nfip)."
+    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume. | v6: USA enrichment — added local/regional news and gov domains for pilot events 61 (NY/NJ/DC/VA/MD/PA), 62+128 (New Mexico), 65+71 (Texas). | v7: USA org_domains replaced — removed global humanitarian outlets (unocha, reliefweb, thenewhumanitarian etc.) that do not cover US domestic floods; replaced with US disaster-response orgs (redcross, nvoad, nfip). | v8: USA news_domains — removed 11 diaspora/ethnic/non-English outlets irrelevant to US domestic flood coverage."
   },
   "SYR": {
     "country": "Syrian Arab Republic",
@@ -435,12 +435,6 @@
   "USA": {
     "country": "United States of America",
     "news_domains": [
-      "asamnews.com",
-      "indiaabroad.com",
-      "hindustantimes.com",
-      "filamstar.com",
-      "worldjournal.com",
-      "singtao.ca",
       "nytimes.com",
       "washingtonpost.com",
       "latimes.com",
@@ -451,11 +445,6 @@
       "nbcnews.com",
       "cbsnews.com",
       "reuters.com",
-      "koreatimes.com",
-      "koreadaily.com",
-      "elnuevoherald.com",
-      "laopinion.com",
-      "laraza.com",
       "cnn.com",
       "apnews.com",
       "foxnews.com",
