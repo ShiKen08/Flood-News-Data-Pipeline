@@ -14,7 +14,7 @@ from pathlib import Path
 # VERSIONING
 # -----------------------------------------------------------------------------
 
-WINDOW_RULE_VERSION = "v1"          # bump to v2 if windowing logic ever changes
+WINDOW_RULE_VERSION = "v2"          # v2: WINDOW_POST_DAYS 14→45, WINDOW_POST_LONG_DAYS 5→21
 
 
 # -----------------------------------------------------------------------------
@@ -75,8 +75,8 @@ CC_INDEX_PARAMS = {
 # -----------------------------------------------------------------------------
 
 WINDOW_PRE_DAYS                  = 5    # event_start − 5 days
-WINDOW_POST_DAYS                 = 14   # event_end   + 14 days
-WINDOW_POST_LONG_DAYS            = 5    # cap for events with duration > 20 days
+WINDOW_POST_DAYS                 = 45   # event_end   + 45 days (covers ~2 CC monthly crawl cycles of post-event reporting)
+WINDOW_POST_LONG_DAYS            = 21   # cap for events with duration > 20 days (was 5 — too tight for follow-up coverage)
 WINDOW_LONG_DURATION_THRESHOLD   = 20
 ZERO_DURATION_TREAT_AS_DAYS      = 1    # treat 0-duration events as 1-day event
 
