@@ -25,8 +25,8 @@
 #   python stage_07_url_report.py --flood-id 126               # single event
 #   python stage_07_url_report.py --flood-id 126 --rejects     # include rejects
 #   python stage_07_url_report.py --flood-id 126 --relevant-only
-#   python stage_07_url_report.py --flood-id 126 --relevant-only --include-text
-#   python stage_07_url_report.py --full --rejects --relevant-only --include-text
+#   python stage_07_url_report.py --flood-id 126 --relevant-only
+#   python stage_07_url_report.py --full --rejects --relevant-only --no-text
 #   python stage_07_url_report.py --flood-id 126 --no-csv      # summary only
 # =============================================================================
 
@@ -80,7 +80,7 @@ REPORT_COLS = [
     "signal_large_low_flood",
 ]
 
-# Added last when --include-text is passed
+# Added by default; omitted only when --no-text is passed
 TEXT_COL = "clean_text_relevant"
 
 # Separator used to replace paragraph breaks so text stays in one cell
@@ -247,9 +247,8 @@ def main():
 
     parser.add_argument("--rejects",        action="store_true", help="Include rejected docs")
     parser.add_argument("--relevant-only",  action="store_true", help="Only is_relevant=True docs")
-    parser.add_argument("--include-text",   action="store_true",
-                        help="Add clean_text_relevant column (flood_hits>=2, loc_hits>=1 only). "
-                             "Newlines replaced with ' || ' so each doc stays in one CSV row.")
+    parser.add_argument("--no-text",        action="store_true",
+                        help="Omit clean_text_relevant column (included by default).")
     parser.add_argument("--no-csv",         action="store_true", help="Print summary only, skip CSV write")
     args = parser.parse_args()
 
@@ -290,7 +289,7 @@ def main():
 
     if args.relevant_only: scope_label += "_relevant"
     if args.rejects:       scope_label += "_with_rejects"
-    if args.include_text:  scope_label += "_with_text"
+    include_text = not args.no_text
 
     if clean_df.empty:
         print(f"No docs found for scope '{scope_label}'. Check flood_id or run stage_06 first.")
@@ -305,7 +304,7 @@ def main():
         event_meta      = event_meta,
         include_rejects = args.rejects,
         relevant_only   = args.relevant_only,
-        include_text    = args.include_text,
+        include_text    = include_text,
     )
 
     print_summary(report_df, scope_label)
@@ -316,7 +315,7 @@ def main():
         import csv
         report_df.to_csv(out_path, index=False, quoting=csv.QUOTE_ALL)
         print(f"Saved -> {out_path}  ({len(report_df)} rows, {len(report_df.columns)} columns)")
-        if args.include_text:
+        if include_text:
             text_filled = (report_df[TEXT_COL].str.len() > 0).sum() if TEXT_COL in report_df else 0
             print(f"  Text column populated for {text_filled} / {len(report_df)} rows")
 

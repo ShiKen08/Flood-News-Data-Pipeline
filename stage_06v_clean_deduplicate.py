@@ -418,6 +418,10 @@ def add_content_signals(df: pd.DataFrame) -> pd.DataFrame:
 # =============================================================================
 
 def apply_pubdate_filter(df: pd.DataFrame, event_windows: pd.DataFrame) -> tuple:
+    # Soft flag only — no docs are rejected here.
+    # pub_date falls back to CC capture timestamp (stage 05), which can be weeks/months
+    # after publication, causing legitimate articles to appear out-of-window.
+    # pub_in_window is retained as metadata for downstream filtering in stage 07.
     df = df.copy()
     if event_windows.empty:
         df["pub_in_window"] = None
@@ -440,10 +444,7 @@ def apply_pubdate_filter(df: pd.DataFrame, event_windows: pd.DataFrame) -> tuple
             return None
 
     df["pub_in_window"] = df.apply(_check, axis=1)
-    oot_mask  = df["pub_in_window"] == False   # noqa: E712 intentional
-    rejects   = df[oot_mask].copy()
-    rejects["reject_reason"] = "pub_date_out_of_window"
-    return df[~oot_mask].copy(), rejects
+    return df, pd.DataFrame()
 
 
 # =============================================================================

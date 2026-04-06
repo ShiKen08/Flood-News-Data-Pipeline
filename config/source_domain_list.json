@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "v5",
-    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume."
+    "notes": "v3: Added gov_domains (NDMAs, met/hydro agencies) per country. Added Red Cross/Red Crescent societies to org_domains. Added regional/subnational news for IDN(×7), IND(×4), COL, BRA, ESP. Removed junk domains (sports, entertainment). Strengthened conflict-zone orgs (SYR, COD, HTI, SDN, AFG). | Enrichment patch: filled gov_domains for all 40 countries that had empty lists; added GIN (Guinea) entry with news/gov/org domains. | v4: Audit pass — removed wrong-country domains, misclassified global outlets from news_domains, sports/entertainment-only sites, and data entry errors. scmp.com moved to HKG. Whitespace stripped from GIN entry. | v5: Tier 1 enrichment pass — added national flagships, wire services, and public broadcasters across all 68 countries to improve CC sample volume. | v6: USA enrichment — added local/regional news and gov domains for pilot events 61 (NY/NJ/DC/VA/MD/PA), 62+128 (New Mexico), 65+71 (Texas)."
   },
   "SYR": {
     "country": "Syrian Arab Republic",
@@ -462,7 +462,27 @@
       "abcnews.go.com",
       "politico.com",
       "thehill.com",
-      "huffpost.com"
+      "huffpost.com",
+      "nydailynews.com",
+      "nypost.com",
+      "northjersey.com",
+      "nj.com",
+      "inquirer.com",
+      "baltimoresun.com",
+      "wtop.com",
+      "wamu.org",
+      "pilotonline.com",
+      "abqjournal.com",
+      "santafenewmexican.com",
+      "ruidosonews.com",
+      "kob.com",
+      "koat.com",
+      "currentargus.com",
+      "expressnews.com",
+      "mysanantonio.com",
+      "ksat.com",
+      "news4sanantonio.com",
+      "kerrvilledailytimes.com"
     ],
     "gov_domains": [
       "fema.gov",
@@ -471,7 +491,16 @@
       "caloes.ca.gov",
       "lacounty.gov",
       "floods.nj.gov",
-      "tdem.texas.gov"
+      "tdem.texas.gov",
+      "njoem.nj.gov",
+      "ready.maryland.gov",
+      "vaemergency.gov",
+      "pema.pa.gov",
+      "nmdhsem.org",
+      "nm.gov",
+      "bexarcounty.gov",
+      "kerrcounty.net",
+      "sanantonio.gov"
     ],
     "org_domains": [
       "reliefweb.int",
