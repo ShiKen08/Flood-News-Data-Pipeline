@@ -154,6 +154,12 @@ _TAG_URL_RE = re.compile(
 
 _HOMEPAGE_RE = re.compile(r"^https?://[^/]+/?$")
 
+# Domains that never contain news articles — reject regardless of URL path
+_JUNK_DOMAIN_RE = re.compile(
+    r"^https?://(?:www\.)?weather\.gov(?:/|$)",
+    re.IGNORECASE,
+)
+
 _TAG_TITLE_RES = [
     re.compile(r"\bpage\s+\d+\b",                              re.I),
     re.compile(r"halaman\s+\d+",                               re.I),
@@ -177,6 +183,8 @@ _TAG_TITLE_RES = [
 def _is_tag_url(url: str) -> bool:
     if not url:
         return False
+    if _JUNK_DOMAIN_RE.match(url):
+        return True
     if _HOMEPAGE_RE.match(url):
         return True
     return bool(_TAG_URL_RE.search(url))
@@ -459,34 +467,129 @@ def apply_pubdate_filter(df: pd.DataFrame, event_windows: pd.DataFrame) -> tuple
 
 
 # =============================================================================
-# STEP 7 — Content deduplication
+# STEP 4b — Hard language reject
 # =============================================================================
+
+def apply_language_reject(df: pd.DataFrame) -> tuple:
+    """
+    Reject docs whose detected language doesn't match the event's expected
+    language profile.  Unknown detections (langid failure) are kept to avoid
+    false negatives on short/unusual texts.
+    Scope is English / Spanish / Portuguese floods, so non-matching languages
+    are noise from the open CC crawl.
+    """
+    lang_mismatch = (
+        (~df["language_match"].fillna(False)) &
+        (df["language_detected"].fillna("unknown") != "unknown")
+    )
+    rejects = df[lang_mismatch].copy()
+    rejects["reject_reason"] = "language_mismatch"
+    return df[~lang_mismatch].copy(), rejects
+
+
+# =============================================================================
+# STEP 7 — Content deduplication (within-event + URL-normalised + cross-event)
+# =============================================================================
+
+# Known tracking / referral query parameters that don't change article content
+_TRACKING_PARAMS = frozenset({
+    "ftag", "traffic_source", "intcmp", "fbclid",
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "ref", "source", "via", "related", "cmpid", "mod", "linkId",
+    "share", "partner", "hss_channel",
+})
+
+
+def _normalize_url(url: str) -> str:
+    """Strip known tracking query params so URL variants point to the same article."""
+    if not url:
+        return ""
+    try:
+        from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+        p = urlparse(url)
+        clean_q = {k: v for k, v in parse_qs(p.query).items()
+                   if k.lower() not in _TRACKING_PARAMS}
+        return urlunparse((
+            p.scheme, p.netloc, p.path.rstrip("/"),
+            p.params, urlencode(clean_q, doseq=True), "",
+        )).lower()
+    except Exception:
+        return url.lower()
+
 
 def deduplicate_content(df: pd.DataFrame) -> pd.DataFrame:
     log.info(f"--- Step 7: Content deduplication ({len(df)} docs) ---")
     df = df.copy()
-    df["text_hash"]            = df["clean_text"].apply(
+
+    # ── 7a: Compute text hash ─────────────────────────────────────────────────
+    df["text_hash"] = df["clean_text"].apply(
         lambda t: hashlib.sha256(t.encode("utf-8", errors="replace")).hexdigest() if t else ""
     )
     df["is_content_duplicate"] = False
     df["duplicate_group_id"]   = ""
-    total_dupes = 0
+    if "cross_event_shared" not in df.columns:
+        df["cross_event_shared"] = False
+
+    # ── 7b: URL-normalised dedup (within each flood_id group) ─────────────────
+    # Same article at url vs url?traffic_source=rss → keep earliest capture
+    df["_url_norm"] = df["url"].fillna("").apply(_normalize_url)
+    url_dup_total = 0
     for flood_id, group in df.groupby("flood_id"):
-        group_sorted = group.sort_values("timestamp", na_position="last")
-        valid        = group_sorted[group_sorted["text_hash"] != ""]
-        dup_mask     = valid.duplicated(subset=["text_hash"], keep="first")
-        dup_indices  = valid[dup_mask].index
+        g_sorted    = group.sort_values("timestamp", na_position="last")
+        # Only deduplicate non-empty normalized URLs
+        valid_url   = g_sorted[g_sorted["_url_norm"] != ""]
+        url_dup_idx = valid_url[valid_url.duplicated(subset=["_url_norm"], keep="first")].index
+        df.loc[url_dup_idx, "is_content_duplicate"] = True
+        url_dup_total += len(url_dup_idx)
+    log.info(f"  URL-normalised dupes flagged  : {url_dup_total}")
+
+    # ── 7c: Exact text hash dedup (within each flood_id group) ────────────────
+    hash_dup_total = 0
+    for flood_id, group in df.groupby("flood_id"):
+        # Only look at docs not already marked as duplicates
+        non_dup      = group[~group["is_content_duplicate"]]
+        g_sorted     = non_dup.sort_values("timestamp", na_position="last")
+        valid_hash   = g_sorted[g_sorted["text_hash"] != ""]
+        dup_mask     = valid_hash.duplicated(subset=["text_hash"], keep="first")
+        dup_indices  = valid_hash[dup_mask].index
+
         hash_to_gid: dict = {}
-        for idx, row in valid.iterrows():
+        for idx, row in valid_hash.iterrows():
             h = row["text_hash"]
             if h not in hash_to_gid:
                 hash_to_gid[h] = str(uuid.uuid4())
             df.at[idx, "duplicate_group_id"] = hash_to_gid[h]
+
         df.loc[dup_indices, "is_content_duplicate"] = True
-        total_dupes += len(dup_indices)
-        dup_rate = len(dup_indices) / len(group) if len(group) > 0 else 0
+        hash_dup_total += len(dup_indices)
+        dup_rate = (len(dup_indices) + df.loc[group.index, "is_content_duplicate"].sum() - len(dup_indices)) / len(group) if len(group) > 0 else 0
+    log.info(f"  Exact hash dupes flagged      : {hash_dup_total}")
+
+    # ── 7d: Cross-event content dedup ─────────────────────────────────────────
+    # Same article appearing under multiple flood events (e.g. captured in CC
+    # for both flood 65 and flood 128).  Mark later occurrences cross_event_shared.
+    seen_hashes: dict = {}
+    cross_total = 0
+    for idx, row in df.sort_values("flood_id").iterrows():
+        h = row["text_hash"]
+        if not h:
+            continue
+        if h in seen_hashes and seen_hashes[h] != int(row["flood_id"]):
+            if not df.at[idx, "is_content_duplicate"]:
+                df.at[idx, "cross_event_shared"] = True
+                cross_total += 1
+        else:
+            seen_hashes[h] = int(row["flood_id"])
+    log.info(f"  Cross-event shared docs       : {cross_total}")
+
+    df.drop(columns=["_url_norm"], inplace=True)
+
+    total_dupes = df["is_content_duplicate"].sum()
+    for flood_id, group in df.groupby("flood_id"):
+        d = group["is_content_duplicate"].sum()
+        dup_rate = d / len(group) if len(group) > 0 else 0
         flag     = " ⚠ INVESTIGATE" if dup_rate > 0.70 else ""
-        log.info(f"  flood #{int(flood_id):>3}  total={len(group):>5}  dupes={len(dup_indices):>4}  rate={dup_rate:.1%}{flag}")
+        log.info(f"  flood #{int(flood_id):>3}  total={len(group):>5}  dupes={d:>4}  rate={dup_rate:.1%}{flag}")
     log.info(f"  Total duplicates flagged: {total_dupes}")
     return df
 
@@ -662,6 +765,14 @@ def main():
             df["language_confidence"] = 0.0
             df["language_match"]      = False
 
+        # Step 4b — hard language reject
+        log.info("--- Step 4b: Language mismatch reject ---")
+        if not df.empty:
+            df, lang_rejects = apply_language_reject(df)
+            log.info(f"  language_mismatch={len(lang_rejects)}  survivors={len(df)}")
+        else:
+            lang_rejects = pd.DataFrame()
+
         # Step 5 — relevance scoring
         log.info("--- Step 5: Relevance scoring ---")
         if not df.empty:
@@ -699,7 +810,8 @@ def main():
         # Collect all rejects from this run
         all_rejects = pd.concat(
             [r for r in [extr_rejects, tag_rejects, usability_rejects,
-                         no_loc_rejects, no_flood_rejects, oot_rejects] if not r.empty],
+                         lang_rejects, no_loc_rejects, no_flood_rejects, oot_rejects]
+             if not r.empty],
             ignore_index=True,
         )
 
@@ -758,6 +870,7 @@ def main():
     log.info(f"  extraction_failed        : {_rc('extraction_failed')}")
     log.info(f"  tag_or_index_page        : {_rc('tag_or_index_page')}")
     log.info(f"  usability                : {_rc('char_count') + _rc('empty') + _rc('non_ascii') + _rc('error_page')}")
+    log.info(f"  language_mismatch        : {_rc('language_mismatch')}")
     log.info(f"  no_location_match        : {_rc('no_location_match')}")
     log.info(f"  no_flood_term_match      : {_rc('no_flood_term_match')}")
     log.info(f"  pub_date_out_of_window   : {_rc('pub_date_out_of_window')}")

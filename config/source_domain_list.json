@@ -193,15 +193,13 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
       "aljazeera.com",
-      "cruzrojacolombiana.org"
+      "cruzrojacolombiana.org",
+      "efe.com"
     ]
   },
   "TUN": {
@@ -471,11 +469,22 @@
       "mysanantonio.com",
       "ksat.com",
       "news4sanantonio.com",
-      "kerrvilledailytimes.com"
+      "kerrvilledailytimes.com",
+      "univision.com",
+      "telemundo.com",
+      "elnuevoherald.com",
+      "laopinion.com",
+      "efe.com",
+      "kens5.com",
+      "kvia.com",
+      "krqe.com",
+      "roswell-record.com",
+      "hillcountrynews.com",
+      "kxan.com",
+      "texastribune.org"
     ],
     "gov_domains": [
       "fema.gov",
-      "weather.gov",
       "usgs.gov",
       "caloes.ca.gov",
       "lacounty.gov",
@@ -494,7 +503,6 @@
     "org_domains": [
       "redcross.org",
       "nvoad.org",
-      "apnews.com",
       "nfip.org"
     ]
   },
@@ -746,14 +754,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "IRQ": {
@@ -1008,14 +1014,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "HND": {
@@ -1070,14 +1074,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "MEX": {
@@ -1128,14 +1130,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "NPL": {
@@ -2107,11 +2107,11 @@
       "thenewhumanitarian.org",
       "irinnews.org",
       "allafrica.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "lusa.pt"
     ]
   },
   "JPN": {
@@ -3040,13 +3040,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "cruzvermelha.org.br"
+      "cruzvermelha.org.br",
+      "efe.com",
+      "lusa.pt"
     ]
   },
   "HRV": {
@@ -3289,14 +3288,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "PER": {
@@ -3345,14 +3342,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "NAM": {
@@ -3805,15 +3800,13 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
       "aljazeera.com",
-      "cruzroja.es"
+      "cruzroja.es",
+      "efe.com"
     ]
   },
   "DOM": {
@@ -3859,14 +3852,12 @@
       "oxfam.org",
       "thenewhumanitarian.org",
       "irinnews.org",
-      "allafrica.com",
-      "africanews.com",
       "dw.com",
-      "rfi.fr",
       "voanews.com",
       "apnews.com",
       "reuters.com",
-      "aljazeera.com"
+      "aljazeera.com",
+      "efe.com"
     ]
   },
   "FRA": {

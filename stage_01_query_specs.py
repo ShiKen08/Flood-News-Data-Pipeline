@@ -190,10 +190,10 @@ def build_specs_for_event(
     query_lang_codes  = json.loads(lang_row["query_language_codes"])
     query_lang_skipped = json.loads(lang_row["query_language_skipped"])
 
-    # Always include English as a universal fallback — international wire services
-    # (Reuters, AP, AFP, Al Jazeera) cover every major flood in English regardless
-    # of event country. Fra/spa/por added for the same reason.
-    for universal_lang in ("eng", "fra", "spa", "por"):
+    # Always include English/Spanish/Portuguese as universal fallbacks — pipeline scope
+    # is restricted to these three languages. French removed: it was producing noise
+    # for non-Francophone events and is outside the intended language scope.
+    for universal_lang in ("eng", "spa", "por"):
         if universal_lang not in query_lang_codes:
             query_lang_codes.append(universal_lang)
 

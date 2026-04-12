@@ -357,65 +357,73 @@ def get_aliases(normalised: str) -> list[str]:
     return KNOWN_ALIASES.get(normalised, [])
 
 
+_ADMIN_SUFFIX_RE = re.compile(
+    r"\s+(province|state|region|district|department|governorate|"
+    r"prefecture|county|municipality|regency|oblast|commune|"
+    r"capital city|city area|isl\.|island)s?$",
+    re.IGNORECASE,
+)
+_DIRECTIONAL_PREFIX_RE = re.compile(
+    r"^(eastern|western|northern|southern|central|northeast|northwest|"
+    r"southeast|southwest)\s+",
+    re.IGNORECASE,
+)
+_FILLER_TOKENS = {"and", "or", "the", "of", "in", "with", "isl", "island"}
+
+
+def _clean_location_token(sp: str) -> str:
+    """Strip admin suffixes, directional prefixes, leading conjunctions, normalise."""
+    sp = sp.strip()
+    sp = re.sub(r"^(and|or|the)\s+", "", sp, flags=re.IGNORECASE).strip()
+    sp = _ADMIN_SUFFIX_RE.sub("", sp).strip()
+    sp = _DIRECTIONAL_PREFIX_RE.sub("", sp).strip()
+    return normalise_location(sp)
+
+
 def parse_location_field(raw: str) -> list[str]:
     """
     Split a Location field into individual clean place names.
 
-    Handles:
-    - Comma/semicolon separated lists
-    - Parenthetical notes e.g. "(Java Isl.)" — stripped
-    - Leading conjunctions e.g. "and Antioquia" — stripped
-    - Admin suffixes e.g. "Indramayu regency" — kept as-is but also
-      stored without suffix so both forms match
-    - Very long unsplit strings (fallback: split on " and ")
+    Parenthetical content is now EXTRACTED as additional terms (not stripped),
+    so e.g. "Kerr county (Texas)" yields both "kerr" and "texas", and
+    "Roswell (Chaves county, Eastern New Mexico)" yields "roswell", "chaves",
+    and "new mexico".
     """
     if not raw or not raw.strip():
         return []
 
-    # Remove parenthetical clarifications
-    text = re.sub(r"\([^)]*\)", "", raw)
+    # Extract content inside parentheses as additional location terms
+    paren_parts: list[str] = re.findall(r"\(([^)]+)\)", raw)
 
-    # Split on comma or semicolon first
-    parts = re.split(r"[,;]", text)
+    # Remove parentheses from main text so we don't double-count the outer token
+    main_text = re.sub(r"\([^)]*\)", "", raw)
 
-    cleaned = []
-    for part in parts:
-        part = part.strip()
-        if not part:
+    # Process main text + each parenthetical block
+    all_raw_parts: list[str] = []
+    for chunk in [main_text] + paren_parts:
+        parts = re.split(r"[,;]", chunk)
+        for part in parts:
+            part = part.strip()
+            if not part:
+                continue
+            # Fallback split on " and " for very long unsplit strings
+            if len(part) > 40 and " and " in part.lower():
+                all_raw_parts.extend(re.split(r"\s+and\s+", part, flags=re.IGNORECASE))
+            else:
+                all_raw_parts.append(part)
+
+    seen: set[str] = set()
+    result: list[str] = []
+    for raw_tok in all_raw_parts:
+        sp = _clean_location_token(raw_tok)
+        if len(sp) < 3:
             continue
+        if sp in _FILLER_TOKENS:
+            continue
+        if sp not in seen:
+            seen.add(sp)
+            result.append(sp)
 
-        # If a part is very long (>40 chars) and unsplit, try splitting on " and "
-        if len(part) > 40 and " and " in part.lower():
-            subparts = re.split(r"\s+and\s+", part, flags=re.IGNORECASE)
-        else:
-            subparts = [part]
-
-        for sp in subparts:
-            sp = sp.strip()
-            # Strip leading conjunctions: "and X" / "or X"
-            sp = re.sub(r"^(and|or|the)\s+", "", sp, flags=re.IGNORECASE).strip()
-            # Strip trailing admin suffixes — keep canonical short form
-            sp = re.sub(
-                r"\s+(province|state|region|district|department|governorate|"
-                r"prefecture|county|municipality|regency|oblast|commune|"
-                r"capital city|city area|isl\.|island)s?$",
-                "", sp, flags=re.IGNORECASE
-            ).strip()
-            sp = normalise_location(sp)
-            # Drop tokens that are too short or pure filler
-            if len(sp) < 3:
-                continue
-            if sp in {"and", "or", "the", "of", "in", "with", "isl", "island"}:
-                continue
-            cleaned.append(sp)
-
-    # Deduplicate preserving order
-    seen = set()
-    result = []
-    for name in cleaned:
-        if name not in seen:
-            seen.add(name)
-            result.append(name)
     return result
 
 
@@ -429,6 +437,13 @@ def build_location_dictionary(df: pd.DataFrame) -> pd.DataFrame:
         country_name = normalise_location(str(row.get("Country", "") or ""))
 
         place_names = parse_location_field(raw_location)
+
+        # River Basin column → additional subnational terms (e.g. "Guadalupe")
+        river_basin_raw = str(row.get("River Basin", "") or "").strip()
+        if river_basin_raw and river_basin_raw.lower() not in {"nan", "n/a", "none", ""}:
+            for basin_name in parse_location_field(river_basin_raw):
+                if basin_name not in place_names:
+                    place_names.append(basin_name)
 
         # Always include the country itself
         all_names = []
@@ -486,6 +501,11 @@ def main():
         "--refresh-collinfo", action="store_true",
         help="Force re-download of collinfo.json even if cached copy exists"
     )
+    parser.add_argument(
+        "--rebuild-locations", action="store_true",
+        help="Rebuild location_dictionary.parquet only (no network calls). Use after "
+             "fixing parse_location_field without re-running the full pipeline."
+    )
     args = parser.parse_args()
 
     log.info("=" * 70)
@@ -514,6 +534,14 @@ def main():
     if df.empty:
         log.error("No matching events found. Check Flood_ID column name in your CSV.")
         sys.exit(1)
+
+    # ------------------------------------------------------------------
+    # --rebuild-locations: skip network calls, just rebuild location dict
+    # ------------------------------------------------------------------
+    if args.rebuild_locations:
+        loc_df = build_location_dictionary(df)
+        log.info("Location dictionary rebuilt. Re-run stage_06v with --fresh.")
+        return
 
     # ------------------------------------------------------------------
     # Stage 0a — Crawl lag check

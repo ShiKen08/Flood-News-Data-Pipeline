@@ -1,0 +1,184 @@
+FLOOD DATA PIPELINE — SUMMARY
+==============================
+
+OVERVIEW
+--------
+A Python-based pipeline that extracts news and government articles about 150 flood events across
+6 geographic regions from Common Crawl's public web archive (WARC format). The pipeline is
+sequential — each stage reads the Parquet output of the previous one.
+
+
+PIPELINE STAGES
+===============
+
+STAGE 00 — PREFLIGHT
+---------------------
+Prepares metadata before any querying. Four sub-stages:
+
+  0a — Crawl Lag Check: Fetches Common Crawl's collinfo.json to find which CC crawl jobs cover
+       each event's date window
+
+  0b — Windowing Rules: Computes search windows per event:
+       start - 5 days  to  end + 14 days (or +5 days for events > 20 days duration)
+
+  0c — Language Resolution: Maps event language codes (ISO 639-3) to a 3-tier system:
+       - Tier 1: High CC coverage (Arabic, English, French, Spanish, etc.)
+       - Tier 2: Moderate coverage (Nepali, Bulgarian, Thai, etc.)
+       - Tier 3: Very low — falls back to French or English
+
+  0d — Location Dictionary: Builds normalised place name lists with aliases from flood_crawl.csv
+
+Outputs: crawl_coverage.parquet, language_assignments.parquet, location_dictionary.parquet
+
+
+STAGE 01 — QUERY SPECS
+-----------------------
+Builds CDX search query specifications for each event. Four variants (pilot uses only Variant C):
+
+  A: Flood keywords only
+  B: Location names only
+  C (primary): Flood keywords AND location: (flood OR inundation OR ...) AND (Jakarta OR ...)
+  D: Impact/emergency terms + location
+
+Also determines retrieval strategy:
+  - domain-restricted: queries known news domains from source_domain_list.json
+  - open-web: wildcard patterns (e.g. *.tz/*)
+
+Output: event_query_specs.parquet
+
+
+STAGE 02 — CC INDEX QUERY
+--------------------------
+Queries Common Crawl's CDX (Capture inDeX) API to find URLs. The CDX API searches by URL
+patterns, not keywords — so the pipeline queries known domains or country-level wildcards.
+
+  - 1000 results per page, paginated
+  - 3 retries with exponential backoff
+  - 0.5s delay between requests
+  - Captures: URL, timestamp, WARC filename, byte offset + length, content digest
+
+Outputs: cc_index_hits.parquet, hit_count_summary.parquet, raw JSONL API responses
+
+
+STAGE 03 — VALIDATE POINTERS
+------------------------------
+Filters WARC pointers before downloading. Three steps:
+
+  1. Validation: Check offset/length are valid numbers, filename matches WARC path regex
+  2. Size filter: Too small (< 500 bytes) or too large (> 5 MB) are flagged separately
+  3. Deduplication: Hash (url, offset, length) to flag duplicate pointers within and across events
+
+Outputs: validated_pointers.parquet, rejects.parquet
+
+
+STAGE 04 — DOWNLOAD WARC SLICES
+---------------------------------
+Async download of WARC byte slices using HTTP Range requests. Two-phase architecture:
+
+  Phase 1 (Primary):
+    - 50 concurrent coroutines, 30s timeout
+    - Throughput floor of 10 KB/s
+    - Timed-out items deferred to Phase 2
+    - 403/503 bursts pause all workers for 120s
+
+  Phase 2 (Deferred):
+    - 50 concurrent coroutines, 300s timeout
+    - No throughput floor — whatever comes back is final
+
+WARC slices cached locally as cache/{flood_id}/{pointer_id}.warc.gz
+
+Output: warc_fetch_log.parquet
+
+
+STAGE 05 — EXTRACT TEXT FROM HTML
+------------------------------------
+Extracts article text from cached WARC slices:
+
+  1. Decompress gzip, parse WARC headers, find HTTP response boundary
+  2. Skip non-HTML content types
+  3. Detect encoding: HTTP Content-Type -> HTML meta charset -> chardet (if confidence > 0.7)
+     -> UTF-8 fallback
+  4. Primary extraction: trafilatura (ML-based, discards navbars, sidebars, footers, cookie banners)
+  5. Fallback: BeautifulSoup plain-text extraction
+  6. Extract metadata: <title>, meta description, publication date (from meta tags, JSON-LD,
+     or URL patterns)
+
+Output: extracted_text.parquet
+
+
+STAGE 06 — CLEAN, DEDUPLICATE & FILTER RELEVANCE
+--------------------------------------------------
+The most complex stage, covering three logical steps:
+
+  TEXT CLEANING:
+    - Whitespace normalisation (collapse spaces, preserve paragraph breaks)
+    - Strip boilerplate lines (subscribe, newsletter, advertisement, etc.)
+    - Compute char_count, word_count, non_ascii_ratio
+
+  USABILITY GATES (is_usable = FALSE if):
+    - Empty/null text
+    - Less than 200 characters
+    - More than 40% non-ASCII (indicates encoding failure)
+    - Title matches error page patterns (404, 403, "Access Denied")
+    - URL/title pattern matches index/tag/archive/pagination pages
+
+  LANGUAGE DETECTION:
+    - langid library (Naive Bayes + character n-grams)
+    - ISO 639-1 to ISO 639-3 code conversion
+    - Confidence normalized to 0-1 via sigmoid
+    - language_match = TRUE if detected language is in event's query languages
+      (with Tier 3 fallback logic)
+
+  RELEVANCE FILTERING (keyword matching):
+    - Word-boundary regex: \bterm\b for ASCII; lookaround patterns for non-ASCII
+      (Arabic, Chinese, Thai)
+    - Metrics: flood_term_hits, location_term_hits, subnational_hits,
+      location_specificity_score
+    - Gate: is_relevant = (flood_hits >= 2) AND (loc_hits >= 1)
+
+  CONTENT DEDUPLICATION:
+    - SHA256 hash of clean_text
+    - Within each flood_id: keep earliest timestamp as canonical
+    - Assign duplicate_group_id (UUID) to all duplicates
+    - Warn if dup rate > 70%
+
+Output: clean_text.parquet, appends to rejects.parquet
+
+
+STAGE 07 — URL REPORT
+-----------------------
+Generates a human-readable CSV for manual QA, with one row per document. Includes relevance
+flags, language detection results, word counts, specificity scores, and optional full text.
+
+Output: url_report_pilot.csv
+
+
+KEY TECHNOLOGIES & LIBRARIES
+==============================
+
+  trafilatura     Article extraction (ML-based)
+  langid          Language detection (Naive Bayes)
+  chardet         Encoding detection
+  BeautifulSoup   HTML parsing fallback
+  lxml            Parser backend
+  aiohttp         Async HTTP downloads
+  pandas          Data manipulation
+  pyarrow         Parquet I/O
+  pytest          Testing
+
+
+DATA SOURCES
+=============
+
+  - Common Crawl CDX API     index.commoncrawl.org     URL/timestamp index lookup
+  - Common Crawl WARC Data   data.commoncrawl.org      Raw HTML via byte-range requests
+  - flood_crawl.csv          150 flood events with dates, countries, languages
+  - keyword_lexicon.json     Multilingual flood keywords (20+ languages, ~6 categories each)
+  - source_domain_list.json  News/gov/org domains per country (68 countries)
+
+
+PILOT VS FULL RUN
+==================
+The pipeline is first validated on 7 pilot events (PILOT_FLOOD_IDS = [131-137]) before scaling
+to all 150. Progress is tracked in git-committed JSON manifests (progress/flood_*.json) for
+team coordination.

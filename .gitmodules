@@ -1,0 +1,3 @@
+[submodule "NLP-model"]
+	path = NLP-model
+	url = https://github.com/Lenap0911/NLP-model.git

@@ -52,3 +52,9 @@ Thumbs.db
 .env
 *.key
 *.pem
+
+# --- Local tooling ---
+.claude/
+
+# --- Project files not for repo ---
+*.pdf

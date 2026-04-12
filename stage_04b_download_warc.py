@@ -36,6 +36,7 @@ import gzip
 import importlib.util
 import io
 import logging
+import re
 import signal
 import sys
 import queue as queue_module
@@ -104,6 +105,39 @@ RATE_LIMIT_PAUSE        = 300        # seconds to pause when 403s detected (5 mi
 RATE_LIMIT_THRESHOLD    = 3          # consecutive 403s before triggering throttle-down
 RAMP_UP_AFTER           = 2000        # downloads with no failures before adding a worker
 
+# =============================================================================
+# URL pre-filter — skip known junk URLs before downloading any WARC bytes
+# =============================================================================
+# Mirrors the tag/index filter in stage_06v but applied at the pointer level
+# to avoid wasting bandwidth on pages that will never be relevant articles.
+
+_PREFILTER_JUNK_DOMAIN_RE = re.compile(
+    r"^https?://(?:www\.)?weather\.gov(?:/|$)",
+    re.IGNORECASE,
+)
+
+_PREFILTER_URL_PATH_RE = re.compile(
+    r"/tag/|/tags/|/tag$|/tags$"
+    r"|/category/|/categories/"
+    r"|/topic/|/topics/"
+    r"|/archive/|/archives/"
+    r"|/search/|/buscar/|/recherche/"
+    r"|[?&]q=|[?&]s=|[?&]query=|[?&]keyword="
+    r"|/page/\d+|[?&]page=\d+",
+    re.IGNORECASE,
+)
+
+_PREFILTER_HOMEPAGE_RE = re.compile(r"^https?://[^/]+/?(?:\?.*)?$")
+
+
+def _is_prefilter_junk(url: str) -> bool:
+    if not url:
+        return False
+    if _PREFILTER_JUNK_DOMAIN_RE.match(url):
+        return True
+    if _PREFILTER_HOMEPAGE_RE.match(url):
+        return True
+    return bool(_PREFILTER_URL_PATH_RE.search(url))
 
 
 # =============================================================================
@@ -679,11 +713,11 @@ def main():
     parser = argparse.ArgumentParser(description="Stage 04 — Download WARC slices")
     parser.add_argument(
         "--full", action="store_true",
-        help="Download all valid pointers (default: test batch of 100/event)"
+        help="(no-op — kept for backwards compat; all pointers are downloaded by default)"
     )
     parser.add_argument(
         "--all", action="store_true",
-        help="Process all events (Phase 2 — implies --full)"
+        help="Process all events (Phase 2)"
     )
     parser.add_argument(
         "--flood-id", type=int,
@@ -691,12 +725,12 @@ def main():
     )
     parser.add_argument(
         "--random", action="store_true",
-        help="Fresh random sample each run (default: resume same sample if one exists)"
+        help="(no-op — kept for backwards compat)"
     )
     args = parser.parse_args()
 
-    is_full  = args.full or args.all
-    mode_str = "FULL" if is_full else f"TEST BATCH ({BATCH_SIZE}/event)"
+    is_full  = True  # pilot batch limit removed — always download all eligible pointers
+    mode_str = "FULL"
 
     log.info("=" * 70)
     log.info("STAGE 04 — DOWNLOAD WARC SLICES")
@@ -743,25 +777,12 @@ def main():
     log.info(f"To download             : {len(to_download)}")
 
     # ------------------------------------------------------------------
-    # Apply pilot batch limit (per event) unless --full
+    # URL pre-filter — drop known junk URLs before downloading any bytes
     # ------------------------------------------------------------------
-    sample_path = OUTPUT_DIR / "batch_sample_pointers.parquet"
-
-    if not is_full:
-        if not args.random and sample_path.exists():
-            saved_sample    = pd.read_parquet(sample_path)
-            total_in_sample = len(saved_sample)
-            already_done    = total_in_sample - saved_sample["pointer_id"].isin(to_download["pointer_id"]).sum()
-            to_download     = to_download[to_download["pointer_id"].isin(saved_sample["pointer_id"])]
-            log.info(f"Resumed sample          : {total_in_sample} total  |  {already_done} already cached  |  {len(to_download)} remaining")
-        else:
-            batches = []
-            for flood_id, group in to_download.groupby("flood_id"):
-                batches.append(group.sample(min(BATCH_SIZE, len(group)), random_state=42))
-            to_download = pd.concat(batches, ignore_index=True)
-            to_download[["pointer_id", "flood_id"]].to_parquet(sample_path, index=False)
-            mode = "random" if args.random else "new"
-            log.info(f"After pilot batch limit : {len(to_download)} pointers ({mode} sample saved)")
+    junk_mask   = to_download["url"].fillna("").apply(_is_prefilter_junk)
+    n_junk      = junk_mask.sum()
+    to_download = to_download[~junk_mask].copy()
+    log.info(f"URL pre-filter dropped  : {n_junk} junk URLs  |  remaining={len(to_download)}")
 
     if to_download.empty:
         log.info("Nothing to download — all pointers already cached.")
