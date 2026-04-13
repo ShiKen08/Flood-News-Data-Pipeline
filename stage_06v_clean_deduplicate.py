@@ -391,8 +391,14 @@ def _score_one(text_lower: str, flood_terms: list, loc_entries: list) -> dict:
             is_relevant = flood_hits >= 2 and loc_hits >= 1
     else:
         is_relevant = flood_hits >= 2
+    # Soft relevance: relaxes subnational requirement — flood + any location hit.
+    # Useful for triage: articles that mention the flood region but not a specific
+    # subarea (e.g. "Texas" but not "Kerr County"). Not used for the strict output
+    # but retained as a signal for analysis and alias expansion decisions.
+    is_soft_relevant = flood_hits >= 2 and loc_hits >= 1
     return {
         "is_relevant":                is_relevant,
+        "is_soft_relevant":           is_soft_relevant,
         "flood_mentioned":            flood_hits >= 1,
         "flood_term_hits":            flood_hits,
         "location_term_hits":         loc_hits,

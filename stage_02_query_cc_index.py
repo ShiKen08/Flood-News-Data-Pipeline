@@ -85,6 +85,13 @@ CC_RETRY_MAX         = 3
 CC_RETRY_BACKOFF     = 2        # seconds; wait = backoff ^ attempt
 CC_RATE_LIMIT_SLEEP  = 0.5      # seconds between requests — respect CC servers
 
+# Per-domain CC hit cap — prevents high-volume national/international domains
+# (foxnews.com, aljazeera.com, cbsnews.com) from consuming the pointer budget.
+# National outlets contribute 8k+ rejects per flood with near-zero relevance on
+# specific county-level events. Local/regional domains are exempt (see domain_hints).
+MAX_DOMAIN_HITS         = 3000   # default cap per domain per flood
+MAX_DOMAIN_HITS_NATIONAL = 500   # tighter cap for national/international scope domains
+
 
 # =============================================================================
 # Helpers
@@ -96,6 +103,17 @@ def load_domain_list() -> dict:
         return {}
     with open(SOURCE_DOMAIN_LIST) as f:
         return json.load(f)
+
+
+def load_national_scope_domains() -> set:
+    """Load the set of national/international scope domains from domain_hints.json."""
+    hints_path = Path(__file__).parent / "config" / "domain_hints.json"
+    if not hints_path.exists():
+        log.debug("domain_hints.json not found — all domains will use default hit cap")
+        return set()
+    with open(hints_path) as f:
+        hints = json.load(f)
+    return set(hints.get("national_scope", []))
 
 
 def ts_to_cc_format(iso_ts: str) -> str:
@@ -148,15 +166,19 @@ def query_cc_index(
     from_ts:       str,
     to_ts:         str,
     raw_save_path: Path,
+    hit_cap:       int = MAX_DOMAIN_HITS,
 ) -> list[dict]:
     """
     Query the CC CDX index for a single URL pattern + time window.
     Pages through all results. Saves raw JSONL to disk immediately.
     Failed queries are logged to logs/failed_queries.jsonl — never crash.
     Returns list of parsed hit dicts (may be partial if errors occurred).
+    hit_cap: stop paginating once this many hits are collected (prevents high-volume
+    domains from consuming excessive pointer budget).
     """
     import http.client
 
+    _hit_cap = hit_cap
     base_url = CC_INDEX_URL.format(crawl_id=crawl_id)
     hits = []
     page = 0
@@ -263,6 +285,10 @@ def query_cc_index(
             if len(page_hits) < CC_INDEX_PAGE_SIZE:
                 break  # Last page
 
+            if len(hits) >= _hit_cap:
+                log.debug(f"  Hit cap reached ({_hit_cap}) for {url_pattern[:60]} — stopping pagination")
+                break
+
             page += 1
             time.sleep(CC_RATE_LIMIT_SLEEP)
 
@@ -274,13 +300,17 @@ def query_cc_index(
 # =============================================================================
 
 def process_query_spec_row(
-    spec_row:    pd.Series,
-    domain_list: dict,
+    spec_row:              pd.Series,
+    domain_list:           dict,
+    national_scope_domains: set | None = None,
 ) -> list[dict]:
     """
     For one row from event_query_specs, determine what URL patterns to query
     and run the CC index queries. Returns list of enriched hit dicts.
+    national_scope_domains: set of domains that get MAX_DOMAIN_HITS_NATIONAL cap.
     """
+    if national_scope_domains is None:
+        national_scope_domains = set()
     flood_id   = int(spec_row["flood_id"])
     query_id   = spec_row["query_id"]
     crawl_id   = spec_row["crawl_id"]
@@ -329,12 +359,20 @@ def process_query_spec_row(
 
     for url_pattern, domain_slug, filter_type in url_patterns:
         raw_path = raw_response_path(flood_id, crawl_id, domain_slug)
+        # Apply tighter cap for national/international scope domains — they
+        # generate thousands of hits but near-zero relevance for county events.
+        domain_hit_cap = (
+            MAX_DOMAIN_HITS_NATIONAL
+            if domain_slug in national_scope_domains
+            else MAX_DOMAIN_HITS
+        )
         raw_hits = query_cc_index(
             crawl_id=crawl_id,
             url_pattern=url_pattern,
             from_ts=from_ts,
             to_ts=to_ts,
             raw_save_path=raw_path,
+            hit_cap=domain_hit_cap,
         )
 
         for hit in raw_hits:
@@ -472,6 +510,8 @@ def main():
 
     specs_df = pd.read_parquet(specs_path)
     domain_list = load_domain_list()
+    national_scope_domains = load_national_scope_domains()
+    log.info(f"National-scope domains loaded: {len(national_scope_domains)} (cap={MAX_DOMAIN_HITS_NATIONAL})")
 
     # Build flood -> ISO map
     from config import FLOOD_CSV
@@ -507,7 +547,7 @@ def main():
             query_id = spec_row["query_id"]
             log.info(f"  Querying flood #{flood_id:>3}  {query_id}  crawl={spec_row['crawl_id']}")
 
-            hits = process_query_spec_row(spec_row, domain_list)
+            hits = process_query_spec_row(spec_row, domain_list, national_scope_domains)
             all_hits.extend(hits)
             log.info(f"    -> {len(hits)} hits")
 
