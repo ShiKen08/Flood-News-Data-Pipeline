@@ -361,9 +361,11 @@ def process_query_spec_row(
         raw_path = raw_response_path(flood_id, crawl_id, domain_slug)
         # Apply tighter cap for national/international scope domains — they
         # generate thousands of hits but near-zero relevance for county events.
+        # Open-web fallback domains are exempt: they're the only source for
+        # events with no restricted domain list, so cap them at the default.
         domain_hit_cap = (
             MAX_DOMAIN_HITS_NATIONAL
-            if domain_slug in national_scope_domains
+            if filter_type == "restricted" and domain_slug in national_scope_domains
             else MAX_DOMAIN_HITS
         )
         raw_hits = query_cc_index(
