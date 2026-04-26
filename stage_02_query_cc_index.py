@@ -524,7 +524,7 @@ def main():
     # ------------------------------------------------------------------
     if args.flood_id:
         specs_df = specs_df[specs_df["flood_id"] == args.flood_id]
-    elif not args.all:
+    elif PILOT_FLOOD_IDS and not args.all:
         specs_df = specs_df[specs_df["flood_id"].isin(PILOT_FLOOD_IDS)]
 
     # For pilot: only use primary queries (variant C) for the spot-check

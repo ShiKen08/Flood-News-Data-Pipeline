@@ -73,6 +73,7 @@ _spec.loader.exec_module(_config)
 sys.modules["config"] = _config
 
 from config import (
+    EXTRACT_WORKERS,
     LOGS_DIR,
     OUTPUT_DIR,
     PILOT_FLOOD_IDS,
@@ -535,7 +536,7 @@ def main():
     parser.add_argument("--all",      action="store_true", help="All events (Phase 2)")
     parser.add_argument("--flood-id", type=int,            help="Single flood_id (debug)")
     parser.add_argument("--fresh",    action="store_true", help="Ignore checkpoint, reprocess everything")
-    parser.add_argument("--workers",  type=int, default=4, help="Parallel worker threads (default: 4 — tuned for M3 8GB)")
+    parser.add_argument("--workers",  type=int, default=EXTRACT_WORKERS, help=f"Parallel worker threads (default: {EXTRACT_WORKERS})")
     args = parser.parse_args()
 
     if not TRAFILATURA_AVAILABLE:

@@ -1,7 +1,7 @@
 # =============================================================================
 # stage_01_query_specs.py  ·  Flood Data Pipeline — Build Event Query Specs
 # =============================================================================
-# Checklist Stage 1 (pilot phase — 7 events only by default)
+# Checklist Stage 1 — Americas 2020-2025 (all events by default)
 #
 # Reads:
 #   output/crawl_coverage.parquet       (from stage_00 — used to skip NO_CRAWL)
@@ -18,8 +18,8 @@
 #              window_rule_version, retrieval_strategy, created_at
 #
 # Run:
-#   python stage_01_query_specs.py           # pilot events only
-#   python stage_01_query_specs.py --all     # all covered events (Phase 2)
+#   python stage_01_query_specs.py           # all covered events (default)
+#   python stage_01_query_specs.py --all     # explicit full run
 # =============================================================================
 
 import argparse
@@ -292,9 +292,9 @@ def main():
     # ------------------------------------------------------------------
     # Filter events
     # ------------------------------------------------------------------
-    if not args.all:
+    if PILOT_FLOOD_IDS and not args.all:
         raw_df = raw_df[raw_df[COL_FLOOD_ID].isin(PILOT_FLOOD_IDS)].copy()
-        log.info(f"Filtered to {len(raw_df)} pilot events")
+        log.info(f"Filtered to {len(raw_df)} events: {PILOT_FLOOD_IDS}")
 
     # Only process events that have COVERED or PARTIAL crawl status
     covered = coverage_df[coverage_df["coverage_status"].isin(["COVERED", "PARTIAL"])]

@@ -46,7 +46,7 @@
 # RUN:
 #   python stage_04_download_warc.py                  # test batch (BATCH_SIZE/event)
 #   python stage_04_download_warc.py --full           # all pointers, pilot events
-#   python stage_04_download_warc.py --all            # Phase 2 — all 150 events
+#   python stage_04_download_warc.py --all            # all 227 events
 #   python stage_04_download_warc.py --flood-id 126   # single event debug
 #   python stage_04_download_warc.py --flood-id 126 --full
 #   python stage_04_download_warc.py --random         # fresh random sample
@@ -98,11 +98,6 @@ try:
     from config import BATCH_SIZE
 except ImportError:
     BATCH_SIZE = 100                    # max pointers per event in test-batch mode
-
-try:
-    from config import PILOT_BATCH_SIZE
-except ImportError:
-    PILOT_BATCH_SIZE = BATCH_SIZE       # legacy alias — same value
 
 try:
     from config import DOWNLOAD_INTER_REQUEST_SLEEP
@@ -801,7 +796,7 @@ def main():
     )
     parser.add_argument(
         "--all", action="store_true",
-        help="Process all 150 events — Phase 2 full run (implies --full)",
+        help="Process all 227 events (implies --full)",
     )
     parser.add_argument(
         "--flood-id", type=int,
@@ -847,9 +842,9 @@ def main():
     if args.flood_id:
         eligible = eligible[eligible["flood_id"] == args.flood_id].copy()
         log.info(f"Filtered to flood #{args.flood_id}: {len(eligible)} pointers")
-    elif not args.all:
+    elif PILOT_FLOOD_IDS and not args.all:
         eligible = eligible[eligible["flood_id"].isin(PILOT_FLOOD_IDS)].copy()
-        log.info(f"Filtered to pilot events {PILOT_FLOOD_IDS}: {len(eligible)} pointers")
+        log.info(f"Filtered to events {PILOT_FLOOD_IDS}: {len(eligible)} pointers")
 
     # ------------------------------------------------------------------
     # Skip already-cached pointers

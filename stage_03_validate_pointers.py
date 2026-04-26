@@ -385,9 +385,9 @@ def main():
     hits_df = pd.read_parquet(hits_path)
     log.info(f"Loaded {len(hits_df)} index hits from {hits_path}")
 
-    if not args.all:
+    if PILOT_FLOOD_IDS and not args.all:
         hits_df = hits_df[hits_df["flood_id"].isin(PILOT_FLOOD_IDS)]
-        log.info(f"Filtered to {len(hits_df)} pilot event hits")
+        log.info(f"Filtered to {len(hits_df)} hits for events: {PILOT_FLOOD_IDS}")
 
     if args.flood_id:
         hits_df = hits_df[hits_df["flood_id"] == args.flood_id]

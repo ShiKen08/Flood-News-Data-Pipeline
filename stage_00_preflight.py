@@ -17,7 +17,7 @@
 #
 # Run:
 #   python stage_00_preflight.py [--all]
-#   Default: pilot events only (7 IDs). Pass --all to process all 150 events.
+#   Default: all 227 Americas events. Pass --all to be explicit; or set PILOT_FLOOD_IDS in config.
 # =============================================================================
 
 import argparse
@@ -47,7 +47,6 @@ from config import (
     COL_LANGUAGE,
     COL_LOCATION,
     COL_START_DATE,
-    EXPECTED_NO_CRAWL_IDS,
     FLOOD_CSV,
     LOGS_DIR,
     OUTPUT_DIR,
@@ -157,8 +156,6 @@ def check_crawl_coverage(event_row: pd.Series, crawls: list[dict]) -> dict:
 
     if not matching:
         status = "NO_CRAWL"
-        if flood_id in EXPECTED_NO_CRAWL_IDS:
-            window_note = (window_note + " | Expected NO_CRAWL (crawl lag)").strip(" | ")
     elif len(matching) == 1:
         # Partial if the single crawl only clips the window
         crawl_data = next(c for c in crawls if c["crawl_id"] == matching[0])
@@ -646,10 +643,10 @@ def main():
     full_df = pd.read_csv(FLOOD_CSV)
     log.info(f"Loaded {len(full_df)} events from {FLOOD_CSV}")
 
-    # Filter to pilot set unless --all flag passed
-    if not args.all:
+    # Filter to subset if PILOT_FLOOD_IDS is set, unless --all overrides
+    if PILOT_FLOOD_IDS and not args.all:
         df = full_df[full_df[COL_FLOOD_ID].isin(PILOT_FLOOD_IDS)].copy()
-        log.info(f"Filtered to {len(df)} pilot events: {PILOT_FLOOD_IDS}")
+        log.info(f"Filtered to {len(df)} events: {PILOT_FLOOD_IDS}")
     else:
         df = full_df.copy()
 
@@ -696,7 +693,7 @@ def main():
     log.info("  crawl_coverage.parquet")
     log.info("  language_assignments.parquet")
     log.info("  location_dictionary.parquet")
-    log.info("Next: run stage_01_query_specs.py (pilot events only, skip NO_CRAWL)")
+    log.info("Next: run stage_01_query_specs.py (skip NO_CRAWL)")
     log.info("=" * 70)
 
 

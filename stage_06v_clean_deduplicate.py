@@ -56,7 +56,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date as _date
 from pathlib import Path
-from config import KEYWORD_LEXICON
+from config import KEYWORD_LEXICON, LANG_DETECT_WORKERS
 import numpy as np
 import pandas as pd
 import sys
@@ -110,7 +110,6 @@ log = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-LANG_DETECT_WORKERS = 8      # parallel threads for language detection
 LANG_DETECT_CHARS   = 3000   # chars fed to langid per document
 
 # ---------------------------------------------------------------------------

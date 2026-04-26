@@ -68,7 +68,6 @@ from config import (
     LOGS_DIR,
     MAX_RETRIES,
     OUTPUT_DIR,
-    PILOT_BATCH_SIZE,
     BATCH_SIZE,
     PILOT_FLOOD_IDS,
     RETRY_BACKOFF_BASE,
@@ -763,7 +762,7 @@ def main():
     if args.flood_id:
         eligible = eligible[eligible["flood_id"] == args.flood_id]
         log.info(f"Filtered to flood #{args.flood_id}: {len(eligible)} pointers")
-    elif not args.all:
+    elif PILOT_FLOOD_IDS and not args.all:
         eligible = eligible[eligible["flood_id"].isin(PILOT_FLOOD_IDS)]
 
     # ------------------------------------------------------------------
