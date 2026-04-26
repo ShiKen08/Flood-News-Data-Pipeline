@@ -1,0 +1,151 @@
+Flood_ID,ISO,Country,Subregion,Region,Location,River Basin,Start Date,End Date,Duration,Language_ISO_639_3,Local_Languages
+1,SYR,Syrian Arab Republic,Western Asia,Asia,"Idleb, Lattaquié, Hama",,2026-02-08,2026-02-10,2,arb,Arabic
+2,IDN,Indonesia,South-eastern Asia,Asia,Greater Jakarta area and the Indramayu regency (Java Isl.),"Cilanang, Srenseng and Medana rivers",2026-01-28,2026-02-03,6,ind,Indonesian
+3,COL,Colombia,Latin America and the Caribbean,Americas,"Cordoba, Sucre, Cauca, La Guajira, Chocó, and Antioquia, Narino, departments",Sinu river,2026-01-26,2026-02-11,16,spa,Spanish
+4,TUN,Tunisia,Northern Africa,Africa,"Laghouat, Blida, Djelfa, Mascara, El Bayadh, Boumerdes, Tunis, Ariana, Manouba, Ben Arous, Bizerte,Nabeul, Sousse, Monastir, Mahdia, Sfax, Béja, Jendouba, and Kef",,2026-01-18,2026-01-21,3,arb,Arabic
+5,DZA,Algeria,Northern Africa,Africa,"Laghouat, Blida, Djelfa, Mascara, El Bayadh, Boumerdes, Relizane, Chlef, Alger, Tiaret, Tissemsilt, Médéa, Tipaza, and Aïn Defla provinces",,2026-01-18,2026-01-20,2,arb,Arabic
+6,IDN,Indonesia,South-eastern Asia,Asia,"Sitaro Islands regency (Celebes, North Sulawesi province); Sumbawa, North Sulawesi, and Halmahera Island",,2026-01-06,2026-01-08,2,ind,Indonesian
+7,AFG,Afghanistan,Southern Asia,Asia,"Herat, Badghis, and Faryab provinces",,2026-01-02,2026-01-04,2,"prs, pus","Dari, Pashto"
+8,ZWE,Zimbabwe,Sub-Saharan Africa,Africa,"Masvingo, Manicaland, Midlands, and Mashonaland East provinces",,2026-01-01,2026-01-26,25,"sna, eng","Shona, English"
+9,USA,United States of America,Northern America,Americas,"Santa Barbara, Ventura, Los Angeles, and San Bernardino counties (California)",,2025-12-23,2025-12-25,2,eng,English
+10,IDN,Indonesia,South-eastern Asia,Asia,"West Nusa Tenggara, North Sulawesi, North Sumatra, and East Java provinces",,2025-12-21,2025-12-23,2,ind,Indonesian
+11,IDN,Indonesia,South-eastern Asia,Asia,"Sampang, Jember Regencies ; Banyuwangi, (Java); Banjar Regencies (Kalimantan)",,2025-12-16,2025-12-18,2,ind,Indonesian
+12,IRN,Iran (Islamic Republic of),Southern Asia,Asia,"Ardabil, Azarbayejan Sharghi, Bushehr, Chaharmahal and Bakhtiari, Esfahan, Fars, Ghom, Golestan, Hamedan, Hormozgan, Kerman, Khorasan Jonoubi, Khorasan Razavi, Khorasan Shomali, Khuzestan, Kohgiluyeh va boyerahma, Kurdistan, Markazi, Mazandaran, Semnan, Sistan-o baluchestan, Yazd, Zanjan",,2025-12-15,2025-12-22,7,fas,Persian
+13,MAR,Morocco,Northern Africa,Africa,Safi province (Marrakesh-Safi region); Tinghir province (Drâa-Tafilalet region),,2025-12-14,2025-12-14,0,"arb, ber","Arabic, Berber"
+14,MYS,Malaysia,South-eastern Asia,Asia,Terengganu and Pahang,,2025-12-14,2025-12-17,3,zlm,Malay
+15,BOL,Bolivia (Plurinational State of),Latin America and the Caribbean,Americas,"El Torno, La Guardia and Cotoca municipalities (Santa Cruz department); Beni, Cochabamba",Piraí and Espejos rivers,2025-12-12,2025-12-16,4,"spa, ayu, que","Spanish, Aymara, Quechua"
+16,IRQ,Iraq,Western Asia,Asia,"Ninawa, Sulaymaniyah, Erbil, and Kirkuk governorates",,2025-12-09,2025-12-12,3,"arb, ckb","Arabic, Central Kurdish"
+17,MYS,Malaysia,South-eastern Asia,Asia,"Sabah, Sarawak Kelantan, Perlis, Perak, Selangor, Kedah, Penang, Terengganu, and Pahang states",,2025-11-22,2025-12-03,11,zlm,Malay
+18,THA,Thailand,South-eastern Asia,Asia,"Phra Nakhon Si Ayutthaya province; Tha Din Daeng subdistrict in Bangkok; Chaiya and Kathu districts (Malay Peninsula); hitsanulok, Nakhon Sawan, Uthai Thani, Sing Buri, Chainat, Ang Thong, Suphan Buri, Pathum Thani, Nonthaburi and Nakhon Pathom provinces; Surat Thani, Nakhon Si Thammarat, Trang, Phatthalung, Satun, Songkhla, Pattani, Yala, Narathiwat Prachuap Khiri Khan, Chumphon, Krabi",,2025-11-15,2025-11-27,12,tha,Thai
+19,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,Kinshasa capital city area,"N'djili, Nsanga and Makelele rivers",2025-11-11,2025-11-12,1,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+20,IDN,Indonesia,South-eastern Asia,Asia,Nduga district (Papua province),,2025-11-01,2025-11-02,1,ind,Indonesian
+21,CRI,Costa Rica,Latin America and the Caribbean,Americas,"Alajuela; Cartago; Cuajiniquil, Santa Cruz Veintisiete de Abril, Santa Cruz, Tempate, Santa Cruz, Tamarindo, Nosara, Nicoya (Guanacaste); Sierpe de Osa, Puerto Jiménez, Bahía Drake, Corredor, Corredores, Guaycará, Golfito, Jacó, Garabito (Puntarenas)",,2025-10-25,2025-10-31,6,spa,Spanish
+22,HND,Honduras,Latin America and the Caribbean,Americas,"Francisco Morazán, La Paz, Intibucá, and Lempira departments",,2025-10-17,2025-10-20,3,spa,Spanish
+23,MEX,Mexico,Latin America and the Caribbean,Americas,"Veracruz, Puebla, Hidalgo, San Luis Potosí, and Querétaro states",,2025-10-06,2025-10-09,3,spa,Spanish
+24,NPL,Nepal,Southern Asia,Asia,Ilam district (Koshi province); Jhapa District,,2025-10-03,2025-10-05,2,npi,Nepali
+25,IND,India,Southern Asia,Asia,Darjeeling (West Bengal); Bihar states,,2025-10-03,2025-10-07,4,"hin, eng","Hindi, English"
+26,BGR,Bulgaria,Eastern Europe,Europe,Elenite (Burgas province),,2025-10-03,2025-10-03,0,bul,Bulgarian
+27,KHM,Cambodia,South-eastern Asia,Asia,Mondulkiri and Ratanakiri provinces,,2025-10-01,2025-10-02,1,khm,Khmer
+28,UKR,Ukraine,Eastern Europe,Europe,Odesa city (Odesa Oblast),,2025-09-30,2025-09-30,0,ukr,Ukrainian
+29,GEO,Georgia,Western Asia,Asia,Lagodekhi (Kakheti municipality),,2025-09-28,2025-10-06,8,kat,Georgian
+30,THA,Thailand,South-eastern Asia,Asia,"Ayutthaya, Phichit, and Phetchabun",Chao Praya River basin,2025-09-23,2025-09-24,1,tha,Thai
+31,IDN,Indonesia,South-eastern Asia,Asia,Central Papua and East Java,,2025-09-19,2025-09-20,1,ind,Indonesian
+32,HTI,Haiti,Latin America and the Caribbean,Americas,"Chansolme, Port-de-Paix communes",,2025-09-16,2025-09-17,1,"hat, fra","Haitian Creole, French"
+33,IND,India,Southern Asia,Asia,"Dehradun, Champawat, Haridwar, Pauri Garhwal, Bageshwar, Pithoragarh, Nainital, and Udham Singh Nagar districts (Uttarakhand State)",,2025-09-15,2025-09-17,2,"hin, eng","Hindi, English"
+34,GMB,Gambia,Sub-Saharan Africa,Africa,North Bank region,,2025-09-10,2025-09-11,1,"eng, mnk, wol","English, Mandinka, Wolof"
+35,MYS,Malaysia,South-eastern Asia,Asia,Sarawak and Sabah states (Borneo Island),,2025-09-08,2025-09-15,7,zlm,Malay
+36,IDN,Indonesia,South-eastern Asia,Asia,"Gianyar, Karangasem, Jembrana, Tabanan, Klungkung, and Badung, with Denpasar (Bali); Flores",,2025-09-08,2025-09-12,4,ind,Indonesian
+37,SLE,Sierra Leone,Sub-Saharan Africa,Africa,"Bonthe, Kenema, Bo, Moyamba, Kono, Falaba, and Koinadugu",,2025-08-31,2025-09-05,5,"eng, men, tem","English, Mende, Temne"
+38,GMB,Gambia,Sub-Saharan Africa,Africa,"West Coast region, Lower River regions, and Kanifing Municipality (West Banjul region)",Upper River and Central River regions,2025-08-30,2025-09-09,10,"eng, mnk, wol","English, Mandinka, Wolof"
+39,SDN,Sudan,Northern Africa,Africa,"River Nile, Sennar States",,2025-08-27,2025-08-28,1,"arb, eng","Arabic, English"
+40,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,Kalehe territory (South Kivu province),,2025-08-25,2025-08-27,2,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+41,UGA,Uganda,Sub-Saharan Africa,Africa,"Bulambuli, Sironko, Mbale districts and Mbale city (Mount Elgon sub-region in Eastern Uganda)",,2025-08-17,2025-08-19,2,"eng, swa, lug","English, Swahili, Ganda"
+42,CHN,China,Eastern Asia,Asia,"Ordos, Bayannnur city (Inner Mongolia autonomous region)",,2025-08-16,2025-08-19,3,cmn,Mandarin Chinese
+43,IND,India,Southern Asia,Asia,Punjab state,,2025-08-15,2025-09-19,35,"hin, eng","Hindi, English"
+44,PAK,Pakistan,Southern Asia,Asia,"Bunner, Bhattagram, Bajur, and Swat districts (Khyber Pakhtunkhwa) Gilgit-Baltistan, Sindh, Azad Jammu and Kashmir provinces",,2025-08-15,2025-08-20,5,"urd, eng","Urdu, English"
+45,IND,India,Southern Asia,Asia,Kishtwar (Jammu and Kashmir state),,2025-08-14,2025-08-15,1,"hin, eng","Hindi, English"
+46,KOR,Republic of Korea,Eastern Asia,Asia,"Incheon, Gimpo, and Pocheon cities (Gyeonggi Province); Seoul",,2025-08-13,2025-08-19,6,kor,Korean
+47,CAF,Central African Republic,Sub-Saharan Africa,Africa,Moyenne Sido (prefecture of Ouham),,2025-08-12,2025-08-19,7,"fra, sag","French, Sango"
+48,CPV,Cabo Verde,Sub-Saharan Africa,Africa,São Vicente and Santo Antão Islands,,2025-08-10,2025-08-11,1,por,Portuguese
+49,CHN,China,Eastern Asia,Asia,Yuzhong county (Gansu province),,2025-08-07,2025-08-08,1,cmn,Mandarin Chinese
+50,JPN,Japan,Eastern Asia,Asia,"Kagoshima, Toyama, Akita, Ishikawa, Kumamoto, Fukuoaka prefectures",,2025-08-06,2025-08-08,2,jpn,Japanese
+51,MMR,Myanmar,South-eastern Asia,Asia,Laiza,,2025-08-04,2025-08-06,2,mya,Burmese
+52,GNQ,Equatorial Guinea,Sub-Saharan Africa,Africa,Malabo (Bioko Norte province) and Luba (Bioko Sur province),,2025-08-02,2025-08-05,3,"spa, fra, por","Spanish, French, Portuguese"
+53,TWN,Taiwan (Province of China),Eastern Asia,Asia,,,2025-07-28,2025-08-04,7,cmn,Mandarin Chinese
+54,ROU,Romania,Eastern Europe,Europe,"Suceava, Neamt counties",,2025-07-28,2025-07-28,0,ron,Romanian
+55,NGA,Nigeria,Sub-Saharan Africa,Africa,Yola (Adamawa State),,2025-07-27,2025-07-27,0,"eng, hau, ibo, yor","English, Hausa, Igbo, Yoruba"
+56,CHN,China,Eastern Asia,Asia,"Yanqing, Beijing, Hebei province, Shanxi province, Shandong province.",,2025-07-23,2025-07-29,6,cmn,Mandarin Chinese
+57,HKG,"China, Hong Kong Special Administrative Region",Eastern Asia,Asia,,,2025-07-20,2025-07-20,0,"yue, eng","Yue Chinese, English"
+58,LAO,Lao People's Democratic Republic,South-eastern Asia,Asia,"Vientiane, Bolikhamxay, Luang Prabang, Xayaboury, Xieng Khouang, Huaphan, Xaysomboun, Khammouane, and Bokeo",,2025-07-16,2025-08-04,19,lao,Lao
+59,KOR,Republic of Korea,Eastern Asia,Asia,"South Chungcheong , Naju, Gwangju, Seoul, Honseong, and Gyeonggi Provinces",,2025-07-16,2025-07-21,5,kor,Korean
+60,MEX,Mexico,Latin America and the Caribbean,Americas,La Martinica (Jalisco State),,2025-07-15,2025-07-15,0,spa,Spanish
+61,USA,United States of America,Northern America,Americas,"New York; Middlesex, Union, and Somerset (New Jersey); Washington DC, Petersburg (Virginia); Maryland, for Lancaster County (Pennsylvania)",,2025-07-11,2025-07-15,4,eng,English
+62,USA,United States of America,Northern America,Americas,Ruidoso (New Mexico),Rio Ruidoso river,2025-07-08,2025-07-08,0,eng,English
+63,BGD,Bangladesh,Southern Asia,Asia,"Feni, Cumilla, Banderban, Lakshmipur and Barishal",,2025-07-07,2025-07-10,3,ben,Bengali
+64,IDN,Indonesia,South-eastern Asia,Asia,"Bogor, West Java and East Jakarta",,2025-07-05,2025-07-06,1,ind,Indonesian
+65,USA,United States of America,Northern America,Americas,Kerr county (Texas),Guadalupe,2025-07-04,2025-07-07,3,eng,English
+66,AFG,Afghanistan,Southern Asia,Asia,Maidan Wardak and Logar provinces,,2025-06-30,2025-07-04,4,"prs, pus","Dari, Pashto"
+67,PAK,Pakistan,Southern Asia,Asia,"Khyber Pakhtunkhwa, Punjab, Azad Jammu and Kashmir, Sindh, and Balochistan",Swat river,2025-06-26,2025-09-11,77,"urd, eng","Urdu, English"
+68,IND,India,Southern Asia,Asia,"Himachal Pradesh, Uttarakhand",,2025-06-20,2025-07-07,17,"hin, eng","Hindi, English"
+69,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,"Ngaliema, Masina, Lemba, Matete communes (Kinshasa)",,2025-06-14,2025-06-16,2,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+70,ZAF,South Africa,Sub-Saharan Africa,Africa,Eastern Cape and KwaZulu-Natal provinces,,2025-06-09,2025-06-20,11,"eng, afr, zul, xho","English, Afrikaans, Zulu, Xhosa"
+71,USA,United States of America,Northern America,Americas,San Antonio (Texas),,2025-06-08,2025-06-14,6,eng,English
+72,VNM,Viet Nam,South-eastern Asia,Asia,"Lai Châu, Hà Giang, and Lào Cai",,2025-06-07,2025-06-11,4,vie,Vietnamese
+73,PHL,Philippines,South-eastern Asia,Asia,Zamboanga Peninsula region (Mindanao) and Luzon islands,,2025-06-07,2025-06-09,2,"tgl, eng","Tagalog, English"
+74,IND,India,Southern Asia,Asia,"Assam, Arunachal Pradesh, Mizoram, Manipur, Sikkim, Meghalaya Nagaland, Tripura, Meghalaya states",,2025-05-31,2025-06-01,1,"hin, eng","Hindi, English"
+75,NGA,Nigeria,Sub-Saharan Africa,Africa,Mokwa city (Niger state),,2025-05-29,2025-06-02,4,"eng, hau, ibo, yor","English, Hausa, Igbo, Yoruba"
+76,THA,Thailand,South-eastern Asia,Asia,,,2025-05-24,2025-05-24,0,tha,Thai
+77,IDN,Indonesia,South-eastern Asia,Asia,Arfak Mountains Regency (West Papua),,2025-05-16,2025-05-16,0,ind,Indonesian
+78,BGD,Bangladesh,Southern Asia,Asia,"Sylhet, Sunamganj, Moulvibazar, Netrokona, Khagrachari, Habiganj, Noakhali, Bhola, Bandarban, and Rangamati.",,2025-05-15,2025-06-01,17,ben,Bengali
+79,TZA,United Republic of Tanzania,Sub-Saharan Africa,Africa,"Kyela, Rungwe, and Ileje districts (Mbeya Region)",,2025-05-14,2025-05-15,1,"swa, eng","Swahili, English"
+80,DZA,Algeria,Northern Africa,Africa,"Laghouat, Tiaret, Djelfa, M'Sila",,2025-05-14,2025-05-16,2,arb,Arabic
+81,THA,Thailand,South-eastern Asia,Asia,"Nakhon Sawan, Phichit, Phitsanulok, Phetchabun, Kalasin, Amnat Charoen, Nakhon Ratchasima, and Sa Kaeo provinces",,2025-05-14,2025-05-14,0,tha,Thai
+82,SOM,Somalia,Sub-Saharan Africa,Africa,"Kahda and Daynile districts; Mogadiscio (Banaadir region); Balcad and Jowhar in Hirshabelle State, and Gaalkacyo in Mudug region and Afgooye (South West State); Puntland State",,2025-05-09,2025-05-10,1,"som, arb","Somali, Arabic"
+83,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,Kasaba (South Kivu),"Kasaba river, Tanganyika lake",2025-05-08,2025-05-09,1,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+84,IDN,Indonesia,South-eastern Asia,Asia,Lampung Province (southern Sumatra),,2025-04-28,2025-04-28,0,ind,Indonesian
+85,SOM,Somalia,Sub-Saharan Africa,Africa,"Puntland and South West States; Jowhar district, Middle Shabelle region",Shabelle and Juba rivers,2025-04-15,2025-04-30,15,"som, arb","Somali, Arabic"
+86,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,Tanganyika Province,Rugumba River,2025-04-11,2025-04-11,0,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+87,COD,Democratic Republic of the Congo,Sub-Saharan Africa,Africa,Kinshasa capital city,Ndjili river,2025-04-04,2025-04-11,7,"fra, lin, swa, kon, lua","French, Lingala, Swahili, Kongo, Luba-Kasai"
+88,BRA,Brazil,Latin America and the Caribbean,Americas,"Petrópolis, Angra dos Reis, São Paulo, Rio de Janeiro",,2025-04-03,2025-04-05,2,por,Portuguese
+89,IDN,Indonesia,South-eastern Asia,Asia,"Sulawesi, north Sumatra, north Maluku and east Java,",,2025-04-01,2025-04-07,6,ind,Indonesian
+90,HRV,Croatia,Southern Europe,Europe,Dubrovnik city area,,2025-03-26,2025-03-31,5,hrv,Croatian
+91,BIH,Bosnia and Herzegovina,Southern Europe,Europe,Prijedor and Sanski (Slavonia region),"Bosna, Una, Sava, Sana, Ukrina rivers",2025-03-26,2025-03-31,5,"bos, hrv, srp","Bosnian, Croatian, Serbian"
+92,MYS,Malaysia,South-eastern Asia,Asia,"Johor Bahru, Kulai, Pontian, Kota Tinggi, Kluang, Batu Pahat, and Iskandar Puteri (Johor state); Sabah and Sarawak states",,2025-03-20,2025-03-21,1,zlm,Malay
+93,IDN,Indonesia,South-eastern Asia,Asia,Madiun regency (East Java); West Java,,2025-03-15,2025-03-17,2,ind,Indonesian
+94,ITA,Italy,Southern Europe,Europe,"Florence, Prato, Pisa, and Livorno (Toscane); Emilia-Romagna",,2025-03-14,2025-03-16,2,ita,Italian
+95,MYS,Malaysia,South-eastern Asia,Asia,"Tenom, Beaufort, Membakut, and Soo (Sabah, northern Borneo Island)",,2025-03-08,2025-03-12,4,zlm,Malay
+96,IRQ,Iraq,Western Asia,Asia,"Anbar, Diyala, Erbil, Qadisiyah, Thi-Qar",,2025-03-07,2025-03-10,3,"arb, ckb","Arabic, Central Kurdish"
+97,ARG,Argentina,Latin America and the Caribbean,Americas,Bahia Blanca city area (Buenos Aires province),,2025-03-06,2025-03-10,4,spa,Spanish
+98,IDN,Indonesia,South-eastern Asia,Asia,"Bogor regency (West Java province); Sukabumi Regency (West Java) ; Banten, Jakarta, West Java, South Kalimantan, West Sumatra provinces","Ciliwung, Cikeas, Cilengsih and Kali Angke rivers",2025-03-02,2025-03-09,7,ind,Indonesian
+99,PER,Peru,Latin America and the Caribbean,Americas,"Amazonas, Áncash, Apurímac, Arequipa, Ayacucho, Cusco, Huancavelica, Huánuco, Ica, Junín, La Libertad, Lima, Moquegua, Pasco, Piura, Tacna, Tumbes, and Ucayali provinces",,2025-03-01,2025-03-06,5,"spa, que, ayu","Spanish, Quechua, Aymara"
+100,NAM,Namibia,Sub-Saharan Africa,Africa,"Kunene, Omusati, Oshana, Ohangwena, and Zambezi regions",,2025-03-01,2025-04-08,38,"eng, afr, deu","English, Afrikaans, German"
+101,AFG,Afghanistan,Southern Asia,Asia,Farah region; Pushtkoh district; Kandahar province; Helmand province,,2025-02-24,2025-02-26,2,"prs, pus","Dari, Pashto"
+102,BWA,Botswana,Sub-Saharan Africa,Africa,"Gaborone city area, Kgatleng, Ghanzi, Tlokweng (South-East), Francistown, Kweneng, and Boteti,",,2025-02-19,2025-02-21,2,"eng, tsn","English, Tswana"
+103,MYS,Malaysia,South-eastern Asia,Asia,Pahang and Negeri Sembilan states,,2025-02-19,2025-02-20,1,zlm,Malay
+104,PER,Peru,Latin America and the Caribbean,Americas,Tiquillaca district (Puno region),,2025-02-17,2025-02-21,4,"spa, que, ayu","Spanish, Quechua, Aymara"
+105,MDG,Madagascar,Sub-Saharan Africa,Africa,Analamanga region,Sisaony and the Ikopa rivers,2025-02-15,2025-02-28,13,"mlg, fra","Malagasy, French"
+106,MDG,Madagascar,Sub-Saharan Africa,Africa,Antananarivo city area,Sisaony River,2025-02-15,2025-02-16,1,"mlg, fra","Malagasy, French"
+107,PHL,Philippines,South-eastern Asia,Asia,"Mimaropa, Eastern Visayas, and Bicol regions",,2025-02-07,2025-02-19,12,"tgl, eng","Tagalog, English"
+108,BOL,Bolivia (Plurinational State of),Latin America and the Caribbean,Americas,"Chuquisaca, La Paz, Tarija, Cochabamba, Santa Cruz and Potosí",,2025-02-05,2025-02-13,8,"spa, ayu, que","Spanish, Aymara, Quechua"
+109,MYS,Malaysia,South-eastern Asia,Asia,Sabah and Sarawak states,,2025-01-28,2025-01-30,2,zlm,Malay
+110,BRA,Brazil,Latin America and the Caribbean,Americas,Carapicuíba (São Paulo state),,2025-01-24,2025-01-25,1,por,Portuguese
+111,HTI,Haiti,Latin America and the Caribbean,Americas,"Grand'Anse, Nippes and North-West departments",,2024-12-20,2024-12-28,8,"hat, fra","Haitian Creole, French"
+112,LBY,Libya,Northern Africa,Africa,"Tarhuna city, Bani Walid city, Bani Walid district, Gharyan city, Jabal al Gharbi district, Qasr Akhyar, Ain Zara",,2024-12-05,2024-12-09,4,arb,Arabic
+113,IDN,Indonesia,South-eastern Asia,Asia,Sukabumi regency (West Java province),,2024-12-03,2024-12-10,7,ind,Indonesian
+114,KEN,Kenya,Sub-Saharan Africa,Africa,,"Nzoia, Nyando, Yala, Miriu and Awach rivers",2024-12-01,2024-12-05,4,"eng, swa","English, Swahili"
+115,HTI,Haiti,Latin America and the Caribbean,Americas,Grand-Anse department and the South department,,2024-11-30,2024-12-04,4,"hat, fra","Haitian Creole, French"
+116,MWI,Malawi,Sub-Saharan Africa,Africa,,,2024-11-27,2024-12-06,9,"eng, nya","English, Nyanja"
+117,GAB,Gabon,Sub-Saharan Africa,Africa,"Mouila (Ngounié Province), Port-Gentil (Ogooué-Maritime Province), Tchibanga (Nyanga Province) and Grand Libreville (Estuaire Province)",,2024-11-25,2024-11-27,2,fra,French
+118,THA,Thailand,South-eastern Asia,Asia,"Chumphon, Phatthalung, Ranong, Satun, Surat Thani, Nakhon Si Thammarat, Songkhla, Pattani, Narathiwat, and Yala provinces",,2024-11-25,2024-12-15,20,tha,Thai
+119,TZA,United Republic of Tanzania,Sub-Saharan Africa,Africa,Tarime district (Mara region),,2024-11-25,2024-11-27,2,"swa, eng","Swahili, English"
+120,IDN,Indonesia,South-eastern Asia,Asia,"Karo, South Tapanuli, Padang Lawas and Deli Serdang districts (North Sumatra province)",,2024-11-23,2024-11-26,3,ind,Indonesian
+121,BOL,Bolivia (Plurinational State of),Latin America and the Caribbean,Americas,La Paz capital city area,Pasajahuira river,2024-11-23,2024-11-24,1,"spa, ayu, que","Spanish, Aymara, Quechua"
+122,ESP,Spain,Southern Europe,Europe,"Álora, Cártama, Alhaurín de la Torre, Pizarra municipalities and Malaga city (Malaga); Catalonia province",Campanillas and Guadalhorce rivers,2024-11-13,2024-11-14,1,spa,Spanish
+123,CRI,Costa Rica,Latin America and the Caribbean,Americas,"Guanacaste, Puntarenas",,2024-11-12,2024-11-26,14,spa,Spanish
+124,DOM,Dominican Republic,Latin America and the Caribbean,Americas,"Duarte, El Seibo, Espaillat, Hato Mayor, La Altagracia, Maria Trinidad Sanches, Puerto Plata, Samanà",,2024-11-10,2024-11-12,2,spa,Spanish
+125,HTI,Haiti,Latin America and the Caribbean,Americas,"Les Cayes, Torbeck, Saint-Louis-du-Sud, Maniche and Port-Salut municipalities",,2024-11-10,2024-11-12,2,"hat, fra","Haitian Creole, French"
+126,ESP,Spain,Southern Europe,Europe,"Alaquàs, Albal, Aldaya, Alfafar, Algemesí, Benerússer, Catarroja, Llocnou de la Corona, Massanassa, Paiporta, Picanya, Sedaví, Utiel and La Torre municipalties (Valencia);, Letur, lbacete provinces; Castilla-La Mancha communities, Andalusia, Murcia, and the Balearic Islands, Catalonia",,2024-10-27,2024-11-04,8,spa,Spanish
+127,ZAF,South Africa,Sub-Saharan Africa,Africa,Eastern Cape province,,2024-10-22,2024-10-25,3,"eng, afr, zul, xho","English, Afrikaans, Zulu, Xhosa"
+128,USA,United States of America,Northern America,Americas,"Roswell (Chaves county, Eastern New Mexico)",,2024-10-18,2024-10-20,2,eng,English
+129,FRA,France,Western Europe,Europe,"Rhône, Loire, Haute-Loire, Lozère, Ardèche, Alpes-Maritimes, Paris area",,2024-10-17,2024-10-18,1,fra,French
+130,BGD,Bangladesh,Southern Asia,Asia,Sherpur district (Mymensingh and Sindh divisions),,2024-10-05,2024-10-10,5,ben,Bengali
+131,IND,India,Southern Asia,Asia,Meghalaya,,2024-10-04,2024-10-07,3,"hin, eng","Hindi, English"
+132,BIH,Bosnia and Herzegovina,Southern Europe,Europe,"Donja Jablanica, Konjic, Buturovic polje, Fojnica, Kiseljak and Kreševo",Neretva River,2024-10-03,2024-10-04,1,"bos, hrv, srp","Bosnian, Croatian, Serbian"
+133,IRN,Iran (Islamic Republic of),Southern Asia,Asia,Jiroft (Kerman province),Halil river,2024-09-30,2024-10-02,2,fas,Persian
+134,NPL,Nepal,Southern Asia,Asia,"Kathmandu, Kavrepalanchowk, Lalitpur, Bagmati, Gandak",,2024-09-26,2024-10-08,12,npi,Nepali
+135,SLE,Sierra Leone,Sub-Saharan Africa,Africa,"Bumbuna dam in Bumbuna town (Tonkolili District, Northern province), Bo, Bonthe, Bombali, Falaba, Kambia, Moyamba, Port Loko, Pujehun, and the Western Area districts",,2024-09-23,2024-10-08,15,"eng, men, tem","English, Mende, Temne"
+136,NGA,Nigeria,Sub-Saharan Africa,Africa,Maiduguri (Borno state),,2024-09-07,2024-09-09,2,"eng, hau, ibo, yor","English, Hausa, Igbo, Yoruba"
+137,MAR,Morocco,Northern Africa,Africa,"Tata, Tiznit, Errachidia, Tinghir and Taroudant provinces",,2024-09-06,2024-09-09,3,"arb, ber","Arabic, Berber"
+138,DZA,Algeria,Northern Africa,Africa,"Béchar, Elbayadh, Beni Abbes, Tamanrasset, Tiaret, Tindouf, and Naama",,2024-09-05,2024-09-09,4,arb,Arabic
+139,YEM,Yemen,Western Asia,Asia,Al-Mahwit governorate,,2024-08-27,2024-08-29,2,arb,Arabic
+140,IND,India,Southern Asia,Asia,"Gujarat, Maharashtra, Tripura States",,2024-08-26,2024-08-27,1,"hin, eng","Hindi, English"
+141,IDN,Indonesia,South-eastern Asia,Asia,Ternate regency (North Maluku province),,2024-08-25,2024-08-26,1,ind,Indonesian
+143,BGD,Bangladesh,Southern Asia,Asia,"Lakshmipur, Cumilla, Feni, and Noakhali districts",,2024-08-19,2024-09-03,15,ben,"English, Hausa, Igbo, Yoruba"
+144,IND,India,Southern Asia,Asia,Tripura state,,2024-08-19,2024-08-23,4,ben,Bengali
+146,THA,Thailand,South-eastern Asia,Asia,"Phetchabun, Chiang Rai, Chiang Mai, Nan, Phayao, Lampang, Phrae, Udon Thani, Rayong, Phuket, Sukhothai and Prae provinces",,2024-08-16,2024-08-26,10,tha,"Hindi, English"
+147,CHN,China,Eastern Asia,Asia,"Ridi Village (Kangding county, Garzê Tibetan Autonomous Prefecture, Sichuan province)",,2024-08-03,2024-08-04,1,cmn,"French, Sango"
+148,CMR,Cameroon,Sub-Saharan Africa,Africa,Logone et Chari and the Mayo-Danay Divisions (Far North Region ),,2024-08-01,2024-09-30,60,fra,Thai
+149,TCD,Chad,Sub-Saharan Africa,Africa,"Batha, Chari-Baguirmi, Logone Oriental, Mayo-Kebbi Ouest, Sila, Logone Occidental, N'Djamena city, Lake, Kanem; Tibesti, Lac, Mayo-Kebbi Est, Mandoul, Tandjilé, Batah, Guera, Salamat, Ennedi West, Borkou, Ennedi East",,2024-08-01,2024-09-30,60,"arb, fra",Mandarin Chinese
+150,IND,India,Southern Asia,Asia,"Mandi, Kullu, Shimla districts (Himachal Pradesh)",,2024-07-31,2024-08-23,23,"hin, eng","French, English"
+151,GIN,Guinea,Sub-Saharan Africa,Africa,"BTN, Bolibana, Sigurikoura, Nankoda, Kokomo, Heremakonon, Chinese City, Tiguibiry, Konoba, Abatoire, Setceur TP, Téléladji, ORS1, and Mandé districts; Kintinian, Kinièbakoura, Niandankoro sub-prefectures (Siguiri)",,2024-07-29,2024-07-31,2,"fra, arb","French, Arabic"
+152,YEM,Yemen,Western Asia,Asia,"Maqbanah district (Taez governorate), Sadaa provinces; Al Hudaydah, Al Hajjah, Ma'rib governorates",,2024-07-28,2024-08-08,11,arb,"Hindi, English"
