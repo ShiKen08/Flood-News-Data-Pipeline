@@ -56,6 +56,7 @@ sys.modules["config"] = _config
 import pandas as pd
 from config import (
     CC_INDEX_URL,
+    CC_INDEX_WORKERS,
     LOGS_DIR,
     OUTPUT_DIR,
     PILOT_FLOOD_IDS,
@@ -299,6 +300,22 @@ def query_cc_index(
 # Per query spec row — resolve domains and run queries
 # =============================================================================
 
+def load_raw_jsonl(raw_path: Path) -> list[dict]:
+    """Replay hits from an existing raw JSONL file. Returns [] if absent/empty."""
+    if not raw_path.exists() or raw_path.stat().st_size == 0:
+        return []
+    hits = []
+    with open(raw_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                try:
+                    hits.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+    return hits
+
+
 def process_query_spec_row(
     spec_row:              pd.Series,
     domain_list:           dict,
@@ -368,14 +385,21 @@ def process_query_spec_row(
             if filter_type == "restricted" and domain_slug in national_scope_domains
             else MAX_DOMAIN_HITS
         )
-        raw_hits = query_cc_index(
-            crawl_id=crawl_id,
-            url_pattern=url_pattern,
-            from_ts=from_ts,
-            to_ts=to_ts,
-            raw_save_path=raw_path,
-            hit_cap=domain_hit_cap,
-        )
+
+        cached = load_raw_jsonl(raw_path)
+        if cached:
+            log.debug(f"  Resume: {len(cached)} hits from cache — {raw_path.name}")
+            raw_hits = cached
+        else:
+            raw_hits = query_cc_index(
+                crawl_id=crawl_id,
+                url_pattern=url_pattern,
+                from_ts=from_ts,
+                to_ts=to_ts,
+                raw_save_path=raw_path,
+                hit_cap=domain_hit_cap,
+            )
+            time.sleep(CC_RATE_LIMIT_SLEEP)  # only sleep on actual network requests
 
         for hit in raw_hits:
             all_hits.append({
@@ -395,8 +419,6 @@ def process_query_spec_row(
                 "retrieval_strategy": filter_type,
                 "fetched_at":         fetched_at,
             })
-
-        time.sleep(CC_RATE_LIMIT_SLEEP)
 
     return all_hits
 
@@ -542,16 +564,26 @@ def main():
     all_hits = []
 
     for phase_label, phase_df in [("PRIMARY (C)", primary_specs), ("SECONDARY (A/B/D)", secondary_specs)]:
-        log.info(f"--- Running {phase_label} queries ---")
+        if phase_df.empty:
+            continue
+        log.info(f"--- Running {phase_label} queries ({CC_INDEX_WORKERS} workers) ---")
 
-        for _, spec_row in phase_df.iterrows():
-            flood_id = int(spec_row["flood_id"])
-            query_id = spec_row["query_id"]
-            log.info(f"  Querying flood #{flood_id:>3}  {query_id}  crawl={spec_row['crawl_id']}")
-
-            hits = process_query_spec_row(spec_row, domain_list, national_scope_domains)
-            all_hits.extend(hits)
-            log.info(f"    -> {len(hits)} hits")
+        with ThreadPoolExecutor(max_workers=CC_INDEX_WORKERS) as executor:
+            futures = {
+                executor.submit(process_query_spec_row, row, domain_list, national_scope_domains): row
+                for _, row in phase_df.iterrows()
+            }
+            for future in as_completed(futures):
+                row = futures[future]
+                try:
+                    hits = future.result()
+                    all_hits.extend(hits)
+                    log.info(
+                        f"  flood #{int(row['flood_id']):>3}  {row['query_id']}"
+                        f"  crawl={row['crawl_id']}  -> {len(hits)} hits"
+                    )
+                except Exception as exc:
+                    log.error(f"  flood #{int(row['flood_id'])} {row['query_id']} failed: {exc}")
 
         # After primary phase: spot-check before running secondary
         if phase_label.startswith("PRIMARY") and all_hits:
