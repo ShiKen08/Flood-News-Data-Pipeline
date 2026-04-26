@@ -153,10 +153,12 @@ def build_report(
         lambda fid: event_meta.get(int(fid), "") if pd.notna(fid) else ""
     )
 
-    # Relevant-only filter on kept docs
+    # Relevant-only filter on kept docs — union of strict + soft relevance
     if relevant_only:
         kept_mask = df["_source"] == "kept"
-        rel_mask  = df["is_relevant"].fillna(False).astype(bool)
+        strict    = df["is_relevant"].fillna(False).astype(bool)
+        soft      = df["is_soft_relevant"].fillna(False).astype(bool) if "is_soft_relevant" in df.columns else strict
+        rel_mask  = strict | soft
         df        = df[~(kept_mask & ~rel_mask)].copy()
 
     # Sort: flood_id -> relevant first -> flood_term_hits desc

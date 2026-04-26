@@ -127,7 +127,7 @@ def load_flood_metadata() -> dict[int, dict]:
 def build_nlp_input(
     clean_df: pd.DataFrame,
     flood_meta: dict[int, dict],
-    include_soft: bool = False,
+    include_soft: bool = True,
 ) -> pd.DataFrame:
     """
     Transform clean_text.parquet rows into NLP input schema.
@@ -246,8 +246,8 @@ def write_summary(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Stage 08 — NLP bridge: prep input CSVs")
     parser.add_argument(
-        "--include-soft", action="store_true",
-        help="include is_soft_relevant articles (relaxed subnational requirement)",
+        "--strict-only", action="store_true",
+        help="use only is_relevant (strict subnational requirement); default includes soft-relevant",
     )
     parser.add_argument(
         "--flood-id", type=int, default=None,
@@ -271,7 +271,7 @@ def main() -> None:
         log.info(f"Filtered to flood_id={args.flood_id}: {len(clean_df)} rows")
 
     # Build NLP input dataframe
-    nlp_df = build_nlp_input(clean_df, flood_meta, include_soft=args.include_soft)
+    nlp_df = build_nlp_input(clean_df, flood_meta, include_soft=not args.strict_only)
 
     if nlp_df.empty:
         log.warning("No articles passed the relevance filter — nothing to write.")

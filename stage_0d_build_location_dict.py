@@ -18,237 +18,471 @@ import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Country-level names ────────────────────────────────────────────────────────
-# Built from the Country column of all 150 rows.
+# Built from the Country column of the Americas 2020-2025 dataset (227 events).
 # Anything NOT in this set will be tagged subnational.
 COUNTRY_NAMES = {
-    # From ISO / Country column — normalised to lowercase
-    "syrian arab republic", "syria",
-    "indonesia",
-    "colombia",
-    "tunisia",
-    "algeria",
-    "afghanistan",
-    "zimbabwe",
+    # Americas — primary dataset
     "united states of america", "usa", "united states",
-    "iran", "iran (islamic republic of)",
-    "morocco",
-    "malaysia",
-    "bolivia", "bolivia (plurinational state of)",
-    "iraq",
-    "thailand",
-    "democratic republic of the congo", "drc", "dr congo", "congo", "congo-kinshasa",
-    "costa rica",
-    "honduras",
-    "mexico",
-    "nepal",
-    "india",
-    "bulgaria",
-    "cambodia",
-    "ukraine",
-    "georgia",           # NOTE: also a US state — flagged as ambiguous below
-    "gambia",
-    "sierra leone",
-    "sudan",
-    "uganda",
-    "china",
-    "pakistan",
-    "republic of korea", "south korea", "korea",
-    "central african republic",
-    "cabo verde",
-    "japan",
-    "myanmar",
-    "equatorial guinea",
-    "taiwan", "taiwan (province of china)",
-    "romania",
-    "nigeria",
-    "laos", "lao people's democratic republic",
-    "bangladesh",
-    "viet nam", "vietnam",
-    "philippines",
-    "south africa",
     "brazil",
-    "croatia",
-    "bosnia and herzegovina",
-    "italy",
-    "argentina",
+    "colombia",
+    "bolivia", "bolivia (plurinational state of)",
     "peru",
-    "namibia",
-    "botswana",
-    "madagascar",
-    "spain",
+    "ecuador",
+    "mexico",
+    "venezuela", "venezuela (bolivarian republic of)",
+    "guatemala",
+    "canada",
+    "argentina",
+    "uruguay",
     "dominican republic",
+    "paraguay",
+    "honduras",
+    "costa rica",
+    "panama",
+    "trinidad and tobago",
+    "saint lucia",
+    "el salvador",
+    "cuba",
+    "guyana",
+    "french guiana",
+    "puerto rico",
+    "chile",
     "haiti",
-    "france",
-    "kenya",
-    "malawi",
-    "gabon",
-    "united republic of tanzania", "tanzania",
-    "somalia",
-    "libya",
-    "yemen",
-    "cameroon",
-    "chad",
-    "guinea",
-    "china, hong kong special administrative region", "hong kong",
-    "myanmar",
-    "lao people's democratic republic",
 }
 
 # ── Ambiguous names ────────────────────────────────────────────────────────────
 # Names that could match unrelated events if not checked against flood context.
 AMBIGUOUS_NAMES = {
-    "georgia",      # US state AND country (Flood #29)
+    "georgia",      # US state AND former Soviet country
     "columbia",     # District of Columbia AND country variant
-    "virginia",     # US state but very common word
+    "virginia",     # US state — common word
     "nueva",        # common Spanish prefix
     "victoria",     # city name in many countries
-    "wellington",   # city in multiple countries
-    "queensland",   # Australia — not in dataset but guard anyway
-    "santa cruz",   # appears in Bolivia AND other countries
-    "san jose",     # multiple countries
+    "santa cruz",   # Bolivia dept AND city in multiple countries
+    "san jose",     # Costa Rica capital AND city in USA/multiple countries
+    "florida",      # US state AND Uruguay department
+    "sucre",        # Bolivia capital AND Colombia department
+    "miranda",      # Venezuela state AND common surname
+    "merida",       # Venezuela state AND Mexico city AND Spain city
+    "cordoba",      # Argentina city AND Spain city
+    "santiago",     # Chile capital AND multiple other cities
+    "amazonas",     # Brazil state AND Colombia/Venezuela dept
+    "parana",       # Brazil state AND river name
+    "san marcos",   # Guatemala dept AND Texas city
+    "loreto",       # Peru region AND Italy city
 }
 
 # ── Alias map ──────────────────────────────────────────────────────────────────
 # Maps canonical lowercase name -> list of known alternate spellings.
-# Seeded for all countries + high-priority subnational names in the dataset.
-# EXTEND THIS as pilot documents surface new spellings.
+# Covers all countries + high-priority subnational names in the Americas dataset.
+# EXTEND THIS as pipeline runs surface new spellings.
 ALIAS_MAP = {
-    # Countries
-    "democratic republic of the congo": [
-        "drc", "dr congo", "congo-kinshasa", "zaire", "rd congo",
-        "republique democratique du congo", "rdc"
+    # ── Country name variants ──────────────────────────────────────────────────
+    "united states of america": ["usa", "united states", "us", "america", "estados unidos"],
+    "bolivia (plurinational state of)": [
+        "bolivia", "estado plurinacional de bolivia"
     ],
-    "syrian arab republic": ["syria", "syrian republic"],
-    "iran (islamic republic of)": ["iran", "persia", "islamic republic of iran"],
-    "united states of america": ["usa", "united states", "us", "america"],
-    "bolivia (plurinational state of)": ["bolivia"],
-    "lao people's democratic republic": ["laos", "lao pdr", "lao"],
-    "united republic of tanzania": ["tanzania"],
-    "viet nam": ["vietnam", "viet-nam"],
-    "republic of korea": ["south korea", "korea"],
-    "taiwan (province of china)": ["taiwan"],
-    "china, hong kong special administrative region": ["hong kong", "hksar"],
-    "bosnia and herzegovina": ["bosnia", "bih"],
+    "venezuela (bolivarian republic of)": [
+        "venezuela", "vzla", "república bolivariana de venezuela",
+        "republica bolivariana de venezuela"
+    ],
+    "trinidad and tobago": ["t&t", "trinidad", "tobago", "trinidad & tobago"],
+    "saint lucia": ["st. lucia", "st lucia", "sainte-lucie", "sta. lucia"],
+    "french guiana": [
+        "guyane", "french guyana", "guyane française", "guyane francaise",
+        "guiana francesa"
+    ],
+    "guyana": ["cooperative republic of guyana", "co-operative republic of guyana"],
+    "dominican republic": ["república dominicana", "republica dominicana", "rd"],
+    "el salvador": ["república de el salvador", "republica de el salvador"],
+    "puerto rico": ["pr", "borinquen", "estado libre asociado de puerto rico"],
 
-    # High-value subnational aliases from the CSV
-    "kinshasa": ["kinshasa capital city", "kinshasa city"],
-    "khyber pakhtunkhwa": ["kpk", "nwfp"],
-    "azad jammu and kashmir": ["ajk", "azad kashmir"],
-    "gilgit-baltistan": ["gb", "gilgit baltistan"],
-    "west bengal": ["west bengal state"],
-    "greater jakarta": ["greater jakarta area", "jakarta"],
-    "java": ["java island", "java isl."],
-    "sulawesi": ["celebes"],
-    "north sulawesi": ["north sulawesi province"],
-    "kalimantan": ["borneo"],
-    "north maluku": ["north maluku province", "maluku utara"],
-    "west papua": ["west papua province"],
-    "santa barbara": ["santa barbara county"],
-    "los angeles": ["los angeles county", "la county"],
-    "ventura": ["ventura county"],
-    "san bernardino": ["san bernardino county"],
-    "esfahan": ["isfahan"],
-    "khorasan razavi": ["razavi khorasan"],
-    "sistan-o baluchestan": ["sistan and baluchestan", "sistan-baluchestan"],
-    "azarbayejan sharghi": ["east azerbaijan", "east azarbaijan"],
-    "kohgiluyeh va boyerahma": ["kohgiluyeh and boyer-ahmad"],
-    "uttarakhand": ["uttaranchal"],
-    "himachal pradesh": ["hp"],
-    "jammu and kashmir": ["j&k", "jk"],
-    "phra nakhon si ayutthaya": ["ayutthaya"],
-    "nakhon si thammarat": ["nakhon si thammarat province"],
-    "nueva jersey": ["new jersey"],  # for Spanish-language docs
-    "nueva york": ["new york"],
-    "grand'anse": ["grande anse", "grand anse"],
-    "borno": ["borno state"],
-    "adamawa": ["adamawa state"],
-    "niger state": ["niger"],   # careful — country Niger also exists
-    "emilia-romagna": ["emilia romagna"],
-    "toscane": ["tuscany", "toscana"],
-    "comunitat valenciana": ["valencia", "valencian community"],
-    "castilla-la mancha": ["castile-la mancha"],
-    "kakheti": ["kakheti municipality", "kakheti region"],
-    "odesa": ["odessa", "odesa oblast"],
-    "negeri sembilan": ["negri sembilan"],
-    "sarawak": ["sarawak state"],
-    "sabah": ["sabah state"],
-    "terengganu": ["trengganu"],
-    "pahang": ["pahang state"],
-    "kelantan": ["kelantan state"],
-    "puno": ["puno region"],
-    "analamanga": ["analamanga region"],
-    "antananarivo": ["antananarivo city"],
-    "mbeya": ["mbeya region"],
-    "kyela": ["kyela district"],
-    "south kivu": ["sud-kivu", "south kivu province"],
-    "kasaba": ["kasaba territory"],
-    "tanganyika province": ["tanganyika"],
-    "ngaliema": ["ngaliema commune"],
-    "kalehe": ["kalehe territory"],
-    "ngounié": ["ngounie", "ngounié province"],
-    "estuaire": ["estuaire province"],
-    "batha": ["batha region"],
-    "chari-baguirmi": ["chari baguirmi"],
-    "n'djamena": ["ndjamena", "n djamena"],
-    "logone oriental": ["logone oriental region"],
-    "logone et chari": ["logone-et-chari"],
-    "far north region": ["extreme nord", "far north"],
-    "maqbanah": ["maqbanah district"],
-    "taez": ["taiz", "ta'iz"],
-    "al-mahwit": ["mahwit", "al mahwit"],
-    "al hudaydah": ["hudaydah", "hodeidah"],
-    "siguiri": ["siguiri prefecture"],
-    "garzê": ["garze", "garzê tibetan autonomous prefecture"],
-    "sichuan": ["szechuan", "szechwan"],
-    "busan": ["pusan"],
-    "gyeonggi": ["gyeonggi province", "gyeonggi-do"],
-    "gangwon": ["gangwon province"],
-    "chungcheong": ["south chungcheong"],
-    "gwangju": ["kwangju"],
-    "ordos": ["ordos city"],
-    "inner mongolia": ["nei mongol", "inner mongolia autonomous region"],
-    "hebei": ["hopei"],
-    "shanxi": ["shansi"],
-    "shandong": ["shantung"],
-    "gansu": ["kansu"],
-    "yuzhong": ["yuzhong county"],
-    "kagoshima": ["kagoshima prefecture"],
-    "ishikawa": ["ishikawa prefecture"],
-    "kumamoto": ["kumamoto prefecture"],
-    "mondulkiri": ["mondulkiri province"],
-    "ratanakiri": ["ratanakiri province"],
-    "laiza": ["laiza city"],
-    "malabo": ["malabo city"],
-    "bioko norte": ["bioko norte province"],
-    "suceava": ["suceava county"],
-    "neamt": ["neamț", "neamt county"],
-    "yola": ["yola city"],
-    "maiduguri": ["maiduguri city"],
-    "mokwa": ["mokwa city"],
-    "puntland": ["puntland state"],
-    "banaadir": ["banadir", "banaadir region"],
-    "hirshabelle": ["hirshabelle state"],
-    "gaalkacyo": ["galcaio", "gaalkacyo city"],
-    "mogadiscio": ["mogadishu", "mogadiscio"],
-    "balcad": ["balcad district"],
-    "dubrovnik": ["dubrovnik city"],
-    "prijedor": ["prijedor city"],
-    "donja jablanica": ["jablanica"],
-    "bahia blanca": ["bahía blanca"],
-    "buenos aires": ["buenos aires province"],
+    # ── Brazil — states and major cities ──────────────────────────────────────
+    "rio grande do sul": ["rs", "rio grande do sul state", "estado do rio grande do sul", "rgs"],
+    "bahia": ["ba", "bahia state", "estado da bahia"],
+    "são paulo": ["sp", "sao paulo", "sao paulo state", "estado de são paulo",
+                  "estado de sao paulo"],
+    "santa catarina": ["sc", "santa catarina state", "estado de santa catarina"],
+    "paraná": ["parana", "parana state", "estado do parana", "estado do paraná"],
+    "minas gerais": ["mg", "minas gerais state", "estado de minas gerais"],
+    "pará": ["pa", "para", "para state", "estado do para", "estado do pará"],
+    "maranhão": ["ma", "maranhao", "maranhao state", "estado do maranhão"],
+    "pernambuco": ["pe", "pernambuco state"],
+    "ceará": ["ce", "ceara", "ceara state", "estado do ceará"],
+    "rio de janeiro": ["rj", "rio", "rio de janeiro state", "estado do rio de janeiro"],
+    "rio grande do norte": ["rn", "rio grande do norte state"],
+    "espírito santo": ["es", "espirito santo", "espirito santo state"],
+    "goiás": ["go", "goias", "goias state"],
+    "mato grosso do sul": ["ms", "mato grosso do sul state"],
+    "mato grosso": ["mt", "mato grosso state"],
+    "roraima": ["rr", "roraima state"],
+    "rondônia": ["ro", "rondonia", "rondonia state"],
+    "tocantins": ["to", "tocantins state"],
+    "amapá": ["ap", "amapa", "amapa state"],
+    "piauí": ["pi", "piaui", "piaui state"],
+    "alagoas": ["al", "alagoas state"],
+    "sergipe": ["se", "sergipe state"],
+    "paraíba": ["pb", "paraiba", "paraiba state"],
     "petrópolis": ["petropolis"],
-    "rio de janeiro": ["rio"],
-    "são paulo": ["sao paulo"],
+    "oriximiná": ["oriximina"],
     "carapicuíba": ["carapicuiba"],
-    "florence": ["firenze"],
-    "prato": ["prato city"],
-    "rhône": ["rhone"],
-    "haute-loire": ["haute loire"],
-    "ardèche": ["ardeche"],
-    "alpes-maritimes": ["alpes maritimes"],
-    "álora": ["alora"],
-    "málaga": ["malaga"],
-    "campaillas": ["campanillas"],
+
+    # ── Colombia — departments ─────────────────────────────────────────────────
+    "cundinamarca": ["cundinamarca department", "departamento de cundinamarca"],
+    "nariño": ["narino", "narino department", "departamento de nariño"],
+    "norte de santander": ["north santander", "norte santander", "north santander department"],
+    "la mojana": ["la mojana sub-region", "sub-región de la mojana"],
+    "bolívar": ["bolivar", "bolivar department"],
+    "sucre": ["sucre department"],   # Colombia dept — see AMBIGUOUS for Bolivia capital
+    "antioquia": ["antioquia department"],
+    "chocó": ["choco", "choco department"],
+    "cauca": ["cauca department"],
+    "valle del cauca": ["valle del cauca department", "valle"],
+    "magdalena": ["magdalena department"],
+    "córdoba": ["cordoba department"],   # Colombia dept
+    "atlántico": ["atlantico", "atlantico department"],
+    "meta": ["meta department"],
+    "huila": ["huila department"],
+    "tolima": ["tolima department"],
+    "caldas": ["caldas department"],
+    "santander": ["santander department"],
+    "boyacá": ["boyaca", "boyaca department"],
+    "casanare": ["casanare department"],
+    "guainía": ["guainia", "guainia department"],
+    "vichada": ["vichada department"],
+
+    # ── Bolivia — departments ──────────────────────────────────────────────────
+    "chuquisaca": ["chuquisaca department", "departamento de chuquisaca"],
+    "la paz": ["la paz department", "la paz dept", "departamento de la paz"],
+    "cochabamba": ["cochabamba department", "departamento de cochabamba"],
+    "beni": ["beni department", "departamento del beni", "el beni"],
+    "oruro": ["oruro department"],
+    "potosí": ["potosi", "potosi department"],
+    "santa cruz": ["santa cruz department", "santa cruz de la sierra"],
+    "tarija": ["tarija department"],
+    "pando": ["pando department"],
+    "tipuani": ["tipuani municipality"],
+
+    # ── Peru — regions ─────────────────────────────────────────────────────────
+    "cusco": ["cuzco", "cusco region", "departamento del cusco", "departamento de cusco"],
+    "tumbes": ["tumbes region", "tumbes province"],
+    "junín": ["junin", "junin region", "departamento de junin"],
+    "ancash": ["ancash region", "departamento de ancash", "áncash"],
+    "piura": ["piura region", "departamento de piura"],
+    "loreto": ["loreto region", "departamento de loreto"],
+    "madre de dios": ["madre de dios region"],
+    "puno": ["puno region", "departamento de puno"],
+    "ayacucho": ["ayacucho region"],
+    "apurímac": ["apurimac", "apurimac region"],
+    "arequipa": ["arequipa region", "departamento de arequipa"],
+    "ica": ["ica region"],
+    "la libertad": ["la libertad region"],
+    "lambayeque": ["lambayeque region"],
+    "lima": ["lima region", "departamento de lima"],
+    "ucayali": ["ucayali region"],
+    "huánuco": ["huanuco", "huanuco region"],
+    "cajamarca": ["cajamarca region"],
+    "san martín": ["san martin", "san martin region"],
+    "tahuamanu": ["tahuamanu province"],
+    "contralmirante villar": ["contralmirante villar province"],
+
+    # ── Ecuador — provinces ────────────────────────────────────────────────────
+    "esmeraldas": ["esmeraldas province"],
+    "manabí": ["manabi", "manabi province"],
+    "el oro": ["el oro province"],
+    "morona santiago": ["morona-santiago", "morona santiago province"],
+    "cotopaxi": ["cotopaxi province"],
+    "azuay": ["azuay province"],
+    "chimborazo": ["chimborazo province"],
+    "guayas": ["guayas province"],
+    "los ríos": ["los rios", "los rios province"],
+    "pichincha": ["pichincha province"],
+    "loja": ["loja province"],
+    "imbabura": ["imbabura province"],
+    "tungurahua": ["tungurahua province"],
+    "bolívar province": ["bolivar province"],
+    "carchi": ["carchi province"],
+    "napo": ["napo province"],
+    "sucumbíos": ["sucumbios", "sucumbios province"],
+    "pastaza": ["pastaza province"],
+    "zamora chinchipe": ["zamora-chinchipe", "zamora chinchipe province"],
+    "alfredo baquerizo moreno": ["jujan"],
+
+    # ── Mexico — states ────────────────────────────────────────────────────────
+    "veracruz": ["veracruz state", "veracruz-llave", "estado de veracruz"],
+    "morelos": ["morelos state", "estado de morelos"],
+    "querétaro": ["queretaro", "queretaro state", "estado de querétaro"],
+    "guerrero": ["guerrero state", "estado de guerrero"],
+    "oaxaca": ["oaxaca state", "estado de oaxaca"],
+    "chiapas": ["chiapas state"],
+    "tabasco": ["tabasco state"],
+    "hidalgo": ["hidalgo state"],
+    "jalisco": ["jalisco state"],
+    "puebla": ["puebla state"],
+    "michoacán": ["michoacan", "michoacan state"],
+    "sinaloa": ["sinaloa state"],
+    "sonora": ["sonora state"],
+    "colima": ["colima state"],
+    "nuevo león": ["nuevo leon", "nuevo leon state"],
+    "tamaulipas": ["tamaulipas state"],
+    "durango": ["durango state"],
+    "zacatecas": ["zacatecas state"],
+    "san luis potosí": ["san luis potosi", "san luis potosi state"],
+    "guanajuato": ["guanajuato state"],
+    "baja california": ["baja california state"],
+    "campeche": ["campeche state"],
+    "yucatán": ["yucatan", "yucatan state"],
+    "quintana roo": ["quintana roo state"],
+    "nayarit": ["nayarit state"],
+    "aguascalientes": ["aguascalientes state"],
+    "coahuila": ["coahuila state"],
+    "chihuahua": ["chihuahua state"],
+    "tlaxcala": ["tlaxcala state"],
+    "filomeno mata": ["filomeno mata municipality"],
+    "tlayacapan": ["tlayacapan municipality"],
+
+    # ── Venezuela — states ─────────────────────────────────────────────────────
+    "táchira": ["tachira", "tachira state", "estado táchira"],
+    "barinas": ["barinas state", "estado barinas"],
+    "miranda": ["miranda state", "estado miranda"],
+    "la guaira": ["vargas", "vargas state", "la guaira state", "estado vargas"],
+    "mérida": ["merida state", "estado mérida"],
+    "zulia": ["zulia state"],
+    "carabobo": ["carabobo state"],
+    "aragua": ["aragua state"],
+    "bolívar state": ["bolivar state", "estado bolivar"],
+    "anzoátegui": ["anzoategui", "anzoategui state"],
+    "sucre state": ["sucre estado"],
+    "monagas": ["monagas state"],
+    "falcón": ["falcon", "falcon state"],
+    "lara": ["lara state"],
+    "portuguesa": ["portuguesa state"],
+    "yaracuy": ["yaracuy state"],
+    "cojedes": ["cojedes state"],
+    "guárico": ["guarico", "guarico state"],
+    "apure": ["apure state"],
+    "nueva esparta": ["nueva esparta state"],
+    "macuto": ["macuto parish"],
+    "caraballeda": ["caraballeda parish"],
+    "febres cordero": ["febres cordero municipality"],
+
+    # ── Argentina — provinces ──────────────────────────────────────────────────
+    "buenos aires": ["buenos aires province", "pba", "provincia de buenos aires"],
+    "bahia blanca": ["bahía blanca"],
+    "corrientes": ["corrientes province"],
+    "entre ríos": ["entre rios", "entre rios province"],
+    "mendoza": ["mendoza province"],
+    "córdoba province": ["cordoba province", "provincia de córdoba"],
+    "tucumán": ["tucuman", "tucuman province"],
+    "salta": ["salta province"],
+    "jujuy": ["jujuy province"],
+    "chaco": ["chaco province"],
+    "formosa": ["formosa province"],
+    "misiones": ["misiones province"],
+    "santa fe": ["santa fe province"],
+    "san juan": ["san juan province"],
+    "la rioja": ["la rioja province"],
+    "catamarca": ["catamarca province"],
+    "río negro": ["rio negro", "rio negro province"],
+    "neuquén": ["neuquen", "neuquen province"],
+    "chubut": ["chubut province"],
+    "santa cruz province": ["santa cruz argentina"],
+    "tierra del fuego": ["tierra del fuego province"],
+    "la pampa": ["la pampa province"],
+    "san luis": ["san luis province"],
+    "santiago del estero": ["santiago del estero province"],
+
+    # ── Chile — regions ────────────────────────────────────────────────────────
+    "ñuble": ["nuble", "nuble region", "región de ñuble"],
+    "biobío": ["biobio", "biobio region", "bío-bío"],
+    "araucanía": ["araucania", "la araucania", "araucania region", "región de la araucanía"],
+    "maule": ["maule region"],
+    "los ríos": ["los rios region", "región de los ríos"],
+    "o'higgins": [
+        "o'higgins region", "libertador o'higgins",
+        "libertador general bernardo o'higgins", "ohiggins"
+    ],
+    "metropolitana": [
+        "santiago metropolitan", "metropolitan region", "rm",
+        "region metropolitana", "región metropolitana de santiago"
+    ],
+    "valparaíso": ["valparaiso", "valparaiso region"],
+    "los lagos": ["los lagos region"],
+    "aysén": ["aysen", "aysen region"],
+    "magallanes": ["magallanes region"],
+    "coquimbo": ["coquimbo region"],
+    "atacama": ["atacama region"],
+    "antofagasta": ["antofagasta region"],
+    "tarapacá": ["tarapaca", "tarapaca region"],
+    "arica y parinacota": ["arica and parinacota"],
+    "o'higgins": ["ohiggins", "libertador region"],
+
+    # ── Guatemala — departments ────────────────────────────────────────────────
+    "zacapa": ["zacapa department"],
+    "quiché": ["quiche", "quiche department", "el quiche"],
+    "sacatepéquez": ["sacatepequez", "sacatepequez department"],
+    "suchitepéquez": ["suchitepequez", "suchitepequez department"],
+    "jutiapa": ["jutiapa department"],
+    "san marcos": ["san marcos department"],
+    "huehuetenango": ["huehuetenango department"],
+    "alta verapaz": ["alta verapaz department"],
+    "baja verapaz": ["baja verapaz department"],
+    "chiquimula": ["chiquimula department"],
+    "retalhuleu": ["retalhuleu department"],
+    "escuintla": ["escuintla department"],
+    "izabal": ["izabal department"],
+    "petén": ["peten", "peten department"],
+    "chimaltenango": ["chimaltenango department"],
+    "guatemal": ["guatemala department"],
+
+    # ── Honduras — departments ─────────────────────────────────────────────────
+    "francisco morazán": ["francisco morazan", "francisco morazan department"],
+    "cortés": ["cortes", "cortes department"],
+    "atlántida": ["atlantida", "atlantida department"],
+    "lempira": ["lempira department"],
+    "intibucá": ["intibuca", "intibuca department"],
+    "islas de la bahía": ["islas de la bahia", "bay islands"],
+    "colón": ["colon department"],
+    "gracias a dios": ["gracias a dios department"],
+    "yoro": ["yoro department"],
+    "comayagua": ["comayagua department"],
+    "copán": ["copan", "copan department"],
+    "santa bárbara": ["santa barbara department"],
+    "la masica": ["la masica municipality"],
+
+    # ── Paraguay — departments ─────────────────────────────────────────────────
+    "alto paraná": ["alto parana", "alto parana department"],
+    "itapúa": ["itapua", "itapua department"],
+    "concepción": ["concepcion", "concepcion department"],
+    "canindeyú": ["canindeyu", "canindeyu department"],
+    "misiones": ["misiones department"],
+    "neembucú": ["neembucu", "neembucu department"],
+    "central": ["central department"],
+    "paraguarí": ["paraguari", "paraguari department"],
+    "caaguazú": ["caaguazu", "caaguazu department"],
+    "alto paraguay": ["alto paraguay department"],
+    "amambay": ["amambay department"],
+    "boquerón": ["boqueron", "boqueron department"],
+    "presidente hayes": ["presidente hayes department"],
+
+    # ── Uruguay — departments ──────────────────────────────────────────────────
+    "montevideo": ["montevideo department", "montevideo capital city", "montevideo capital"],
+    "canelones": ["canelones department"],
+    "paysandú": ["paysandu", "paysandu department"],
+    "cerro largo": ["cerro largo department"],
+    "rocha": ["rocha department"],
+    "salto": ["salto department"],
+    "soriano": ["soriano department"],
+    "tacuarembó": ["tacuarembo", "tacuarembo department"],
+    "treinta y tres": ["treinta y tres department"],
+    "durazno": ["durazno department"],
+    "flores": ["flores department"],
+    "san josé": ["san jose department", "san jose"],
+    "florida department": ["florida uruguay"],
+    "lavalleja": ["lavalleja department"],
+    "maldonado": ["maldonado department"],
+    "artigas": ["artigas department"],
+    "colonia": ["colonia department", "nueva helvecia"],
+    "rivera": ["rivera department"],
+
+    # ── USA — states and counties ──────────────────────────────────────────────
+    "kerr county": ["kerr county texas"],
+    "chaves county": ["chaves county new mexico"],
+    "new mexico": ["nm", "nuevo mexico"],
+    "texas": ["tx", "tejas"],
+    "san antonio": ["san antonio texas"],
+    "ruidoso": ["ruidoso new mexico", "village of ruidoso"],
+    "roswell": ["roswell new mexico"],
+    "nueva jersey": ["new jersey"],   # Spanish-language docs
+    "nueva york": ["new york"],
+
+    # ── Costa Rica — provinces ─────────────────────────────────────────────────
+    "alajuela": ["alajuela province"],
+    "cartago": ["cartago province"],
+    "guanacaste": ["guanacaste province"],
+    "puntarenas": ["puntarenas province"],
+    "heredia": ["heredia province"],
+    "limón": ["limon", "limon province"],
+    "san josé province": ["san jose province"],
+    "sarapiquí": ["sarapiqui", "sarapiqui canton"],
+
+    # ── Dominican Republic ─────────────────────────────────────────────────────
+    "santo domingo": ["santo domingo province", "distrito nacional"],
+    "azua": ["azua province"],
+    "barahona": ["barahona province"],
+    "duarte": ["duarte province"],
+    "monte plata": ["monte plata province"],
+    "san cristóbal": ["san cristobal", "san cristobal province"],
+    "san pedro de macorís": ["san pedro de macoris", "san pedro de macoris province"],
+    "la altagracia": ["la altagracia province"],
+    "espaillat": ["espaillat province"],
+    "hato mayor": ["hato mayor province"],
+    "samana": ["samaná", "samana province"],
+    "puerto plata": ["puerto plata province"],
+
+    # ── Panama ─────────────────────────────────────────────────────────────────
+    "bocas del toro": ["bocas del toro province"],
+    "chiriquí": ["chiriqui", "chiriqui province"],
+    "los santos": ["los santos province"],
+    "colón province": ["colon province"],
+    "veraguas": ["veraguas province"],
+    "coclé": ["cocle", "cocle province"],
+    "herrera": ["herrera province"],
+    "darién": ["darien", "darien province"],
+    "nabe-buglé": ["nabe bugle"],
+
+    # ── Cuba ───────────────────────────────────────────────────────────────────
+    "matanzas": ["matanzas province"],
+    "pinar del río": ["pinar del rio", "pinar del rio province"],
+    "granma": ["granma province"],
+    "las tunas": ["las tunas province"],
+    "santiago de cuba": ["santiago de cuba province"],
+    "camagüey": ["camaguey", "camaguey province"],
+    "san juan y martínez": ["san juan y martinez"],
+
+    # ── Canada ─────────────────────────────────────────────────────────────────
+    "alberta": ["alberta province"],
+    "nova scotia": ["nova scotia province"],
+    "québec": ["quebec", "quebec province"],
+    "ontario": ["ontario province"],
+    "british columbia": ["bc", "british columbia province"],
+    "charlevoix": ["charlevoix region"],
+    "lanaudière": ["lanaudiere", "lanaudiere region"],
+    "baie-saint-paul": ["baie saint paul"],
+
+    # ── Haiti ──────────────────────────────────────────────────────────────────
+    "grand'anse": ["grande anse", "grand anse", "grand'anse department"],
+    "artibonite": ["artibonite department"],
+    "nord": ["nord department", "north haiti"],
+    "sud": ["sud department", "south haiti"],
+    "ouest": ["ouest department"],
+    "nippes": ["nippes department"],
+
+    # ── Guyana ─────────────────────────────────────────────────────────────────
+    "demerara-mahaica": ["region 4", "region four"],
+    "mahaica-berbice": ["region 5"],
+    "upper demerara-upper berbice": ["region 10"],
+    "cuyuni-mazaruni": ["region 7"],
+    "upper takutu-upper essequibo": ["region 9"],
+    "essequibo islands-west demerara": ["region 3"],
+
+    # ── French Guiana ──────────────────────────────────────────────────────────
+    "saint-laurent du maroni": ["saint-laurent-du-maroni", "saint laurent du maroni"],
+    "camopi": ["camopi commune", "camopi-trois sauts"],
+    "kourou": ["kourou district"],
+
+    # ── El Salvador ────────────────────────────────────────────────────────────
+    "sonsonate": ["sonsonate department"],
+    "chalatenango": ["chalatenango department"],
+    "ahuachapán": ["ahuachapan", "ahuachapan department"],
+    "usulután": ["usulutan", "usulutan department"],
+    "tecoluca": ["tecoluca municipality"],
+    "jiquilisco": ["jiquilisco municipality"],
+
+    # ── Puerto Rico ────────────────────────────────────────────────────────────
+    "san juan": ["san juan pr", "san juan puerto rico"],
+    "bayamón": ["bayamon"],
+    "carolina": ["carolina municipality"],
 }
 
 
@@ -377,9 +611,9 @@ def print_summary(location_dict: dict):
     print(f"  Ambiguous flagged   : {ambiguous_count}")
     print(f"{'─'*55}\n")
 
-    # Show pilot events for quick sanity check
-    pilot_ids = [1, 2, 3, 9, 12, 19, 34]
-    print("  Pilot event spot-check:")
+    # Show first events for quick sanity check
+    pilot_ids = [1, 2, 3, 4, 5]
+    print("  Spot-check (first 5 events):")
     for fid in pilot_ids:
         entries = location_dict.get(fid, [])
         names   = [e['name'] for e in entries]
@@ -389,7 +623,7 @@ def print_summary(location_dict: dict):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Stage 0d — Build location dictionary")
-    parser.add_argument("--csv", default="flood_crawl.csv",  help="Path to flood_crawl.csv")
+    parser.add_argument("--csv", default="data/flood_crawl.csv",  help="Path to flood_crawl.csv")
     parser.add_argument("--out", default="location_dictionary.json", help="Output JSON path")
     args = parser.parse_args()
 
