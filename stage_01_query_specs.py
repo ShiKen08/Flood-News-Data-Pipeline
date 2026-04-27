@@ -297,7 +297,7 @@ def main():
         log.info(f"Filtered to {len(raw_df)} events: {PILOT_FLOOD_IDS}")
 
     # Only process events that have COVERED or PARTIAL crawl status
-    covered = coverage_df[coverage_df["coverage_status"].isin(["COVERED", "PARTIAL"])]
+    covered = coverage_df[coverage_df["coverage_status"].isin(["COVERED", "PARTIAL", "NEAREST"])]
     covered_ids = set(covered["flood_id"].tolist())
 
     skipped_no_crawl = []

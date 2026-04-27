@@ -55,6 +55,7 @@ from config import (
     TIER_2_LANGUAGES,
     TIER_3_FALLBACK_LANGUAGES,
     TIER_3_LANGUAGES,
+    NEAREST_CRAWL_MAX_GAP_DAYS,
     WINDOW_LONG_DURATION_THRESHOLD,
     WINDOW_POST_DAYS,
     WINDOW_POST_LONG_DAYS,
@@ -155,7 +156,32 @@ def check_crawl_coverage(event_row: pd.Series, crawls: list[dict]) -> dict:
             matching.append(crawl["crawl_id"])
 
     if not matching:
-        status = "NO_CRAWL"
+        # No overlapping crawl — try nearest post-window crawl as fallback
+        future_crawls = sorted(
+            [c for c in crawls if c["from_dt"] > window_end],
+            key=lambda c: c["from_dt"],
+        )
+        if future_crawls:
+            nearest = future_crawls[0]
+            gap_days = (nearest["from_dt"] - window_end).days
+            if gap_days <= NEAREST_CRAWL_MAX_GAP_DAYS:
+                matching = [nearest["crawl_id"]]
+                status = "NEAREST"
+                # Extend window_end to cover the crawl's actual timestamps so that
+                # stage_02's CDX timestamp filter captures content from this crawl.
+                window_end = nearest["to_dt"]
+                window_note = (
+                    f"No overlapping crawl — nearest post-window crawl "
+                    f"{nearest['crawl_id']} ({gap_days}d gap); window extended to {window_end.date()}"
+                )
+            else:
+                status = "NO_CRAWL"
+                window_note = (
+                    f"No crawl within {NEAREST_CRAWL_MAX_GAP_DAYS}d "
+                    f"(nearest: {nearest['crawl_id']}, {gap_days}d away)"
+                )
+        else:
+            status = "NO_CRAWL"
     elif len(matching) == 1:
         # Partial if the single crawl only clips the window
         crawl_data = next(c for c in crawls if c["crawl_id"] == matching[0])
