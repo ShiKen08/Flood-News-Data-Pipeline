@@ -85,7 +85,9 @@ CC_INDEX_PAGE_SIZE   = 1000     # max results per API page
 CC_REQUEST_TIMEOUT   = 30       # seconds
 CC_RETRY_MAX         = 3
 CC_RETRY_BACKOFF     = 2        # seconds; wait = backoff ^ attempt
-CC_RATE_LIMIT_SLEEP  = 0.5      # seconds between requests — respect CC servers
+CC_RATE_LIMIT_SLEEP  = 1.0      # seconds between requests — 1s keeps 3 workers well under CC limits
+CC_EMPTY_RETRY_MAX   = 3        # retries when CC returns empty 200 (silent rate-limit signal)
+CC_EMPTY_RETRY_SLEEP = 10       # seconds to wait after an empty response before retrying
 
 # Per-domain CC hit cap — prevents high-volume national/international domains
 # (foxnews.com, aljazeera.com, cbsnews.com) from consuming the pointer budget.
@@ -184,6 +186,7 @@ def query_cc_index(
     base_url = CC_INDEX_URL.format(crawl_id=crawl_id)
     hits = []
     page = 0
+    empty_retries = 0
 
     raw_save_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -268,7 +271,17 @@ def query_cc_index(
                 break
 
             if not response_lines:
-                break  # No more results
+                if page == 0 and empty_retries < CC_EMPTY_RETRY_MAX:
+                    # Empty body on page 0 = silent rate-limit signal from CC.
+                    # Back off and retry the same page rather than returning 0 hits.
+                    empty_retries += 1
+                    log.warning(
+                        f"  Empty response (rate-limited?) for {url_pattern[:60]} "
+                        f"— retry {empty_retries}/{CC_EMPTY_RETRY_MAX} in {CC_EMPTY_RETRY_SLEEP}s"
+                    )
+                    time.sleep(CC_EMPTY_RETRY_SLEEP)
+                    continue
+                break  # genuine end of pagination or exhausted empty-retries
 
             page_hits = []
             for line in response_lines:
