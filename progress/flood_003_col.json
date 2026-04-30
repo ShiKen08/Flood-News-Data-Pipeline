@@ -1,0 +1,18 @@
+{
+  "flood_id": 3,
+  "iso": "COL",
+  "country": "Colombia",
+  "last_updated": "2026-04-30T12:28:35Z",
+  "stages_complete": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "cache_size": "1.93 GB",
+  "pointers_total": 66112,
+  "pointers_downloaded": 66103,
+  "warc_fetch_success_rate": 0.9999
+}

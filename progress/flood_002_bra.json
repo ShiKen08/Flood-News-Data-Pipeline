@@ -1,0 +1,18 @@
+{
+  "flood_id": 2,
+  "iso": "BRA",
+  "country": "Brazil",
+  "last_updated": "2026-04-30T12:28:31Z",
+  "stages_complete": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "cache_size": "1.54 GB",
+  "pointers_total": 46932,
+  "pointers_downloaded": 46932,
+  "warc_fetch_success_rate": 1.0
+}

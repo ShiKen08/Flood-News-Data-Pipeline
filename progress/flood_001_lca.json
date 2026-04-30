@@ -1,0 +1,18 @@
+{
+  "flood_id": 1,
+  "iso": "LCA",
+  "country": "Saint Lucia",
+  "last_updated": "2026-04-30T12:28:29Z",
+  "stages_complete": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "cache_size": "333.7 MB",
+  "pointers_total": 11326,
+  "pointers_downloaded": 11326,
+  "warc_fetch_success_rate": 1.0
+}
