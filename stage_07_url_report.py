@@ -154,12 +154,16 @@ def build_report(
     )
 
     # Relevant-only filter on kept docs — union of strict + soft relevance
+    # Soft-relevant articles also require pub_in_window to avoid off-event
+    # articles (e.g. 2018 dam opinion pieces crawled during a 2022 flood window)
+    # slipping through on flood-term + location-term hits alone.
     if relevant_only:
-        kept_mask = df["_source"] == "kept"
-        strict    = df["is_relevant"].fillna(False).astype(bool)
-        soft      = df["is_soft_relevant"].fillna(False).astype(bool) if "is_soft_relevant" in df.columns else strict
-        rel_mask  = strict | soft
-        df        = df[~(kept_mask & ~rel_mask)].copy()
+        kept_mask  = df["_source"] == "kept"
+        strict     = df["is_relevant"].fillna(False).astype(bool)
+        soft       = df["is_soft_relevant"].fillna(False).astype(bool) if "is_soft_relevant" in df.columns else strict
+        in_window  = df["pub_in_window"].fillna(False).astype(bool) if "pub_in_window" in df.columns else pd.Series(True, index=df.index)
+        rel_mask   = strict | (soft & in_window)
+        df         = df[~(kept_mask & ~rel_mask)].copy()
 
     # Sort: flood_id -> relevant first -> flood_term_hits desc
     sort_cols = ["flood_id"]
