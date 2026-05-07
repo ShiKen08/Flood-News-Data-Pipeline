@@ -16,8 +16,6 @@ raw_index_responses/
 *.warc.gz
 *.parquet
 
-# --- Config with local paths (copy config.py.template → config.py) ---
-config.py
 
 # --- Python ---
 __pycache__/
