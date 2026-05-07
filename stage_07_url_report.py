@@ -30,6 +30,8 @@
 #   python stage_07_url_report.py --flood-id 126 --no-csv      # summary only
 # =============================================================================
 
+from __future__ import annotations
+
 import argparse
 import importlib.util
 import re

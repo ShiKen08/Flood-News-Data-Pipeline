@@ -52,6 +52,8 @@
 #   python stage_04_download_warc.py --random         # fresh random sample
 # =============================================================================
 
+from __future__ import annotations
+
 import argparse
 import asyncio
 import gzip

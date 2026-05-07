@@ -29,6 +29,8 @@
 #   python stage_02_query_cc_index.py --flood-id 3   # single event debug
 # =============================================================================
 
+from __future__ import annotations
+
 import argparse
 import importlib.util
 import json
