@@ -6,19 +6,19 @@
 # Monitor:  squeue -u $USER
 # Logs:     tail -f logs/k_<jobid>.out
 # Cancel:   scancel <jobid>
-# Copy out: scp -r scur0742@snellius.surf.nl:~/kun/Flood-News-Data-Pipeline/output/ .
+# Copy out: scp -r scur0742@snellius.surf.nl:~/Flood-News-Data-Pipeline/output/ .
 # ============================================================
 
 #SBATCH --job-name=flood_pipeline
-#SBATCH --output=/home/scur0742/kun/Flood-News-Data-Pipeline/logs/k_%j.out
-#SBATCH --error=/home/scur0742/kun/Flood-News-Data-Pipeline/logs/k_%j.err
+#SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/k_%j.out
+#SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/k_%j.err
 #SBATCH --time=30:00:00
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 
 set -e   # stop immediately if any stage fails
 
-cd /home/scur0742/kun/Flood-News-Data-Pipeline
+cd /home/scur0742/Flood-News-Data-Pipeline
 
 source /home/scur0742/venv-agent/bin/activate
 
