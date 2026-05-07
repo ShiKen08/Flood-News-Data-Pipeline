@@ -27,14 +27,21 @@ REQUIRED_DIRS = [
     ROOT / "raw_index_responses",
 ]
 
+# (import_name, pip_package_name) — import name is used for __import__ check
 REQUIRED_PACKAGES = [
-    "pandas",
-    "pyarrow",
-    "requests",
-    "trafilatura",
-    "bs4",
-    "langdetect",
-    "tqdm",
+    ("pandas",       "pandas"),
+    ("pyarrow",      "pyarrow"),
+    ("numpy",        "numpy"),
+    ("requests",     "requests"),
+    ("urllib3",      "urllib3"),
+    ("trafilatura",  "trafilatura"),
+    ("bs4",          "beautifulsoup4"),
+    ("lxml",         "lxml"),
+    ("chardet",      "chardet"),
+    ("langid",       "langid"),
+    ("tqdm",         "tqdm"),
+    ("pytest",       "pytest"),
+    ("aiohttp",      "aiohttp"),
 ]
 
 def create_directories():
@@ -63,13 +70,13 @@ def setup_config():
 def check_packages():
     print("\n📦 Checking Python packages...")
     missing = []
-    for pkg in REQUIRED_PACKAGES:
+    for import_name, pip_name in REQUIRED_PACKAGES:
         try:
-            __import__(pkg)
-            print(f"   ✓ {pkg}")
+            __import__(import_name)
+            print(f"   ✓ {pip_name}")
         except ImportError:
-            print(f"   ✗ {pkg}  ← MISSING")
-            missing.append(pkg)
+            print(f"   ✗ {pip_name}  ← MISSING")
+            missing.append(pip_name)
 
     if missing:
         print(f"\n   Install missing packages with:")
