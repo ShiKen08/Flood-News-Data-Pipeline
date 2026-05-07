@@ -34,7 +34,8 @@ echo "Running on $(hostname)"
 echo "Start time: $(date)"
 
 python setup.py
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+python -m pip install trafilatura
 python stage_00_preflight.py
 python stage_01_query_specs.py
 python stage_02_query_cc_index.py
