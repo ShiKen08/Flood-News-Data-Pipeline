@@ -20,7 +20,7 @@
 # ============================
 
 #SBATCH --job-name=group_water
-#SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/k_%j.out
+#SBATCH --output=/hme/scur0742/Flood-News-Data-Pipeline/logs/k_%j.out
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/k_%j.err
 #SBATCH --time=30:00:00
 #SBATCH --cpus-per-task=2
@@ -34,6 +34,7 @@ echo "Running on $(hostname)"
 echo "Start time: $(date)"
 
 python setup.py
+pip install -r requirements.txt
 python stage_00_preflight.py
 python stage_01_query_specs.py
 python stage_02_query_cc_index.py
