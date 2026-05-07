@@ -172,6 +172,11 @@ _TAG_TITLE_RES = [
     re.compile(r"berita dan informasi .+ terkini$",            re.I),
     re.compile(r"berita tentang .+ terkini",                   re.I),
     re.compile(r"informasi .+ terkini dan terbaru",            re.I),
+    # Handbook / report chapter titles — "3.4 Watershed Management", "Chapter 5", "Annex B"
+    re.compile(r"^\d+\.\d+[\s\.]",                            re.I),
+    re.compile(r"^chapter\s+\d+\b",                           re.I),
+    re.compile(r"^section\s+\d+\b",                           re.I),
+    re.compile(r"^annex\s+[a-z0-9]\b",                        re.I),
     re.compile(
         r"^[\w\s\.\-]+\s*[-=]\s*(breaking news|home|homepage|accueil|inicio|beranda)$",
         re.I,
@@ -350,11 +355,14 @@ def build_relevance_terms(flood_id: int, lang_df: pd.DataFrame,
     query_codes = json.loads(lang_rows.iloc[0]["query_language_codes"]) if not lang_rows.empty else []
 
     flood_terms = []
+    impact_terms = []
     for lang in query_codes:
         entry = lexicon.get(lang, {})
         for cat in ("flood", "river", "disaster"):
             flood_terms.extend(entry.get(cat, []))
-    flood_terms = list(dict.fromkeys(t.lower() for t in flood_terms))
+        impact_terms.extend(entry.get("impact", []))
+    flood_terms  = list(dict.fromkeys(t.lower() for t in flood_terms))
+    impact_terms = list(dict.fromkeys(t.lower() for t in impact_terms))
 
     loc_entries = []
     for _, r in loc_df[loc_df["flood_id"] == flood_id].iterrows():
@@ -363,11 +371,13 @@ def build_relevance_terms(flood_id: int, lang_df: pd.DataFrame,
         aliases = [a.lower() for a in json.loads(r.get("aliases", "[]") or "[]")]
         loc_entries.append((norm, level, aliases))
 
-    return flood_terms, loc_entries
+    return flood_terms, impact_terms, loc_entries
 
 
-def _score_one(text_lower: str, flood_terms: list, loc_entries: list) -> dict:
+def _score_one(text_lower: str, flood_terms: list, impact_terms: list,
+               loc_entries: list) -> dict:
     flood_hits       = sum(1 for t in flood_terms if _get_pattern(t).search(text_lower))
+    impact_hits      = sum(1 for t in impact_terms if _get_pattern(t).search(text_lower))
     loc_hits         = 0
     subnational_hits = 0
     for norm, level, aliases in loc_entries:
@@ -395,11 +405,17 @@ def _score_one(text_lower: str, flood_terms: list, loc_entries: list) -> dict:
     # subarea (e.g. "Texas" but not "Kerr County"). Not used for the strict output
     # but retained as a signal for analysis and alias expansion decisions.
     is_soft_relevant = flood_hits >= 2 and loc_hits >= 1
+    # Event-article tier: strict relevance + event-reporting language (casualties,
+    # evacuations, rescue, damage). Distinguishes news articles from methodology
+    # documents and historical risk bulletins that pass keyword matching alone.
+    is_event_article = is_relevant and impact_hits >= 1
     return {
         "is_relevant":                is_relevant,
         "is_soft_relevant":           is_soft_relevant,
+        "is_event_article":           is_event_article,
         "flood_mentioned":            flood_hits >= 1,
         "flood_term_hits":            flood_hits,
+        "impact_term_hits":           impact_hits,
         "location_term_hits":         loc_hits,
         "subnational_hits":           subnational_hits,
         "location_specificity_score": round(specificity, 3),
@@ -412,9 +428,9 @@ def score_relevance_all(df: pd.DataFrame, lang_df: pd.DataFrame,
     log.info(f"  Relevance scoring: {len(df)} docs")
     parts = []
     for flood_id, group in df.groupby("flood_id"):
-        flood_terms, loc_entries = build_relevance_terms(int(flood_id), lang_df, loc_df, lexicon)
+        flood_terms, impact_terms, loc_entries = build_relevance_terms(int(flood_id), lang_df, loc_df, lexicon)
         scores = group["clean_text"].str.lower().apply(
-            lambda t: _score_one(t, flood_terms, loc_entries)
+            lambda t: _score_one(t, flood_terms, impact_terms, loc_entries)
         )
         scores_df = pd.DataFrame(scores.tolist(), index=group.index)
         parts.append(pd.concat([group, scores_df], axis=1))
@@ -658,7 +674,12 @@ def main():
     parser.add_argument("--flood-id",         type=int)
     parser.add_argument("--compare-variants", action="store_true")
     parser.add_argument("--fresh",            action="store_true", help="Ignore checkpoint, start from scratch")
+    parser.add_argument("--flood-ids",        type=str,            help="Comma-separated flood IDs to process, e.g. 1,2,3 (overrides PILOT_FLOOD_IDS)")
+    parser.add_argument("--skip-ids",         type=str,            help="Comma-separated flood IDs to skip, e.g. 1,2,3 (composable with any other flag)")
     args = parser.parse_args()
+
+    flood_ids_filter = [int(x.strip()) for x in args.flood_ids.split(",")] if args.flood_ids else None
+    skip_ids_set     = {int(x.strip()) for x in args.skip_ids.split(",")}  if args.skip_ids  else set()
 
     log.info("=" * 70)
     log.info("STAGE 06 — CLEAN / DETECT / DEDUPLICATE  (vectorised)")
@@ -692,8 +713,12 @@ def main():
 
     if args.flood_id:
         extracted_df = extracted_df[extracted_df["flood_id"] == args.flood_id]
+    elif flood_ids_filter:
+        extracted_df = extracted_df[extracted_df["flood_id"].isin(flood_ids_filter)]
     elif not args.all:
         extracted_df = extracted_df[extracted_df["flood_id"].isin(PILOT_FLOOD_IDS)]
+    if skip_ids_set:
+        extracted_df = extracted_df[~extracted_df["flood_id"].isin(skip_ids_set)]
 
     log.info(f"Docs in scope: {len(extracted_df)}")
 
@@ -857,9 +882,15 @@ def main():
     if args.flood_id:
         clean_df = clean_df[clean_df["flood_id"] == args.flood_id] if not clean_df.empty else clean_df
         rej_df   = rej_df[rej_df["flood_id"]     == args.flood_id] if not rej_df.empty   else rej_df
+    elif flood_ids_filter:
+        clean_df = clean_df[clean_df["flood_id"].isin(flood_ids_filter)] if not clean_df.empty else clean_df
+        rej_df   = rej_df[rej_df["flood_id"].isin(flood_ids_filter)]     if not rej_df.empty   else rej_df
     elif not args.all:
         clean_df = clean_df[clean_df["flood_id"].isin(PILOT_FLOOD_IDS)] if not clean_df.empty else clean_df
         rej_df   = rej_df[rej_df["flood_id"].isin(PILOT_FLOOD_IDS)]     if not rej_df.empty   else rej_df
+    if skip_ids_set:
+        clean_df = clean_df[~clean_df["flood_id"].isin(skip_ids_set)] if not clean_df.empty else clean_df
+        rej_df   = rej_df[~rej_df["flood_id"].isin(skip_ids_set)]     if not rej_df.empty   else rej_df
 
     total = len(clean_df) + len(rej_df)
 

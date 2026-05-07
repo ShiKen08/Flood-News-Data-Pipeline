@@ -31,6 +31,15 @@ OUTPUT_DIR        = BASE_DIR / "output"                    # all output tables (
 LOGS_DIR          = BASE_DIR / "logs"                      # pipeline run logs
 DATA_DIR          = BASE_DIR / "data"                      # flood_crawl.csv and other ref data
 FLOOD_CRAWL_CSV   = DATA_DIR / "flood_crawl.csv"
+FLOOD_CSV         = FLOOD_CRAWL_CSV              # alias used by stage scripts
+
+KEYWORD_LEXICON    = CONFIG_DIR / "keyword_lexicon.json"
+SOURCE_DOMAIN_LIST = CONFIG_DIR / "source_domain_list.json"
+
+# Create dirs if they don't exist yet (safe to call on every import)
+for _dir in [CONFIG_DIR, CACHE_DIR, RAW_INDEX_DIR, OUTPUT_DIR, LOGS_DIR]:
+    _dir.mkdir(parents=True, exist_ok=True)
+
 
 # -----------------------------------------------------------------------------
 # CSV COLUMN NAMES  (actual names in flood_crawl.csv)
@@ -42,17 +51,9 @@ COL_COUNTRY    = "Country"
 COL_LOCATION   = "Location"
 COL_START_DATE = "Start Date"       # note: space not underscore
 COL_END_DATE   = "End Date"         # note: space not underscore
-COL_DURATION   = "Duration"
+COL_DURATION   = "Duration"         # note: not Duration_Days
 COL_LANGUAGE   = "Language_ISO_639_3"
 COL_LOCAL_LANG = "Local_Languages"  # human-readable language names
-
-FLOOD_CSV          = DATA_DIR   / "flood_crawl.csv"
-KEYWORD_LEXICON    = CONFIG_DIR / "keyword_lexicon.json"
-SOURCE_DOMAIN_LIST = CONFIG_DIR / "source_domain_list.json"
-
-# Create dirs if they don't exist yet (safe to call on every import)
-for _dir in [CONFIG_DIR, CACHE_DIR, RAW_INDEX_DIR, OUTPUT_DIR, LOGS_DIR]:
-    _dir.mkdir(parents=True, exist_ok=True)
 
 
 # -----------------------------------------------------------------------------
@@ -71,16 +72,19 @@ CC_INDEX_PARAMS = {
 
 
 # -----------------------------------------------------------------------------
-# WINDOWING RULES  (Stage 0b — version v1)
+# WINDOWING RULES  (Stage 0b — version v2)
 # -----------------------------------------------------------------------------
 
-WINDOW_PRE_DAYS                  = 5    # event_start − 5 days
-WINDOW_POST_DAYS                 = 45   # event_end   + 45 days (covers ~2 CC monthly crawl cycles of post-event reporting)
-WINDOW_POST_LONG_DAYS            = 21   # cap for events with duration > 20 days (was 5 — too tight for follow-up coverage)
-WINDOW_LONG_DURATION_THRESHOLD   = 20
-ZERO_DURATION_TREAT_AS_DAYS      = 1    # treat 0-duration events as 1-day event
+WINDOW_PRE_DAYS          = 5    # event_start − 5 days
+WINDOW_POST_DAYS         = 45   # event_end   + 45 days (covers ~2 CC monthly crawl cycles of post-event reporting)
+WINDOW_POST_LONG_DAYS    = 21   # cap for events with duration > 20 days (was 5 — too tight for follow-up coverage)
+WINDOW_LONG_DURATION_THRESHOLD = 20
+ZERO_DURATION_TREAT_AS_DAYS    = 1    # treat 0-duration events as 1-day event
+NEAREST_CRAWL_MAX_GAP_DAYS = 120  # fallback: assign nearest post-window crawl if within this many days
 
-PILOT_PRIMARY_ONLY   = True             # pilot runs primary variant (C) only
+# Events with duration = 0 are treated as 1-day events (do NOT collapse window)
+# Pilot runs primary variant (C) only — set to False to include A/B/D
+PILOT_PRIMARY_ONLY   = True
 
 
 # -----------------------------------------------------------------------------
@@ -130,7 +134,7 @@ TIER_2_LANGUAGES = {
     "srp",   # Serbian
     "bos",   # Bosnian
     "hrv",   # Croatian
-    "hat",   # Haitian Creole
+    "hat",   # Haitian Creole (moderate CC; fra fallback also used)
 }
 
 # Tier 3 — very low CC coverage; use French or English fallback instead
@@ -166,17 +170,11 @@ TIER_3_FALLBACK_LANGUAGES = {"fra", "eng"}
 # PILOT EVENTS  (Phase 1 — update this to your current working batch)
 # -----------------------------------------------------------------------------
 
-PILOT_FLOOD_IDS = [1, 2, 3, 9, 12, 19, 34]   # default 7-event pilot
-
-# Expected crawl-lag events (NO_CRAWL is acceptable for these)
-EXPECTED_NO_CRAWL_IDS = [1, 2]   # Syria (#1, Feb 2026) and Indonesia (#2, Jan 2026)
+PILOT_FLOOD_IDS = list(range(7, 21))   # floods 7–20; set to None to process all events
 
 # Crawls returning 403 — indexed but WARC files not yet public on S3.
 # Remove entries here once CC makes them accessible.
-BLOCKED_CRAWLS = [
-    # "CC-MAIN-2026-04",
-    # "CC-MAIN-2026-08",
-]
+BLOCKED_CRAWLS = []
 
 
 # -----------------------------------------------------------------------------
@@ -208,10 +206,13 @@ ERROR_PAGE_PATTERNS   = [           # page_title matches → is_usable = FALSE
 
 MAX_RETRIES                  = 3
 RETRY_BACKOFF_BASE           = 5    # seconds; wait = 5^attempt → 5s, 25s, 125s
-DOWNLOAD_INTER_REQUEST_SLEEP = 1.0  # seconds between every WARC request
-PILOT_BATCH_SIZE             = 100
-BATCH_SIZE                   = 200000   # max downloads per event during pilot test batch
+DOWNLOAD_INTER_REQUEST_SLEEP = 1.0  # seconds between every WARC request — prevents rate limiting
+BATCH_SIZE                   = 200000   # max downloads per event per run
 DOWNLOAD_SUCCESS_RATE_FLOOR  = 0.80     # pause and investigate if rate drops below this
+
+EXTRACT_WORKERS     = 8    # parallel threads for Stage 5 text extraction (bumped from 4)
+LANG_DETECT_WORKERS = 16   # parallel threads for Stage 6 language detection (bumped from 8)
+CC_INDEX_WORKERS    = 3    # parallel spec-row workers for Stage 2 CDX queries
 
 
 # -----------------------------------------------------------------------------
@@ -229,20 +230,22 @@ FUNNEL_THRESHOLDS = {
 
 
 # -----------------------------------------------------------------------------
-# OUTPUT TABLE COLUMN SCHEMAS
+# OUTPUT TABLE COLUMN SCHEMAS  (Stage 0d — collinfo schema)
 # -----------------------------------------------------------------------------
+
+# Documenting expected columns per output table so every stage is aligned.
 
 SCHEMA_EVENT_QUERY_SPECS = [
     "query_id",               # {Flood_ID}_{variant}  — NEVER {ISO}_{variant}
     "flood_id",               # integer join key
     "crawl_id",
     "query_text",
-    "query_language_codes",
-    "query_language_skipped",
+    "query_language_codes",   # list of codes actually queried
+    "query_language_skipped", # dict of {code: reason} for dropped languages
     "domain_filter",          # 'restricted' | 'open'
     "window_start",
     "window_end",
-    "window_rule_version",
+    "window_rule_version",    # always WINDOW_RULE_VERSION
     "retrieval_strategy",
     "created_at",
 ]
@@ -283,7 +286,7 @@ SCHEMA_WARC_FETCH_LOG = [
 ]
 
 SCHEMA_EXTRACTED_TEXT = [
-    "doc_id",
+    "doc_id",                 # surrogate key — generated at Stage 5
     "pointer_id",
     "flood_id",
     "page_title",
@@ -306,6 +309,9 @@ SCHEMA_MAIN_DATA = [
     "extraction_success", "extraction_error",
     "language_detected", "language_confidence", "language_match",
     "is_usable", "is_content_duplicate", "duplicate_group_id", "cross_event_shared",
+    # Relevance signals
+    "is_relevant", "is_soft_relevant", "is_event_article",
+    "flood_term_hits", "impact_term_hits", "location_term_hits", "subnational_hits",
     # Reproducibility
     "window_rule_version",
 ]

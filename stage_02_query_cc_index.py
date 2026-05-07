@@ -528,13 +528,25 @@ def print_hit_summary(hits_df: pd.DataFrame) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="Stage 02 — Query CC index")
-    parser.add_argument("--all",      action="store_true", help="Process all events (Phase 2)")
-    parser.add_argument("--flood-id", type=int,            help="Process a single flood_id only (debug)")
+    parser.add_argument("--all",       action="store_true", help="Process all events (Phase 2)")
+    parser.add_argument("--flood-id",  type=int,            help="Process a single flood_id only (debug)")
+    parser.add_argument("--flood-ids", type=str,            help="Comma-separated flood IDs to process, e.g. 1,2,3 (overrides PILOT_FLOOD_IDS)")
+    parser.add_argument("--skip-ids",  type=str,            help="Comma-separated flood IDs to skip, e.g. 1,2,3 (composable with any other flag)")
     args = parser.parse_args()
+
+    flood_ids_filter = [int(x.strip()) for x in args.flood_ids.split(",")] if args.flood_ids else None
+    skip_ids_set     = {int(x.strip()) for x in args.skip_ids.split(",")}  if args.skip_ids  else set()
 
     log.info("=" * 70)
     log.info("STAGE 02 — QUERY CC INDEX")
-    mode = f"flood_id={args.flood_id}" if args.flood_id else ("ALL" if args.all else "PILOT")
+    mode = (
+        f"flood_ids={flood_ids_filter}" if flood_ids_filter else
+        f"flood_id={args.flood_id}"     if args.flood_id    else
+        "ALL"                            if args.all         else
+        "PILOT"
+    )
+    if skip_ids_set:
+        mode += f"  skip={sorted(skip_ids_set)}"
     log.info(f"Mode : {mode}")
     log.info("=" * 70)
 
@@ -560,8 +572,12 @@ def main():
     # ------------------------------------------------------------------
     if args.flood_id:
         specs_df = specs_df[specs_df["flood_id"] == args.flood_id]
+    elif flood_ids_filter:
+        specs_df = specs_df[specs_df["flood_id"].isin(flood_ids_filter)]
     elif PILOT_FLOOD_IDS and not args.all:
         specs_df = specs_df[specs_df["flood_id"].isin(PILOT_FLOOD_IDS)]
+    if skip_ids_set:
+        specs_df = specs_df[~specs_df["flood_id"].isin(skip_ids_set)]
 
     # For pilot: only use primary queries (variant C) for the spot-check
     # to keep request volume low. Run A/B/D after confirming C has hits.

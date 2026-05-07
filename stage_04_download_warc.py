@@ -806,8 +806,19 @@ def main():
         "--random", action="store_true",
         help="Draw a fresh random sample (default: resume saved sample if one exists)",
     )
+    parser.add_argument(
+        "--flood-ids", type=str,
+        help="Comma-separated flood IDs to process, e.g. 1,2,3 (overrides PILOT_FLOOD_IDS)",
+    )
+    parser.add_argument(
+        "--skip-ids", type=str,
+        help="Comma-separated flood IDs to skip, e.g. 1,2,3 (composable with any other flag)",
+    )
     args    = parser.parse_args()
     is_full = args.full or args.all
+
+    flood_ids_filter = [int(x.strip()) for x in args.flood_ids.split(",")] if args.flood_ids else None
+    skip_ids_set     = {int(x.strip()) for x in args.skip_ids.split(",")}  if args.skip_ids  else set()
 
     log.info("=" * 70)
     log.info("STAGE 04 — DOWNLOAD WARC SLICES  [aiohttp + asyncio rewrite]")
@@ -842,9 +853,15 @@ def main():
     if args.flood_id:
         eligible = eligible[eligible["flood_id"] == args.flood_id].copy()
         log.info(f"Filtered to flood #{args.flood_id}: {len(eligible)} pointers")
+    elif flood_ids_filter:
+        eligible = eligible[eligible["flood_id"].isin(flood_ids_filter)].copy()
+        log.info(f"Filtered to flood_ids={flood_ids_filter}: {len(eligible)} pointers")
     elif PILOT_FLOOD_IDS and not args.all:
         eligible = eligible[eligible["flood_id"].isin(PILOT_FLOOD_IDS)].copy()
         log.info(f"Filtered to events {PILOT_FLOOD_IDS}: {len(eligible)} pointers")
+    if skip_ids_set:
+        eligible = eligible[~eligible["flood_id"].isin(skip_ids_set)].copy()
+        log.info(f"Skipped flood IDs {sorted(skip_ids_set)}: {len(eligible)} pointers remaining")
 
     # ------------------------------------------------------------------
     # Skip already-cached pointers

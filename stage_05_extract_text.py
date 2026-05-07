@@ -533,11 +533,16 @@ def process_warc_file(pointer_id: str, flood_id: int, cache_path: str, url: str 
 
 def main():
     parser = argparse.ArgumentParser(description="Stage 05 — Extract HTML to plaintext")
-    parser.add_argument("--all",      action="store_true", help="All events (Phase 2)")
-    parser.add_argument("--flood-id", type=int,            help="Single flood_id (debug)")
-    parser.add_argument("--fresh",    action="store_true", help="Ignore checkpoint, reprocess everything")
-    parser.add_argument("--workers",  type=int, default=EXTRACT_WORKERS, help=f"Parallel worker threads (default: {EXTRACT_WORKERS})")
+    parser.add_argument("--all",       action="store_true", help="All events (Phase 2)")
+    parser.add_argument("--flood-id",  type=int,            help="Single flood_id (debug)")
+    parser.add_argument("--fresh",     action="store_true", help="Ignore checkpoint, reprocess everything")
+    parser.add_argument("--workers",   type=int, default=EXTRACT_WORKERS, help=f"Parallel worker threads (default: {EXTRACT_WORKERS})")
+    parser.add_argument("--flood-ids", type=str,            help="Comma-separated flood IDs to process, e.g. 1,2,3 (overrides PILOT_FLOOD_IDS)")
+    parser.add_argument("--skip-ids",  type=str,            help="Comma-separated flood IDs to skip, e.g. 1,2,3 (composable with any other flag)")
     args = parser.parse_args()
+
+    flood_ids_filter = [int(x.strip()) for x in args.flood_ids.split(",")] if args.flood_ids else None
+    skip_ids_set     = {int(x.strip()) for x in args.skip_ids.split(",")}  if args.skip_ids  else set()
 
     if not TRAFILATURA_AVAILABLE:
         log.warning("trafilatura not available — using BeautifulSoup fallback only")
@@ -574,8 +579,12 @@ def main():
 
     if args.flood_id:
         fetch_log = fetch_log[fetch_log["flood_id"] == args.flood_id]
+    elif flood_ids_filter:
+        fetch_log = fetch_log[fetch_log["flood_id"].isin(flood_ids_filter)]
     elif not args.all:
         fetch_log = fetch_log[fetch_log["flood_id"].isin(PILOT_FLOOD_IDS)]
+    if skip_ids_set:
+        fetch_log = fetch_log[~fetch_log["flood_id"].isin(skip_ids_set)]
 
     log.info(f"WARC files to process : {len(fetch_log)}")
 

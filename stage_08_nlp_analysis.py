@@ -84,7 +84,9 @@ NLP_COLUMNS = [
     "language_detected",
     "language_match",
     "is_relevant",
+    "is_event_article",
     "flood_term_hits",
+    "impact_term_hits",
     "location_term_hits",
     "subnational_hits",
     "location_specificity_score",
@@ -128,13 +130,18 @@ def build_nlp_input(
     clean_df: pd.DataFrame,
     flood_meta: dict[int, dict],
     include_soft: bool = True,
+    event_articles_only: bool = False,
 ) -> pd.DataFrame:
     """
     Transform clean_text.parquet rows into NLP input schema.
-    Filters to is_relevant=True (or also is_soft_relevant=True if include_soft).
+    Filters to is_event_article=True (if event_articles_only), is_relevant=True,
+    or union with is_soft_relevant=True (if include_soft).
     """
     # Relevance filter
-    if include_soft and "is_soft_relevant" in clean_df.columns:
+    if event_articles_only and "is_event_article" in clean_df.columns:
+        mask = clean_df["is_event_article"].fillna(False)
+        log.info(f"Using is_event_article filter: {mask.sum()} articles")
+    elif include_soft and "is_soft_relevant" in clean_df.columns:
         mask = clean_df["is_relevant"] | clean_df["is_soft_relevant"]
         log.info(
             f"Including soft-relevant articles. "
@@ -250,6 +257,14 @@ def main() -> None:
         help="use only is_relevant (strict subnational requirement); default includes soft-relevant",
     )
     parser.add_argument(
+        "--event-articles", action="store_true",
+        help="use is_event_article=True as input filter (highest-confidence tier)",
+    )
+    parser.add_argument(
+        "--pilot", action="store_true",
+        help="scope to PILOT_FLOOD_IDS only",
+    )
+    parser.add_argument(
         "--flood-id", type=int, default=None,
         help="only process a single flood event (debug)",
     )
@@ -265,13 +280,23 @@ def main() -> None:
     flood_meta = load_flood_metadata()
     log.info(f"Loaded flood metadata for {len(flood_meta)} events")
 
-    # Optional single-flood filter
+    # Scope filters
     if args.flood_id:
         clean_df = clean_df[clean_df["flood_id"] == args.flood_id]
         log.info(f"Filtered to flood_id={args.flood_id}: {len(clean_df)} rows")
+    elif args.pilot:
+        from config import PILOT_FLOOD_IDS
+        if PILOT_FLOOD_IDS:
+            clean_df = clean_df[clean_df["flood_id"].isin(PILOT_FLOOD_IDS)]
+            log.info(f"Filtered to pilot floods {PILOT_FLOOD_IDS}: {len(clean_df)} rows")
 
     # Build NLP input dataframe
-    nlp_df = build_nlp_input(clean_df, flood_meta, include_soft=not args.strict_only)
+    nlp_df = build_nlp_input(
+        clean_df,
+        flood_meta,
+        include_soft=not args.strict_only,
+        event_articles_only=args.event_articles,
+    )
 
     if nlp_df.empty:
         log.warning("No articles passed the relevance filter — nothing to write.")
@@ -287,7 +312,7 @@ def main() -> None:
     log.info(f"Combined CSV ({len(nlp_df)} rows) -> {combined_path}")
 
     # Write summary
-    write_summary(counts, flood_meta, NLP_OUTPUT_DIR, include_soft=args.include_soft)
+    write_summary(counts, flood_meta, NLP_OUTPUT_DIR, include_soft=not args.strict_only)
 
     log.info("=== STAGE 08 COMPLETE ===")
     log.info(f"Output directory: {NLP_OUTPUT_DIR}")

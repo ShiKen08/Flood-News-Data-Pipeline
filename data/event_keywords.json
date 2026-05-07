@@ -1,0 +1,1911 @@
+{
+  "1": [
+    "bois",
+    "corinth",
+    "drorange",
+    "gros",
+    "islet",
+    "lucia",
+    "riviere",
+    "saint"
+  ],
+  "2": [
+    "bahia"
+  ],
+  "3": [
+    "bogotá",
+    "calera",
+    "cundinamarca",
+    "santander"
+  ],
+  "4": [
+    "bado",
+    "bois",
+    "bongo",
+    "bonita",
+    "cacao",
+    "corinth",
+    "drorange",
+    "gros",
+    "herrera",
+    "islet",
+    "manantial",
+    "nestlé",
+    "pueblo",
+    "rabelo",
+    "riviere",
+    "santos",
+    "tonosí"
+  ],
+  "5": [
+    "bamboo",
+    "caparo",
+    "carmen",
+    "caroni",
+    "helena",
+    "kelly",
+    "madras",
+    "oropouche",
+    "ortoire",
+    "tobago",
+    "trinidad",
+    "valsayn"
+  ],
+  "6": [
+    "guadalupe",
+    "kerr",
+    "texas"
+  ],
+  "7": [
+    "ruidoso"
+  ],
+  "8": [
+    "antonio",
+    "texas"
+  ],
+  "9": [
+    "angeles",
+    "barbara",
+    "bernardino",
+    "california",
+    "ventura"
+  ],
+  "10": [
+    "aires",
+    "bahia",
+    "blanca",
+    "buenos"
+  ],
+  "11": [
+    "oriximiná",
+    "parà",
+    "trombetas"
+  ],
+  "12": [
+    "benito",
+    "caimito",
+    "guaranda",
+    "majagual",
+    "marcos",
+    "mojana",
+    "sucre"
+  ],
+  "13": [
+    "andes",
+    "nariño",
+    "pablo",
+    "túquerres"
+  ],
+  "14": [
+    "arbeláez",
+    "cachipay",
+    "cundimarca",
+    "viotá"
+  ],
+  "15": [
+    "cuba",
+    "martinez",
+    "matanzas",
+    "pinar"
+  ],
+  "16": [
+    "alajuela",
+    "bahía",
+    "cartago",
+    "cuajiniquil",
+    "drake",
+    "garabito",
+    "golfito",
+    "guanacaste",
+    "guaycará",
+    "jacó",
+    "jiménez",
+    "nicoya",
+    "nosara",
+    "puntarenas",
+    "sierpe",
+    "tamarindo",
+    "tempate",
+    "veintisiete"
+  ],
+  "17": [
+    "botucatu",
+    "laranjal",
+    "marilia",
+    "paulista",
+    "paulo",
+    "taboao"
+  ],
+  "18": [
+    "bolivia",
+    "chuquisaca",
+    "plurinational",
+    "sucre"
+  ],
+  "19": [
+    "lagoa",
+    "vermelha"
+  ],
+  "20": [
+    "camopi",
+    "french",
+    "guiana",
+    "kourou",
+    "laurent",
+    "maroni",
+    "oyapock",
+    "saint",
+    "sauts",
+    "trois"
+  ],
+  "21": [
+    "brazil",
+    "catarina",
+    "pará"
+  ],
+  "22": [
+    "washington",
+    "whatcom"
+  ],
+  "23": [
+    "cusco",
+    "machu",
+    "picchu",
+    "pueblo"
+  ],
+  "24": [
+    "departments",
+    "marcos",
+    "zacapa"
+  ],
+  "25": [
+    "alberta",
+    "athabasca",
+    "clearwater"
+  ],
+  "26": [
+    "caldas",
+    "chinchina",
+    "piedecuesta",
+    "santander"
+  ],
+  "27": [
+    "filomeno",
+    "meta",
+    "veracruz"
+  ],
+  "28": [
+    "acre",
+    "cruzeiro",
+    "gerais",
+    "itabira",
+    "maria",
+    "minas"
+  ],
+  "29": [
+    "bogotá",
+    "boyacá",
+    "caquetá",
+    "florencia",
+    "quípama"
+  ],
+  "30": [
+    "cundinamarca",
+    "medina",
+    "meta",
+    "tablon",
+    "villavicencio"
+  ],
+  "31": [
+    "alférez",
+    "bolivar",
+    "carmen",
+    "guamuez",
+    "orito",
+    "putamayo",
+    "santiago",
+    "valle"
+  ],
+  "32": [
+    "barbacoas",
+    "nariño",
+    "telembí"
+  ],
+  "33": [
+    "chicamán",
+    "quiché",
+    "sacatepéquez",
+    "taña",
+    "uspantán"
+  ],
+  "34": [
+    "antioquia",
+    "campamento",
+    "cisneros",
+    "cocorná",
+    "domingo",
+    "francisco",
+    "liborina",
+    "luis",
+    "retiro"
+  ],
+  "35": [
+    "ahuachapan",
+    "chalatenango",
+    "jiquilisco",
+    "salvador",
+    "sonsonate",
+    "tecoluca",
+    "triunfo"
+  ],
+  "36": [
+    "ayala",
+    "cuautla",
+    "jantetelco",
+    "jonacatepec",
+    "morelos",
+    "tepalcingo",
+    "tlayacapan",
+    "yautepec",
+    "yecapixtla"
+  ],
+  "37": [
+    "querétaro",
+    "santiago",
+    "tequisquiapan"
+  ],
+  "38": [
+    "antioquia",
+    "medellin",
+    "santuario"
+  ],
+  "39": [
+    "dominican"
+  ],
+  "40": [
+    "caloto",
+    "cauca",
+    "jambaló",
+    "muncipalities",
+    "quilichao",
+    "santander",
+    "suarez",
+    "vega"
+  ],
+  "41": [
+    "broward",
+    "dania",
+    "florida",
+    "fort",
+    "hollywood",
+    "lauderdale",
+    "pembroke",
+    "pines"
+  ],
+  "42": [
+    "baie",
+    "charlevoix",
+    "lanaudière",
+    "lénergie",
+    "paul",
+    "quebec",
+    "saint",
+    "sainte",
+    "émélie"
+  ],
+  "43": [
+    "connecticut",
+    "hampshire",
+    "illinois",
+    "jersey",
+    "kentucky",
+    "massachusetts",
+    "missouri",
+    "pennsylvania",
+    "tennessee",
+    "vermont",
+    "york"
+  ],
+  "44": [
+    "halifax",
+    "hants",
+    "lunenburg",
+    "queens",
+    "regional",
+    "scotia"
+  ],
+  "45": [
+    "autlan",
+    "cangrejo",
+    "jalisco"
+  ],
+  "46": [
+    "arkansas",
+    "connecticut",
+    "jersey",
+    "oklahoma",
+    "texas",
+    "york"
+  ],
+  "47": [
+    "azua",
+    "bahoruco",
+    "barahona",
+    "cristobal",
+    "distrito",
+    "domingo",
+    "dominican",
+    "duarte",
+    "josé",
+    "macoris",
+    "maguana",
+    "ocoa",
+    "pedro",
+    "peravia",
+    "plata",
+    "ramírez",
+    "sánchez"
+  ],
+  "48": [
+    "oregon",
+    "portland",
+    "snohomish",
+    "wahkiakum",
+    "washington"
+  ],
+  "49": [
+    "belford",
+    "catarina",
+    "caxias",
+    "duque",
+    "gonçalo",
+    "iguaçu",
+    "janeiro",
+    "japeri",
+    "joão",
+    "meriti",
+    "mesquita",
+    "nilópolis",
+    "paraná",
+    "paulo",
+    "queimados",
+    "roxo"
+  ],
+  "50": [
+    "bolivia",
+    "plurinational",
+    "tipuani"
+  ],
+  "51": [
+    "anagé",
+    "bahia",
+    "cotegipe",
+    "dário",
+    "francisco",
+    "ibicuí",
+    "iguaí",
+    "ilhéus",
+    "jaguaquara",
+    "medeiros",
+    "meira",
+    "milagres",
+    "muquém",
+    "neto",
+    "quijingue",
+    "saubara",
+    "ubaíra",
+    "wanderley"
+  ],
+  "52": [
+    "alfredo",
+    "baba",
+    "balzar",
+    "baquerizo",
+    "chone",
+    "esmeraldas",
+    "guayas",
+    "jujan",
+    "lucía",
+    "lópez",
+    "manabí",
+    "milagro",
+    "moreno",
+    "muisne",
+    "palestina",
+    "playas",
+    "rios",
+    "tosagu",
+    "valenc"
+  ],
+  "53": [
+    "barra",
+    "iguaçu",
+    "janeiro",
+    "japeri",
+    "piraí"
+  ],
+  "54": [
+    "acre",
+    "contralmirante",
+    "provinces",
+    "tahuamanu",
+    "tumbes",
+    "villar",
+    "yaverija"
+  ],
+  "55": [
+    "bolivia",
+    "catachila",
+    "chinata",
+    "cochabamba",
+    "communities",
+    "laquina",
+    "plurinational"
+  ],
+  "56": [
+    "amapá",
+    "macapá"
+  ],
+  "57": [
+    "corrientes"
+  ],
+  "58": [
+    "canelones",
+    "cero",
+    "cities",
+    "colonia",
+    "durazno",
+    "florida",
+    "helvecia",
+    "largo",
+    "paysandú",
+    "rivera",
+    "rocha",
+    "rosario",
+    "uruguay"
+  ],
+  "59": [
+    "acre",
+    "bolivia",
+    "cobija",
+    "pando",
+    "plurinational",
+    "velmonte",
+    "virtudes"
+  ],
+  "60": [
+    "apiacá",
+    "espirito",
+    "freire",
+    "janeiro",
+    "jesus",
+    "mimoso",
+    "municipal",
+    "muniz",
+    "vargem"
+  ],
+  "61": [
+    "ancash",
+    "juja",
+    "junín",
+    "molinos",
+    "sihuas"
+  ],
+  "62": [
+    "carutapera",
+    "conceição",
+    "formosa",
+    "freire",
+    "governador",
+    "gurupi",
+    "joão",
+    "lago",
+    "lagoa",
+    "maranhao",
+    "maranhão",
+    "mirim",
+    "monção",
+    "negra",
+    "nunes",
+    "pedra",
+    "pindaré",
+    "roberto",
+    "sóter",
+    "trizidela",
+    "tuntum",
+    "vale",
+    "vista"
+  ],
+  "63": [
+    "colorado",
+    "florida",
+    "louisiana",
+    "mississippi",
+    "nebraska",
+    "texas",
+    "wyoming"
+  ],
+  "64": [
+    "corrientes",
+    "entre",
+    "ríos"
+  ],
+  "65": [
+    "areas",
+    "gaúcha",
+    "metropolitan",
+    "pardo",
+    "taquari",
+    "vale"
+  ],
+  "66": [
+    "durazno",
+    "largo",
+    "ortigas",
+    "paysandú",
+    "rocha",
+    "salto",
+    "soriano",
+    "tacuarembó",
+    "treinta",
+    "tres",
+    "uruguay"
+  ],
+  "67": [
+    "araucanía",
+    "biobío",
+    "maule",
+    "ohiggins",
+    "ríos",
+    "santiago",
+    "ñuble"
+  ],
+  "68": [
+    "guatemala",
+    "jutiapa",
+    "marcos",
+    "sacatepequez",
+    "suchitepéquez"
+  ],
+  "69": [
+    "dakota",
+    "iowa",
+    "michigan",
+    "minnesota",
+    "nebraska",
+    "wisconsin"
+  ],
+  "70": [
+    "chaves",
+    "roswell"
+  ],
+  "71": [
+    "altagracia",
+    "dominican",
+    "duarte",
+    "espaillat",
+    "hato",
+    "maria",
+    "mayor",
+    "plata",
+    "samanà",
+    "sanches",
+    "seibo",
+    "trinidad"
+  ],
+  "72": [
+    "bolivia",
+    "capital",
+    "pasajahuira",
+    "plurinational"
+  ],
+  "73": [
+    "guanacaste",
+    "puntarenas"
+  ],
+  "74": [
+    "carapicuíba",
+    "paulo"
+  ],
+  "75": [
+    "bolivia",
+    "chuquisaca",
+    "cochabamba",
+    "plurinational",
+    "potosí",
+    "tarija"
+  ],
+  "76": [
+    "puno",
+    "tiquillaca"
+  ],
+  "77": [
+    "huancavelica"
+  ],
+  "78": [
+    "amazonas",
+    "apurímac",
+    "arequipa",
+    "ayacucho",
+    "cusco",
+    "huancavelica",
+    "huánuco",
+    "junín",
+    "libertad",
+    "lima",
+    "moquegua",
+    "pasco",
+    "piura",
+    "provinces",
+    "tacna",
+    "tumbes",
+    "ucayali",
+    "áncash"
+  ],
+  "79": [
+    "angra",
+    "janeiro",
+    "paulo",
+    "petrópolis",
+    "reis"
+  ],
+  "80": [
+    "jersey",
+    "lancaster",
+    "maryland",
+    "middlesex",
+    "pennsylvania",
+    "petersburg",
+    "somerset",
+    "virginia",
+    "washington",
+    "york"
+  ],
+  "81": [
+    "arauca",
+    "caqueta",
+    "choco",
+    "putumayo",
+    "vichada"
+  ],
+  "82": [
+    "jalisco",
+    "martinica"
+  ],
+  "83": [
+    "hidalgo",
+    "luis",
+    "potosí",
+    "puebla",
+    "querétaro",
+    "veracruz"
+  ],
+  "84": [
+    "departments",
+    "francisco",
+    "intibucá",
+    "lempira",
+    "morazán"
+  ],
+  "85": [
+    "beni",
+    "bolivia",
+    "cochabamba",
+    "cotoca",
+    "espejos",
+    "guardia",
+    "piraí",
+    "plurinational",
+    "torno"
+  ],
+  "86": [
+    "huanuco",
+    "marañón",
+    "martha",
+    "rosa",
+    "yanajanca"
+  ],
+  "87": [
+    "alfredo",
+    "chaves",
+    "espirito",
+    "gerais",
+    "iconha",
+    "janeiro",
+    "minas"
+  ],
+  "88": [
+    "arequipa",
+    "huanuco",
+    "monzón",
+    "uchumayo"
+  ],
+  "89": [
+    "machala",
+    "manabí",
+    "morona",
+    "provinces",
+    "santiago"
+  ],
+  "90": [
+    "janeiro"
+  ],
+  "91": [
+    "baixada",
+    "guaruja",
+    "paulo",
+    "santista",
+    "santos",
+    "vicente"
+  ],
+  "92": [
+    "edenville",
+    "michigan",
+    "midland",
+    "sanford"
+  ],
+  "93": [
+    "bolivarian",
+    "tachira",
+    "venezuela"
+  ],
+  "94": [
+    "chiapas",
+    "tabasco",
+    "veracruz"
+  ],
+  "95": [
+    "paulo"
+  ],
+  "96": [
+    "catarina"
+  ],
+  "97": [
+    "arizona",
+    "nevada",
+    "utah"
+  ],
+  "98": [
+    "departments",
+    "guatemala",
+    "marcos",
+    "rosa",
+    "sololá"
+  ],
+  "99": [
+    "hidalgo",
+    "jalisco",
+    "morelos",
+    "rosas",
+    "tula"
+  ],
+  "100": [
+    "catarina",
+    "florianopolis",
+    "itajai",
+    "vale"
+  ],
+  "101": [
+    "combeima",
+    "departement",
+    "ibagué",
+    "tolima"
+  ],
+  "102": [
+    "kentucky",
+    "missouri"
+  ],
+  "103": [
+    "gerais",
+    "minas"
+  ],
+  "104": [
+    "azuay",
+    "chimborazo",
+    "cotopaxi",
+    "esmeraldas",
+    "guayas",
+    "pichincha",
+    "provinces",
+    "ríos"
+  ],
+  "105": [
+    "angra",
+    "cachoeiras",
+    "caxias",
+    "duque",
+    "janeiro",
+    "macacu",
+    "mesquita",
+    "paraty",
+    "reis"
+  ],
+  "106": [
+    "antioquia",
+    "caldas",
+    "cauca",
+    "cundinamarca",
+    "huila",
+    "nariño",
+    "quindío",
+    "risaralda",
+    "tolima",
+    "valle"
+  ],
+  "107": [
+    "azuay",
+    "chimborazo",
+    "chinchipe",
+    "pastaza",
+    "provinces",
+    "rive",
+    "tungurahua",
+    "zamora"
+  ],
+  "108": [
+    "barinas",
+    "bolivarian",
+    "miranda",
+    "táchira",
+    "venezuela"
+  ],
+  "109": [
+    "coahuila",
+    "culiacán",
+    "elota",
+    "guasave",
+    "mocorito",
+    "morelos",
+    "oaxaca",
+    "sinaloa",
+    "tamaulipas",
+    "veracruz"
+  ],
+  "110": [
+    "bolivarian",
+    "caraballeda",
+    "guaira",
+    "macuto",
+    "parishes",
+    "venezuela"
+  ],
+  "111": [
+    "caterina",
+    "rodeio"
+  ],
+  "112": [
+    "canton",
+    "chimborazo",
+    "chone",
+    "cotopaxi",
+    "domingo",
+    "elena",
+    "esmeraldas",
+    "guayas",
+    "imbabura",
+    "manabí",
+    "ríos",
+    "tsáchilas"
+  ],
+  "113": [
+    "ancash",
+    "arequipa",
+    "cajamarca",
+    "departments",
+    "lambayeque",
+    "libertad",
+    "lima",
+    "piura",
+    "tumbes"
+  ],
+  "114": [
+    "departments",
+    "huancavelica",
+    "lambayeque",
+    "libertad",
+    "lima",
+    "piura"
+  ],
+  "115": [
+    "atacames",
+    "esmeraldas",
+    "muisne",
+    "quinindé"
+  ],
+  "116": [
+    "departments",
+    "escuintla",
+    "guatemala",
+    "suchitepéques",
+    "totonicapán",
+    "verapaz",
+    "zacapa"
+  ],
+  "117": [
+    "blumenau",
+    "catarina",
+    "lontras",
+    "tubarão"
+  ],
+  "118": [
+    "itapua",
+    "misiones",
+    "neembucu",
+    "parana",
+    "paranà"
+  ],
+  "119": [
+    "atlantico",
+    "bolivar",
+    "guajira",
+    "magdalena"
+  ],
+  "120": [
+    "chilca",
+    "huancan",
+    "huancayo",
+    "junìn"
+  ],
+  "121": [
+    "beni",
+    "bolivia",
+    "cochabamba",
+    "departments",
+    "plurinational",
+    "potosi",
+    "sapahaqui",
+    "tarija"
+  ],
+  "122": [
+    "caterina",
+    "florianópolis"
+  ],
+  "123": [
+    "cusco",
+    "dios",
+    "junín",
+    "loreto",
+    "madre",
+    "manu",
+    "provinces",
+    "tahuamanu",
+    "tambopata",
+    "ucayali"
+  ],
+  "124": [
+    "canchaque",
+    "chulucanas",
+    "distrcits",
+    "faique",
+    "huancabamba",
+    "loma",
+    "miguel",
+    "morropón",
+    "máncora",
+    "piura",
+    "provinces",
+    "sullana",
+    "tambogrande"
+  ],
+  "125": [
+    "alabama",
+    "arkansas",
+    "carolina",
+    "davidson",
+    "georgia",
+    "jersey",
+    "maryland",
+    "metropolitan",
+    "mississippi",
+    "nashville",
+    "pennsylvania",
+    "rutherford",
+    "sullivan",
+    "tennessee",
+    "virginia",
+    "wilson"
+  ],
+  "126": [
+    "loreto",
+    "martin",
+    "nauta"
+  ],
+  "127": [
+    "bolivia",
+    "cochabamba",
+    "omereque",
+    "plurinational",
+    "raqaypampa"
+  ],
+  "128": [
+    "bolivarian",
+    "cordero",
+    "febres",
+    "merida",
+    "pedro",
+    "venezuela"
+  ],
+  "129": [
+    "azuay",
+    "canton",
+    "cuenca",
+    "tarqui"
+  ],
+  "130": [
+    "departments",
+    "izabal",
+    "livingston",
+    "marcos",
+    "petén",
+    "quetzaltenango",
+    "rosa",
+    "sololá",
+    "suchitepéquez",
+    "verapaz"
+  ],
+  "131": [
+    "amazon",
+    "amazonas",
+    "careiro",
+    "manacapuru",
+    "manaus",
+    "negro",
+    "parintins",
+    "solimões",
+    "várzea"
+  ],
+  "132": [
+    "guyana"
+  ],
+  "133": [
+    "baudó",
+    "chocó",
+    "dubasa",
+    "pepé"
+  ],
+  "134": [
+    "meta"
+  ],
+  "135": [
+    "achibueno",
+    "aconcagua",
+    "ancoa",
+    "biobío",
+    "cachapoal",
+    "carampangue",
+    "chillán",
+    "curanilahue",
+    "diguillín",
+    "duqueco",
+    "laja",
+    "libertador",
+    "longaví",
+    "maipo",
+    "mapocho",
+    "mataquito",
+    "maule",
+    "metropolitana",
+    "nuble",
+    "putagán",
+    "ranas",
+    "tinguiriricq",
+    "valparaíso",
+    "ñuble"
+  ],
+  "136": [
+    "alagoas",
+    "pernambuco"
+  ],
+  "137": [
+    "berbice",
+    "cuyuni",
+    "demerara",
+    "essequibo",
+    "mahaica",
+    "mazaruni",
+    "rupununi",
+    "takutu"
+  ],
+  "138": [
+    "idaho",
+    "montana",
+    "national",
+    "wyoming",
+    "yellowstone"
+  ],
+  "139": [
+    "antonio",
+    "italva",
+    "itaocara",
+    "janeiro",
+    "laje",
+    "miracema",
+    "muriae",
+    "padua"
+  ],
+  "140": [
+    "biobío",
+    "maule",
+    "metropolitan",
+    "ohiggins",
+    "santiago",
+    "valparaíso",
+    "ñuble"
+  ],
+  "141": [
+    "atlántida",
+    "bahía",
+    "cortés",
+    "islas"
+  ],
+  "142": [
+    "canelones",
+    "capital",
+    "montevideo",
+    "uruguay"
+  ],
+  "143": [
+    "antioquia",
+    "departments",
+    "meta",
+    "putumayo"
+  ],
+  "144": [
+    "hawai",
+    "maui",
+    "molokai",
+    "oahu"
+  ],
+  "145": [
+    "bolivia",
+    "chuquisaca",
+    "coroico",
+    "departments",
+    "mapiri",
+    "plurinational",
+    "potosí",
+    "tipuani"
+  ],
+  "146": [
+    "bolivia",
+    "larecaja",
+    "plurinational"
+  ],
+  "147": [
+    "alabama",
+    "baldwin",
+    "escambia",
+    "jefferson",
+    "marshall",
+    "shelby"
+  ],
+  "148": [
+    "cajamarca",
+    "jaèn"
+  ],
+  "149": [
+    "antioquia",
+    "bolívar",
+    "caldas",
+    "cauca",
+    "cundinamarca",
+    "córdoba",
+    "departments",
+    "madgalena",
+    "meta",
+    "risaralda",
+    "santander",
+    "santanderes",
+    "sucre",
+    "tolima"
+  ],
+  "150": [
+    "alajuela",
+    "alajuelita",
+    "alvarado",
+    "cantons",
+    "canyons",
+    "carlos",
+    "cartago",
+    "golfito",
+    "guatoso",
+    "guácimo",
+    "heredia",
+    "isidro",
+    "jiménez",
+    "josé",
+    "limon",
+    "limón",
+    "matina",
+    "moravia",
+    "oreamuno",
+    "paraíso",
+    "pococí",
+    "puntarenas",
+    "puriscal",
+    "quepos",
+    "ramón",
+    "sarapiquí",
+    "siquirres",
+    "tamanca",
+    "turrialba",
+    "unión"
+  ],
+  "151": [
+    "almirante",
+    "bocas",
+    "buglé",
+    "changuinola",
+    "chiriquí",
+    "nabe",
+    "toro"
+  ],
+  "152": [
+    "bolivia",
+    "pirai",
+    "plurinational",
+    "torno"
+  ],
+  "153": [
+    "amambay",
+    "barreto",
+    "concepción",
+    "departments",
+    "felix",
+    "horqueta",
+    "lazaro",
+    "lopez",
+    "paraguay",
+    "paso",
+    "pedro",
+    "sargento"
+  ],
+  "154": [
+    "paulo",
+    "sebastiao",
+    "ubatuba"
+  ],
+  "155": [
+    "riograndedosul",
+    "gaucho"
+  ],
+  "156": [
+    "camboriú",
+    "catarina",
+    "espírito",
+    "itapema"
+  ],
+  "157": [
+    "camagüey",
+    "cuba",
+    "granma",
+    "santiago",
+    "tunas"
+  ],
+  "158": [
+    "antioquia",
+    "atlántico",
+    "bello",
+    "bolivar",
+    "bosconia",
+    "boyacá",
+    "cauca",
+    "cesar",
+    "departments",
+    "guajira",
+    "magdalena",
+    "montecristo",
+    "nariño",
+    "santander",
+    "tolima"
+  ],
+  "159": [
+    "antonio",
+    "chaco",
+    "provinces",
+    "rioja",
+    "salta",
+    "tucumán"
+  ],
+  "160": [
+    "arequipa",
+    "cusco",
+    "tacna"
+  ],
+  "161": [
+    "atlantida",
+    "bahía",
+    "bambu",
+    "coco",
+    "colón",
+    "cortés",
+    "dios",
+    "esteban",
+    "gracias",
+    "islas",
+    "lean",
+    "masica",
+    "papaloteca",
+    "yoro"
+  ],
+  "162": [
+    "beni",
+    "bolivia",
+    "cochabamba",
+    "plurinational",
+    "potosi",
+    "tarija"
+  ],
+  "163": [
+    "fundación",
+    "magdalena",
+    "retén",
+    "santander"
+  ],
+  "164": [
+    "caterina",
+    "itajai",
+    "vale"
+  ],
+  "165": [
+    "caaguazú",
+    "canindeyú",
+    "capital",
+    "distrito",
+    "paraguarí"
+  ],
+  "166": [
+    "convención",
+    "cusco",
+    "echarate"
+  ],
+  "167": [
+    "beni",
+    "bolivia",
+    "departments",
+    "plurinational"
+  ],
+  "168": [
+    "hawaii",
+    "honolulu",
+    "kalawao",
+    "kauai",
+    "maui",
+    "oahu"
+  ],
+  "169": [
+    "chiriquí",
+    "colón",
+    "cristóbal",
+    "garzas",
+    "locality",
+    "pacora",
+    "panama",
+    "panamá"
+  ],
+  "170": [
+    "amacuro",
+    "amazonas",
+    "apure",
+    "aragua",
+    "barinas",
+    "bolivar",
+    "bolivarian",
+    "carabobo",
+    "delta",
+    "merida",
+    "monagas",
+    "táchira",
+    "venezuela",
+    "yaracuy",
+    "zulia"
+  ],
+  "171": [
+    "colorado",
+    "utah"
+  ],
+  "172": [
+    "british",
+    "columbia",
+    "fraser",
+    "nicola",
+    "okanagan",
+    "similkameen",
+    "thompson",
+    "vancouver"
+  ],
+  "173": [
+    "bolivia",
+    "chuquisaca",
+    "cochabamba",
+    "mizque",
+    "pirai",
+    "plurinational",
+    "potosi",
+    "surutu",
+    "tarija",
+    "yapacani"
+  ],
+  "174": [
+    "cotopaxi",
+    "guayas",
+    "pichincha",
+    "quito",
+    "ríos"
+  ],
+  "175": [
+    "rico"
+  ],
+  "176": [
+    "dominican",
+    "plata"
+  ],
+  "177": [
+    "melgar",
+    "nariño",
+    "tolima"
+  ],
+  "178": [
+    "apure",
+    "aragua",
+    "bolivarian",
+    "capital",
+    "carabobo",
+    "caracas",
+    "falcón",
+    "lara",
+    "mérida",
+    "portuguesa",
+    "trujillo",
+    "táchira",
+    "vargas",
+    "venezuela",
+    "zulia"
+  ],
+  "179": [
+    "manitoba"
+  ],
+  "180": [
+    "gualán",
+    "guatemala",
+    "huehuetenango",
+    "quetzaltenango",
+    "quiché",
+    "retalhuleu",
+    "rosa",
+    "solóla",
+    "suchitepéquez",
+    "tucurú",
+    "verapaz",
+    "zacapa"
+  ],
+  "181": [
+    "león"
+  ],
+  "182": [
+    "anzoátegui",
+    "bolivarian",
+    "guanta",
+    "sotillo",
+    "valle",
+    "venezuela",
+    "verde"
+  ],
+  "183": [
+    "ceara",
+    "maranhao",
+    "para",
+    "pernambuco",
+    "piau"
+  ],
+  "184": [
+    "bolivia",
+    "cobija",
+    "pando",
+    "plurinational"
+  ],
+  "185": [
+    "bahia",
+    "belmonte",
+    "cabrália",
+    "ilhéus",
+    "itapebi",
+    "porto",
+    "seguro"
+  ],
+  "186": [
+    "bolivar",
+    "bolivarian",
+    "callao",
+    "venezuela"
+  ],
+  "187": [
+    "artigas",
+    "convento",
+    "conventos",
+    "departments",
+    "paysandú",
+    "salto",
+    "sandú",
+    "sauce",
+    "tacuarembó",
+    "uruguay"
+  ],
+  "188": [
+    "arroio",
+    "colinas",
+    "cruzeiro",
+    "encantado",
+    "estrela",
+    "lajeado",
+    "meio",
+    "muçum",
+    "roca",
+    "sales",
+    "taquari",
+    "tereza"
+  ],
+  "189": [
+    "bejuco",
+    "calovébora",
+    "colon",
+    "panama",
+    "veraguas"
+  ],
+  "190": [
+    "conception"
+  ],
+  "191": [
+    "mississippi",
+    "pearl",
+    "tennessee"
+  ],
+  "192": [
+    "huanuco",
+    "maranon",
+    "peru"
+  ],
+  "193": [
+    "departments",
+    "huehuetenango",
+    "petén",
+    "sayaxché"
+  ],
+  "194": [
+    "canelones",
+    "colonia",
+    "lavalleja",
+    "montevideo",
+    "uruguay"
+  ],
+  "195": [
+    "antioquia",
+    "caldas",
+    "choco",
+    "departments",
+    "meta",
+    "putumayo",
+    "tolima"
+  ],
+  "196": [
+    "beni",
+    "bolivia",
+    "cochabamba",
+    "departments",
+    "plurinational",
+    "taquiña",
+    "tarija"
+  ],
+  "197": [
+    "bolivia",
+    "chuquisaca",
+    "cochabamba",
+    "plurinational",
+    "potosì",
+    "sucre"
+  ],
+  "198": [
+    "canton",
+    "chimborazo",
+    "chunchi",
+    "piñas"
+  ],
+  "199": [
+    "amazonas",
+    "loreto",
+    "martin",
+    "piura",
+    "yurimaguas"
+  ],
+  "200": [
+    "arkansas",
+    "breathitt",
+    "christian",
+    "kentucky",
+    "magoffin",
+    "maryland",
+    "ohio",
+    "tennessee",
+    "todd",
+    "virginia"
+  ],
+  "201": [
+    "belén",
+    "catamarca",
+    "tinogasta"
+  ],
+  "202": [
+    "convención",
+    "cusco",
+    "cuscomayo",
+    "junín",
+    "kimbiri",
+    "martín",
+    "otari",
+    "pichari",
+    "satipo",
+    "vizcatán"
+  ],
+  "203": [
+    "arkansas",
+    "bolivar",
+    "mississippi",
+    "panola",
+    "sunflower",
+    "tallahatchie",
+    "texas"
+  ],
+  "204": [
+    "araucania",
+    "lagos",
+    "ríos"
+  ],
+  "205": [
+    "bolivia",
+    "oconnor",
+    "plurinational",
+    "tarija"
+  ],
+  "206": [
+    "albuquerque",
+    "arizona",
+    "colorado",
+    "larimer"
+  ],
+  "207": [
+    "arizona",
+    "bend",
+    "gila",
+    "paso",
+    "texas"
+  ],
+  "208": [
+    "dickson",
+    "hickman",
+    "humphrey",
+    "tennessee"
+  ],
+  "209": [
+    "bahia",
+    "espirito",
+    "eunápolis",
+    "freitas",
+    "gerais",
+    "itaberaba",
+    "itagimirim",
+    "itamaraju",
+    "jucuruçu",
+    "medeiros",
+    "minas",
+    "neto",
+    "porto",
+    "prado",
+    "seguro",
+    "teixeira",
+    "tocantins"
+  ],
+  "210": [
+    "fluminense",
+    "janeiro",
+    "petrópolis"
+  ],
+  "211": [
+    "azuay"
+  ],
+  "212": [
+    "antigua",
+    "antioquia"
+  ],
+  "213": [
+    "alfredo",
+    "balao",
+    "baquerizo",
+    "caluma",
+    "camilo",
+    "catamayo",
+    "chila",
+    "cotopaxi",
+    "elena",
+    "enrique",
+    "espíndola",
+    "maná",
+    "moreno",
+    "pichincha",
+    "ponce",
+    "provinces",
+    "quilanga",
+    "quinsaloma",
+    "ríos",
+    "zaruma"
+  ],
+  "214": [
+    "dakota",
+    "minnesota"
+  ],
+  "215": [
+    "alberta",
+    "manitoba",
+    "northwest",
+    "territories"
+  ],
+  "216": [
+    "alagoas",
+    "amazon",
+    "coroa",
+    "greater",
+    "guararapes",
+    "jaboatão",
+    "josé",
+    "jurua",
+    "madeira",
+    "negro",
+    "olinda",
+    "paraíba",
+    "pernambuco",
+    "purus",
+    "ricefe",
+    "solimões"
+  ],
+  "217": [
+    "bolivarian",
+    "carabobo",
+    "lara",
+    "miranda",
+    "mérida",
+    "táchira",
+    "venezuela"
+  ],
+  "218": [
+    "bárbara",
+    "choluteca",
+    "colón",
+    "comayagua",
+    "copàn",
+    "cortés",
+    "departments",
+    "francisco",
+    "intibucá",
+    "lempira",
+    "morazán",
+    "ocotepeque",
+    "olancho",
+    "paraíso",
+    "ulùa",
+    "valle",
+    "yoro"
+  ],
+  "219": [
+    "bahia",
+    "carapebus",
+    "catarina",
+    "conceição",
+    "curitiba",
+    "doce",
+    "espirito",
+    "janeiro",
+    "macabu",
+    "paranà"
+  ],
+  "220": [
+    "beni",
+    "bolivia",
+    "chuquisaca",
+    "cochabamba",
+    "departments",
+    "guanay",
+    "mapiri",
+    "plurinational",
+    "potosi",
+    "tipuani"
+  ],
+  "221": [
+    "azua",
+    "bahoruco",
+    "barahona",
+    "dajabón",
+    "dominican",
+    "elías",
+    "espaillat",
+    "independencia",
+    "pedernales",
+    "piña",
+    "rodríguez",
+    "santiago",
+    "vega"
+  ],
+  "222": [
+    "bandeirantes",
+    "paraná"
+  ],
+  "223": [
+    "acre",
+    "amazonas",
+    "assis",
+    "branco",
+    "brasil",
+    "brasileia",
+    "epitaciolndia",
+    "manaus",
+    "xapuri"
+  ],
+  "224": [
+    "altaneira",
+    "antonina",
+    "aratuba",
+    "ceará",
+    "guaramiranga",
+    "itapaje",
+    "itapipoca",
+    "missão",
+    "uruburetama"
+  ],
+  "225": [
+    "maranhão"
+  ],
+  "226": [
+    "aires",
+    "buenos",
+    "córdoba",
+    "entre",
+    "neuquen",
+    "quilmes",
+    "ríos"
+  ],
+  "227": [
+    "alagoas",
+    "atalaia",
+    "cajueiro",
+    "camaragibe",
+    "deodoro",
+    "jacuípe",
+    "largo",
+    "marechal",
+    "matriz",
+    "miguel",
+    "milagres",
+    "murici",
+    "palmares",
+    "pernambuco",
+    "união"
+  ]
+}

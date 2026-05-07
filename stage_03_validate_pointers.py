@@ -364,13 +364,25 @@ def assign_retrieval_rank(df: pd.DataFrame) -> pd.DataFrame:
 
 def main():
     parser = argparse.ArgumentParser(description="Stage 03 — Validate & filter pointers")
-    parser.add_argument("--all",      action="store_true", help="Process all events (Phase 2)")
-    parser.add_argument("--flood-id", type=int,            help="Process a single flood_id only (incremental domain add)")
+    parser.add_argument("--all",       action="store_true", help="Process all events (Phase 2)")
+    parser.add_argument("--flood-id",  type=int,            help="Process a single flood_id only (incremental domain add)")
+    parser.add_argument("--flood-ids", type=str,            help="Comma-separated flood IDs to process, e.g. 1,2,3 (overrides PILOT_FLOOD_IDS)")
+    parser.add_argument("--skip-ids",  type=str,            help="Comma-separated flood IDs to skip, e.g. 1,2,3 (composable with any other flag)")
     args = parser.parse_args()
+
+    flood_ids_filter = [int(x.strip()) for x in args.flood_ids.split(",")] if args.flood_ids else None
+    skip_ids_set     = {int(x.strip()) for x in args.skip_ids.split(",")}  if args.skip_ids  else set()
 
     log.info("=" * 70)
     log.info("STAGE 03 — VALIDATE & FILTER POINTERS")
-    mode = f"flood_id={args.flood_id}" if args.flood_id else ("ALL events" if args.all else "PILOT events only")
+    mode = (
+        f"flood_ids={flood_ids_filter}" if flood_ids_filter else
+        f"flood_id={args.flood_id}"     if args.flood_id    else
+        "ALL events"                     if args.all         else
+        "PILOT events only"
+    )
+    if skip_ids_set:
+        mode += f"  skip={sorted(skip_ids_set)}"
     log.info(f"Mode : {mode}")
     log.info("=" * 70)
 
@@ -385,13 +397,18 @@ def main():
     hits_df = pd.read_parquet(hits_path)
     log.info(f"Loaded {len(hits_df)} index hits from {hits_path}")
 
-    if PILOT_FLOOD_IDS and not args.all:
-        hits_df = hits_df[hits_df["flood_id"].isin(PILOT_FLOOD_IDS)]
-        log.info(f"Filtered to {len(hits_df)} hits for events: {PILOT_FLOOD_IDS}")
-
     if args.flood_id:
         hits_df = hits_df[hits_df["flood_id"] == args.flood_id]
         log.info(f"Filtered to {len(hits_df)} hits for flood_id={args.flood_id}")
+    elif flood_ids_filter:
+        hits_df = hits_df[hits_df["flood_id"].isin(flood_ids_filter)]
+        log.info(f"Filtered to {len(hits_df)} hits for flood_ids={flood_ids_filter}")
+    elif PILOT_FLOOD_IDS and not args.all:
+        hits_df = hits_df[hits_df["flood_id"].isin(PILOT_FLOOD_IDS)]
+        log.info(f"Filtered to {len(hits_df)} hits for events: {PILOT_FLOOD_IDS}")
+    if skip_ids_set:
+        hits_df = hits_df[~hits_df["flood_id"].isin(skip_ids_set)]
+        log.info(f"Skipped flood IDs {sorted(skip_ids_set)}: {len(hits_df)} hits remaining")
 
     # ------------------------------------------------------------------
     # Add join keys (flood_id, query_id, crawl_id already present from stage_02)
