@@ -1,0 +1,14 @@
+# Flood Pipeline — Classifier dependencies
+# Install with: pip install -r requirements_classifier.txt
+#
+# These are separate from requirements.txt because they are only needed
+# for the fine-tuning step (Phase 2), not for the main pipeline.
+# The GPU node installs these automatically via run_finetune.sh.
+
+setfit>=1.0.0             # Few-shot fine-tuning framework (HuggingFace)
+datasets>=2.14.0          # HuggingFace datasets (required by setfit)
+transformers>=4.35.0      # Underlying transformer models
+accelerate>=0.24.0        # Multi-GPU / mixed-precision support
+sentence-transformers>=2.2.0  # Base sentence embedding models
+scikit-learn>=1.3.0       # Metrics (already in requirements.txt but pinned here too)
+torch>=2.0.0              # PyTorch (auto-installed by setfit, listed explicitly for clarity)

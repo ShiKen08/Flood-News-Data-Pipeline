@@ -68,6 +68,14 @@ echo "--- Stage 08: NLP bridge ---"
 python stage_08_nlp_analysis.py --event-articles --pilot
 
 echo ""
+echo "--- Stage 09: ML classification (skipped if model not trained yet) ---"
+if [ -d "classifier/model" ]; then
+    python stage_09_classify.py --pilot
+else
+    echo "  No classifier model found — run sbatch run_finetune.sh after labeling"
+fi
+
+echo ""
 echo "=============================="
 echo "Pipeline complete"
 echo "End time: $(date)"
