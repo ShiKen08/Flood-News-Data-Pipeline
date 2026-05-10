@@ -11,6 +11,9 @@ output/
 logs/
 raw_index_responses/
 
+# --- Trained model weights (too large for git — use scp to transfer) ---
+classifier/model/
+
 # --- Large file types ---
 *.warc
 *.warc.gz
