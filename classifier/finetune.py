@@ -200,8 +200,9 @@ def print_metrics(model, x_val, y_val, x_train=None, y_train=None) -> None:
 
     # Show worst errors
     val_df = pd.DataFrame({"text": x_val, "true": y_val, "prob": y_prob})
-    fp = val_df[(val_df["true"] == 0) & (y_pred == 1)].nlargest(3, "prob")
-    fn = val_df[(val_df["true"] == 1) & (y_pred == 0)].nsmallest(3, "prob")
+    y_pred_arr = np.array(y_pred)
+    fp = val_df[(val_df["true"] == 0) & (y_pred_arr == 1)].nlargest(3, "prob")
+    fn = val_df[(val_df["true"] == 1) & (y_pred_arr == 0)].nsmallest(3, "prob")
 
     if len(fp):
         print("\n  False positives (predicted flood, actually not):")
