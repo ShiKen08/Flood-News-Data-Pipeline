@@ -18,6 +18,15 @@ Usage:
 
 from __future__ import annotations
 
+import os
+os.environ["ACCELERATE_USE_MPS_DEVICE"] = "false"
+os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "0"
+
+import torch
+# Force CPU on Apple Silicon — MPS causes OOM on constrained systems
+torch.backends.mps.is_available = lambda: False  # type: ignore[method-assign]
+torch.backends.mps.is_built     = lambda: False  # type: ignore[method-assign]
+
 import argparse
 import logging
 import sys
@@ -120,8 +129,8 @@ def train_model(x_train, y_train, x_val, y_val, args) -> object:
         log.error("setfit not installed — run:  pip install setfit datasets")
         sys.exit(1)
 
-    log.info("Loading base model: %s", args.model)
-    model = SetFitModel.from_pretrained(args.model)
+    log.info("Loading base model: %s  (device=%s)", args.model, args.device)
+    model = SetFitModel.from_pretrained(args.model, device=args.device)
 
     train_ds = Dataset.from_dict({"text": x_train, "label": y_train})
     val_ds   = Dataset.from_dict({"text": x_val,   "label": y_val})
@@ -134,10 +143,8 @@ def train_model(x_train, y_train, x_val, y_val, args) -> object:
         batch_size=args.batch_size,
         num_epochs=args.epochs,
         num_iterations=args.iters,    # sentence pairs per class for contrastive step
-        evaluation_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
+        # Note: evaluation_strategy / metric_for_best_model only apply to the
+        # head training phase; omit them here to avoid KeyError in embedding phase
         report_to="none",
     )
 
@@ -219,6 +226,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int,   default=16,            help="Batch size (default 16)")
     parser.add_argument("--val-frac",   type=float, default=0.20,          help="Validation fraction (default 0.20)")
     parser.add_argument("--seed",       type=int,   default=42,            help="Random seed")
+    parser.add_argument("--device",     type=str,   default="cpu",         help="Device: cpu, cuda, mps (default cpu)")
     parser.add_argument("--eval-only",  action="store_true",               help="Skip training, evaluate saved model")
     args = parser.parse_args()
 
