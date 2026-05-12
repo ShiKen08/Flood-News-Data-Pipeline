@@ -167,7 +167,7 @@ TIER_3_FALLBACK_LANGUAGES = {"fra", "eng"}
 # PILOT EVENTS  (Phase 1 — run ONLY these 7 flood IDs)
 # -----------------------------------------------------------------------------
 
-PILOT_FLOOD_IDS = list(range(7, 21))   # floods 1–20; set to None to process all events
+PILOT_FLOOD_IDS = list(range(22, 25))   # floods 22–24; set to None to process all events
 
 # Crawls returning 403 — not yet fully public, exclude from downloads
 BLOCKED_CRAWLS = []

@@ -11,7 +11,7 @@
 #SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.out
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.err
 #SBATCH --time=02:00:00
-#SBATCH --partition=gpu
+#SBATCH --partition=gpu_a100
 #SBATCH --gpus=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
@@ -32,6 +32,13 @@ echo "=============================="
 echo ""
 echo "--- Installing classifier dependencies ---"
 python -m pip install -q setfit datasets accelerate
+
+echo ""
+echo "--- Removing old model weights (retraining with LaBSE) ---"
+if [ -d "classifier/model" ]; then
+    rm -rf classifier/model
+    echo "  Old model removed"
+fi
 
 echo ""
 echo "--- Building annotation set (if not already done) ---"

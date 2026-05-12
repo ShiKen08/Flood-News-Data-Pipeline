@@ -51,6 +51,7 @@ import math
 import os
 import re
 import signal
+import unicodedata
 import sys
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -335,6 +336,17 @@ def build_lang_match(df: pd.DataFrame, lang_df: pd.DataFrame) -> pd.Series:
 
 _PATTERN_CACHE: dict = {}
 
+def _strip_accents(text: str) -> str:
+    """Remove diacritics from text so accented/unaccented forms match each other.
+    'inundación' → 'inundacion', 'São' → 'Sao', etc.
+    Applied to both keyword terms and article text before matching.
+    """
+    return "".join(
+        c for c in unicodedata.normalize("NFD", text)
+        if unicodedata.category(c) != "Mn"
+    )
+
+
 def _get_pattern(term: str) -> re.Pattern:
     if term not in _PATTERN_CACHE:
         escaped = re.escape(term)
@@ -361,14 +373,14 @@ def build_relevance_terms(flood_id: int, lang_df: pd.DataFrame,
         for cat in ("flood", "river", "disaster"):
             flood_terms.extend(entry.get(cat, []))
         impact_terms.extend(entry.get("impact", []))
-    flood_terms  = list(dict.fromkeys(t.lower() for t in flood_terms))
-    impact_terms = list(dict.fromkeys(t.lower() for t in impact_terms))
+    flood_terms  = list(dict.fromkeys(_strip_accents(t.lower()) for t in flood_terms))
+    impact_terms = list(dict.fromkeys(_strip_accents(t.lower()) for t in impact_terms))
 
     loc_entries = []
     for _, r in loc_df[loc_df["flood_id"] == flood_id].iterrows():
-        norm    = str(r["location_normalised"]).lower()
+        norm    = _strip_accents(str(r["location_normalised"]).lower())
         level   = str(r.get("level", "subnational")).lower()
-        aliases = [a.lower() for a in json.loads(r.get("aliases", "[]") or "[]")]
+        aliases = [_strip_accents(a.lower()) for a in json.loads(r.get("aliases", "[]") or "[]")]
         loc_entries.append((norm, level, aliases))
 
     return flood_terms, impact_terms, loc_entries
@@ -429,7 +441,7 @@ def score_relevance_all(df: pd.DataFrame, lang_df: pd.DataFrame,
     parts = []
     for flood_id, group in df.groupby("flood_id"):
         flood_terms, impact_terms, loc_entries = build_relevance_terms(int(flood_id), lang_df, loc_df, lexicon)
-        scores = group["clean_text"].str.lower().apply(
+        scores = group["clean_text"].str.lower().apply(_strip_accents).apply(
             lambda t: _score_one(t, flood_terms, impact_terms, loc_entries)
         )
         scores_df = pd.DataFrame(scores.tolist(), index=group.index)
