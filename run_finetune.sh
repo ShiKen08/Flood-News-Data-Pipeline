@@ -10,11 +10,10 @@
 #SBATCH --job-name=flood_finetune
 #SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.out
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.err
-#SBATCH --time=02:00:00
-#SBATCH --partition=gpu_a100
+#SBATCH --time=90:00:00
 #SBATCH --gpus=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=8G
 
 set -e
 
