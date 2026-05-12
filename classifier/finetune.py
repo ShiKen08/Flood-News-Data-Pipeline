@@ -5,9 +5,8 @@ classifier/finetune.py  ·  Flood Pipeline — Fine-tune Flood Article Classifie
 Trains a SetFit binary classifier on manually labeled annotation CSVs.
 SetFit uses contrastive sentence-pair learning — works well with 50–300 labels.
 
-Model: sentence-transformers/LaBSE (EN/ES/PT, 471M params)
-  LaBSE is shared with the NLP-model submodule — already cached on cluster.
-  Alternatively set --model sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+Model: paraphrase-multilingual-mpnet-base-v2 (EN/ES/PT, 278M params)
+  Alternatively set --model sentence-transformers/LaBSE if already cached on cluster.
 
 Usage:
     python3 classifier/finetune.py                            # all annotation batches
@@ -48,7 +47,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "sentence-transformers/LaBSE"
+DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 MODEL_DIR     = ROOT / "classifier" / "model"
 DATA_DIR      = ROOT / "data"
 

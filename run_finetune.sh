@@ -34,33 +34,36 @@ echo "--- Installing classifier dependencies ---"
 python -m pip install -q setfit datasets accelerate
 
 echo ""
-echo "--- Removing old model weights (retraining with LaBSE) ---"
+echo "--- Removing old model weights (retraining from scratch) ---"
 if [ -d "classifier/model" ]; then
     rm -rf classifier/model
     echo "  Old model removed"
 fi
 
 echo ""
-echo "--- Building annotation set (if not already done) ---"
+echo "--- Checking annotation batches ---"
 if [ ! -f data/annotation_batch_1.csv ]; then
-    python scripts/build_annotation_set.py --n 300
-    echo "IMPORTANT: Label data/annotation_batch_1.csv before continuing!"
-    echo "           Fill the 'label' column (1=yes, 0=no) then resubmit."
-    exit 0
+    echo "ERROR: data/annotation_batch_1.csv not found"
+    echo "       Run: python scripts/build_annotation_set.py --n 300"
+    exit 1
 fi
 
-# Check if annotation batch has been labeled
+# Count labeled rows across all annotation batches
 LABELED=$(python -c "
-import pandas as pd, sys
-df = pd.read_csv('data/annotation_batch_1.csv')
-n = df['label'].isin([0,1,'0','1']).sum()
-print(n)
-")
-echo "Labeled examples found: $LABELED"
+import pandas as pd, glob
+files = sorted(glob.glob('data/annotation_batch_*.csv'))
+total = 0
+for f in files:
+    df = pd.read_csv(f)
+    n = df['label'].isin([0,1,'0','1']).sum()
+    print(f'  {f}: {n} labeled rows', flush=True)
+    total += n
+print(total)
+" | tail -1)
+echo "Total labeled examples: $LABELED"
 
 if [ "$LABELED" -lt 30 ]; then
-    echo "ERROR: Need at least 30 labeled rows in data/annotation_batch_1.csv"
-    echo "       Open the CSV, fill the 'label' column, then resubmit."
+    echo "ERROR: Need at least 30 labeled rows across annotation batches"
     exit 1
 fi
 
