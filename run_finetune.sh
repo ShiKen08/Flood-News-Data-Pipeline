@@ -11,10 +11,10 @@
 #SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.out
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.err
 #SBATCH --time=90:00:00
-#SBATCH --partition=gpu_a100
-#SBATCH --gpus=1
+#SBATCH --partition=rome
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G
+#SBATCH --account=cpuuva006
 
 set -e
 
