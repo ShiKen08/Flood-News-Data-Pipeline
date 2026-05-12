@@ -13,7 +13,7 @@
 #SBATCH --time=90:00:00
 #SBATCH --partition=rome
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=8G
+#SBATCH --mem=32G
 #SBATCH --account=cpuuva006
 
 set -e
@@ -69,7 +69,7 @@ fi
 
 echo ""
 echo "--- Stage: Fine-tune classifier ---"
-python classifier/finetune.py
+python classifier/finetune.py --batch-size 8
 
 echo ""
 echo "--- Stage: Evaluate classifier ---"
