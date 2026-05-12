@@ -438,16 +438,22 @@ def _score_one(text_lower: str, flood_terms: list, impact_terms: list,
 def score_relevance_all(df: pd.DataFrame, lang_df: pd.DataFrame,
                         loc_df: pd.DataFrame, lexicon: dict) -> pd.DataFrame:
     log.info(f"  Relevance scoring: {len(df)} docs")
+    # Pre-compute accent-stripped lowercase text once across all docs.
+    # Doing this outside the flood loop avoids redundant per-group apply overhead.
+    log.info("  Pre-computing accent-normalised text...")
+    text_norm = df["clean_text"].fillna("").str.lower().apply(_strip_accents)
+    log.info("  Accent normalisation done — running term scoring across floods...")
     parts = []
-    for flood_id, group in df.groupby("flood_id"):
+    n_floods = df["flood_id"].nunique()
+    for i, (flood_id, group) in enumerate(df.groupby("flood_id"), 1):
         flood_terms, impact_terms, loc_entries = build_relevance_terms(int(flood_id), lang_df, loc_df, lexicon)
-        scores = group["clean_text"].str.lower().apply(_strip_accents).apply(
+        scores = text_norm.loc[group.index].apply(
             lambda t: _score_one(t, flood_terms, impact_terms, loc_entries)
         )
         scores_df = pd.DataFrame(scores.tolist(), index=group.index)
         parts.append(pd.concat([group, scores_df], axis=1))
         rel = scores_df["is_relevant"].sum()
-        log.info(f"    flood #{int(flood_id):>3}  docs={len(group):>5}  relevant={rel:>4}")
+        log.info(f"    [{i:>3}/{n_floods}] flood #{int(flood_id):>3}  docs={len(group):>5}  relevant={rel:>4}")
     return pd.concat(parts, ignore_index=True) if parts else df.copy()
 
 

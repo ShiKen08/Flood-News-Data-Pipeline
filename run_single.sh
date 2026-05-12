@@ -49,7 +49,7 @@ python stage_03_validate_pointers.py
 
 echo ""
 echo "--- Stage 04: Download WARC ---"
-python stage_04_download_warc.py
+python stage_04_download_warc.py --full
 
 echo ""
 echo "--- Stage 05: Extract text ---"
