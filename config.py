@@ -24,8 +24,10 @@ COLLINFO_PATH     = BASE_DIR / "collinfo.json"             # cached CC crawl lis
 CONFIG_DIR        = BASE_DIR / "config"                    # keyword lexicon, domain list
 CACHE_DIR         = BASE_DIR / "cache"                     # local WARC slice cache
 RAW_INDEX_DIR     = BASE_DIR / "raw_index_responses"       # Stage 2 raw CC index saves
-OUTPUT_DIR        = BASE_DIR / "output"                    # all output tables (Parquet)
+_BATCH_OUTPUT     = __import__("os").getenv("PIPELINE_OUTPUT_DIR", "")
+OUTPUT_DIR        = Path(_BATCH_OUTPUT) if _BATCH_OUTPUT else BASE_DIR / "output"
 LOGS_DIR          = BASE_DIR / "logs"                      # pipeline run logs
+BASE_OUTPUT_DIR   = BASE_DIR / "output"                    # shared stage_00 lookup tables
 DATA_DIR          = BASE_DIR / "data"                      # for any other data files (e.g. flood_crawl.csv copy)
 FLOOD_CRAWL_CSV   = DATA_DIR / "flood_crawl.csv"
 FLOOD_CSV         = FLOOD_CRAWL_CSV              # alias used by stage scripts
@@ -49,7 +51,7 @@ KEYWORD_LEXICON    = CONFIG_DIR / "keyword_lexicon.json"
 SOURCE_DOMAIN_LIST = CONFIG_DIR / "source_domain_list.json"
 
 # Create dirs if they don't exist yet (safe to call on every import)
-for _dir in [CONFIG_DIR, CACHE_DIR, RAW_INDEX_DIR, OUTPUT_DIR, LOGS_DIR]:
+for _dir in [CONFIG_DIR, CACHE_DIR, RAW_INDEX_DIR, OUTPUT_DIR, BASE_OUTPUT_DIR, LOGS_DIR]:
     _dir.mkdir(parents=True, exist_ok=True)
 
 

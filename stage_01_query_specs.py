@@ -45,6 +45,7 @@ from config import (
     KEYWORD_LEXICON,
     LOGS_DIR,
     OUTPUT_DIR,
+    BASE_OUTPUT_DIR,
     PILOT_FLOOD_IDS,
     PILOT_PRIMARY_ONLY,
     SOURCE_DOMAIN_LIST,
@@ -90,9 +91,9 @@ def load_domain_list() -> dict:
 def load_stage00_outputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Load the three parquet files produced by stage_00."""
     paths = {
-        "crawl_coverage":       OUTPUT_DIR / "crawl_coverage.parquet",
-        "language_assignments": OUTPUT_DIR / "language_assignments.parquet",
-        "location_dictionary":  OUTPUT_DIR / "location_dictionary.parquet",
+        "crawl_coverage":       BASE_OUTPUT_DIR / "crawl_coverage.parquet",
+        "language_assignments": BASE_OUTPUT_DIR / "language_assignments.parquet",
+        "location_dictionary":  BASE_OUTPUT_DIR / "location_dictionary.parquet",
     }
     missing = [name for name, p in paths.items() if not p.exists()]
     if missing:

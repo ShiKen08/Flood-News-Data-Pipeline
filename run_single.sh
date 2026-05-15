@@ -29,20 +29,25 @@ cd /home/scur0742/Flood-News-Data-Pipeline
 
 source /home/scur0742/venv-agent/bin/activate
 
-# ---- Flood range -------------------------------------------------------
+# ---- Flood range & per-batch output dir --------------------------------
 # Two positional args: START END  (e.g. sbatch run_single.sh 1 20)
-# Falls back to PIPELINE_FLOOD_IDS env var, then config.py default.
+# Each batch writes to output/batch_START_END/ so parallel jobs never
+# share output files. Run scripts/merge_batch_outputs.py afterwards.
 if [ -n "$1" ] && [ -n "$2" ]; then
     export PIPELINE_FLOOD_IDS="${1}-${2}"
+    export PIPELINE_OUTPUT_DIR="$(pwd)/output/batch_${1}_${2}"
 elif [ -z "$PIPELINE_FLOOD_IDS" ]; then
-    export PIPELINE_FLOOD_IDS=""   # use config.py default
+    export PIPELINE_FLOOD_IDS=""
+    export PIPELINE_OUTPUT_DIR="$(pwd)/output"
 fi
+mkdir -p "${PIPELINE_OUTPUT_DIR}"
 # ------------------------------------------------------------------------
 
 echo "=============================="
 echo "Running on $(hostname)"
 echo "Python: $(which python)"
-echo "Flood IDs: ${PIPELINE_FLOOD_IDS:-'(config.py default)'}"
+echo "Flood IDs : ${PIPELINE_FLOOD_IDS:-'(config.py default)'}"
+echo "Output dir: ${PIPELINE_OUTPUT_DIR}"
 echo "Start time: $(date)"
 echo "=============================="
 

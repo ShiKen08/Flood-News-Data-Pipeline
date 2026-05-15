@@ -84,6 +84,7 @@ _spec.loader.exec_module(_config)
 sys.modules["config"] = _config
 
 from config import (
+    BASE_OUTPUT_DIR,
     ERROR_PAGE_PATTERNS,
     KEYWORD_LEXICON,
     LOGS_DIR,
@@ -711,8 +712,8 @@ def main():
     log.info("Loading inputs...")
     extracted_df = pd.read_parquet(OUTPUT_DIR / "extracted_text.parquet")
     pointers_df  = pd.read_parquet(OUTPUT_DIR / "validated_pointers.parquet")
-    lang_df      = pd.read_parquet(OUTPUT_DIR / "language_assignments.parquet")
-    loc_df       = pd.read_parquet(OUTPUT_DIR / "location_dictionary.parquet")
+    lang_df      = pd.read_parquet(BASE_OUTPUT_DIR / "language_assignments.parquet")
+    loc_df       = pd.read_parquet(BASE_OUTPUT_DIR / "location_dictionary.parquet")
 
     with open(KEYWORD_LEXICON, encoding='utf-8') as f:
         lexicon = json.load(f)

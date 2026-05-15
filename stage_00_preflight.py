@@ -49,7 +49,7 @@ from config import (
     COL_START_DATE,
     FLOOD_CSV,
     LOGS_DIR,
-    OUTPUT_DIR,
+    BASE_OUTPUT_DIR,
     PILOT_FLOOD_IDS,
     TIER_1_LANGUAGES,
     TIER_2_LANGUAGES,
@@ -218,7 +218,7 @@ def run_crawl_lag_check(df: pd.DataFrame, crawls: list[dict]) -> pd.DataFrame:
     if no_crawl:
         log.warning(f"NO_CRAWL events (will be excluded from query specs): {no_crawl}")
 
-    out_path = OUTPUT_DIR / "crawl_coverage.parquet"
+    out_path = BASE_OUTPUT_DIR / "crawl_coverage.parquet"
     coverage_df.to_parquet(out_path, index=False)
     log.info(f"Saved crawl_coverage -> {out_path}")
     return coverage_df
@@ -275,7 +275,7 @@ def run_language_assignments(df: pd.DataFrame) -> pd.DataFrame:
     results = [resolve_languages(row) for _, row in df.iterrows()]
     lang_df = pd.DataFrame(results)
 
-    out_path = OUTPUT_DIR / "language_assignments.parquet"
+    out_path = BASE_OUTPUT_DIR / "language_assignments.parquet"
     lang_df.to_parquet(out_path, index=False)
     log.info(f"Saved language_assignments -> {out_path}")
     return lang_df
@@ -626,7 +626,7 @@ def build_location_dictionary(df: pd.DataFrame) -> pd.DataFrame:
             })
 
     loc_df   = pd.DataFrame(records)
-    out_path = OUTPUT_DIR / "location_dictionary.parquet"
+    out_path = BASE_OUTPUT_DIR / "location_dictionary.parquet"
     loc_df.to_parquet(out_path, index=False)
     log.info(f"Saved location_dictionary -> {out_path}  ({len(loc_df)} location rows)")
     return loc_df
