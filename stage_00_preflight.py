@@ -669,12 +669,10 @@ def main():
     full_df = pd.read_csv(FLOOD_CSV)
     log.info(f"Loaded {len(full_df)} events from {FLOOD_CSV}")
 
-    # Filter to subset if PILOT_FLOOD_IDS is set, unless --all overrides
+    # crawl_coverage is a global lookup used by all batches — always build for all floods
+    df = full_df.copy()
     if PILOT_FLOOD_IDS and not args.all:
-        df = full_df[full_df[COL_FLOOD_ID].isin(PILOT_FLOOD_IDS)].copy()
-        log.info(f"Filtered to {len(df)} events: {PILOT_FLOOD_IDS}")
-    else:
-        df = full_df.copy()
+        log.info(f"Note: PILOT_FLOOD_IDS={PILOT_FLOOD_IDS} (ignored here — crawl_coverage covers all floods)")
 
     if df.empty:
         log.error("No matching events found. Check Flood_ID column name in your CSV.")
