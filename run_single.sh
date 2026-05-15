@@ -51,7 +51,11 @@ python -m pip install -q -r requirements.txt
 
 echo ""
 echo "--- Stage 00: Preflight ---"
-python stage_00_preflight.py
+if [ -f "output/crawl_coverage.parquet" ] && [ -f "output/location_dictionary.parquet" ] && [ -f "output/language_assignments.parquet" ]; then
+    echo "  Stage 00 outputs already exist — skipping (delete output/*.parquet to force rerun)"
+else
+    python stage_00_preflight.py
+fi
 
 echo ""
 echo "--- Stage 01: Query specs ---"
