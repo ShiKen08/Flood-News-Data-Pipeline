@@ -167,7 +167,23 @@ TIER_3_FALLBACK_LANGUAGES = {"fra", "eng"}
 # PILOT EVENTS  (Phase 1 — run ONLY these 7 flood IDs)
 # -----------------------------------------------------------------------------
 
-PILOT_FLOOD_IDS = list(range(22, 25))   # floods 22–24; set to None to process all events
+def _parse_flood_ids_env() -> list[int] | None:
+    """Allow PIPELINE_FLOOD_IDS env var to override — e.g. '1-20' or '1,2,5,10-15'."""
+    import os
+    raw = os.getenv("PIPELINE_FLOOD_IDS", "").strip()
+    if not raw:
+        return None
+    ids: list[int] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if "-" in part:
+            a, b = part.split("-", 1)
+            ids.extend(range(int(a), int(b) + 1))
+        else:
+            ids.append(int(part))
+    return ids
+
+PILOT_FLOOD_IDS: list[int] | None = _parse_flood_ids_env() or list(range(1, 25))
 
 # Crawls returning 403 — not yet fully public, exclude from downloads
 BLOCKED_CRAWLS = []

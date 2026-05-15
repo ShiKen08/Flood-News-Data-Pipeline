@@ -2,11 +2,18 @@
 # ============================================================
 # Flood Pipeline — SLURM job script
 #
-# Submit:   sbatch run_single.sh
-# Monitor:  squeue -u $USER
-# Logs:     tail -f logs/k_<jobid>.out
-# Cancel:   scancel <jobid>
-# Copy out: scp -r scur0742@snellius.surf.nl:~/Flood-News-Data-Pipeline/output/ .
+# Submit one batch:
+#   sbatch run_single.sh 1 20      # floods 1–20
+#   sbatch run_single.sh 21 40     # floods 21–40  (accumulates with previous)
+#   sbatch run_single.sh 41 60     # floods 41–60
+#
+# Or with a comma list:
+#   PIPELINE_FLOOD_IDS="1,5,10" sbatch run_single.sh
+#
+# Monitor: squeue -u $USER
+# Logs:    tail -f logs/k_<jobid>.out
+# Cancel:  scancel <jobid>
+# Copy:    scp -r scur0742@snellius.surf.nl:~/Flood-News-Data-Pipeline/output/ .
 # ============================================================
 
 #SBATCH --job-name=flood_pipeline
@@ -22,9 +29,20 @@ cd /home/scur0742/Flood-News-Data-Pipeline
 
 source /home/scur0742/venv-agent/bin/activate
 
+# ---- Flood range -------------------------------------------------------
+# Two positional args: START END  (e.g. sbatch run_single.sh 1 20)
+# Falls back to PIPELINE_FLOOD_IDS env var, then config.py default.
+if [ -n "$1" ] && [ -n "$2" ]; then
+    export PIPELINE_FLOOD_IDS="${1}-${2}"
+elif [ -z "$PIPELINE_FLOOD_IDS" ]; then
+    export PIPELINE_FLOOD_IDS=""   # use config.py default
+fi
+# ------------------------------------------------------------------------
+
 echo "=============================="
 echo "Running on $(hostname)"
 echo "Python: $(which python)"
+echo "Flood IDs: ${PIPELINE_FLOOD_IDS:-'(config.py default)'}"
 echo "Start time: $(date)"
 echo "=============================="
 

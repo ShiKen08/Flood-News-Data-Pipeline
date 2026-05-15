@@ -388,6 +388,15 @@ def main():
         log.warning(f"Output is missing schema columns: {missing_cols}")
 
     out_path = OUTPUT_DIR / "event_query_specs.parquet"
+    if out_path.exists():
+        existing = pd.read_parquet(out_path)
+        existing["flood_id"] = existing["flood_id"].astype(int)
+        new_ids = set(specs_df["flood_id"].unique())
+        existing = existing[~existing["flood_id"].isin(new_ids)]
+        dropped = len(pd.read_parquet(out_path)) - len(existing)
+        if dropped:
+            log.info(f"Upsert: replaced {dropped} existing rows for floods {sorted(new_ids)}")
+        specs_df = pd.concat([existing, specs_df], ignore_index=True)
     specs_df.to_parquet(out_path, index=False)
 
     # ------------------------------------------------------------------

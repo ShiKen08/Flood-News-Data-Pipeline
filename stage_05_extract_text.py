@@ -711,6 +711,15 @@ def main():
             extracted_df[col] = None
 
     out_path = OUTPUT_DIR / "extracted_text.parquet"
+    if out_path.exists():
+        existing = pd.read_parquet(out_path)
+        existing["flood_id"] = existing["flood_id"].astype(int)
+        new_ids = set(extracted_df["flood_id"].unique())
+        existing = existing[~existing["flood_id"].isin(new_ids)]
+        dropped = len(pd.read_parquet(out_path)) - len(existing)
+        if dropped:
+            log.info(f"Upsert: replaced {dropped} existing rows for floods {sorted(new_ids)}")
+        extracted_df = pd.concat([existing, extracted_df], ignore_index=True)
     extracted_df.to_parquet(out_path, index=False)
 
     # Clean up checkpoint now that the full output is saved
