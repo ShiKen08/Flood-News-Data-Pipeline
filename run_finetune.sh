@@ -12,7 +12,7 @@
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.err
 #SBATCH --time=90:00:00
 #SBATCH --partition=rome
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --account=cpuuva006
 
@@ -21,6 +21,9 @@ set -e
 cd /home/scur0742/Flood-News-Data-Pipeline
 
 source /home/scur0742/venv-agent/bin/activate
+
+export OMP_NUM_THREADS=8
+export MKL_NUM_THREADS=8
 
 echo "=============================="
 echo "Running on $(hostname)"
@@ -69,7 +72,10 @@ fi
 
 echo ""
 echo "--- Stage: Fine-tune classifier ---"
-python classifier/finetune.py --batch-size 8
+python classifier/finetune.py \
+    --model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
+    --iters 5 \
+    --batch-size 16
 
 echo ""
 echo "--- Stage: Evaluate classifier ---"
