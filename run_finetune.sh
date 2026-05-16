@@ -12,7 +12,7 @@
 #SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/finetune_%j.err
 #SBATCH --time=90:00:00
 #SBATCH --partition=rome
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=32G
 #SBATCH --account=cpuuva006
 
@@ -22,8 +22,8 @@ cd /home/scur0742/Flood-News-Data-Pipeline
 
 source /home/scur0742/venv-agent/bin/activate
 
-export OMP_NUM_THREADS=8
-export MKL_NUM_THREADS=8
+export OMP_NUM_THREADS=32
+export MKL_NUM_THREADS=32
 
 echo "=============================="
 echo "Running on $(hostname)"
