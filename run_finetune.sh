@@ -73,7 +73,6 @@ fi
 echo ""
 echo "--- Stage: Fine-tune classifier ---"
 python classifier/finetune.py \
-    --model sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
     --iters 5 \
     --batch-size 16
 
