@@ -208,6 +208,11 @@ def main() -> None:
     df_with_text["model_flood_prob"]       = np.array(all_probs, dtype=np.float32)
     df_with_text["model_is_event_article"] = df_with_text["model_flood_prob"] >= args.threshold
 
+    # Drop old model columns to avoid _x/_y suffix conflicts on re-run
+    for col in ["model_flood_prob", "model_is_event_article"]:
+        if col in df.columns:
+            df = df.drop(columns=[col])
+
     # Merge back into full dataframe (rows without text get NaN / False)
     df = df.merge(
         df_with_text[["doc_id", "model_flood_prob", "model_is_event_article"]],
