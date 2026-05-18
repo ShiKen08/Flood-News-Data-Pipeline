@@ -136,7 +136,8 @@ _FLOOD_TERMS = _re.compile(
     r"\b(inundaci[oó]n|inundaç[aã]o|lluvia|crecida|desborde|huaico|enchente|"
     r"alagamento|flood|riada|temporal|tormenta|deslizamiento|desbordamiento|"
     r"precipitaci[oó]n|encharcamiento|emergencia\s+h[íi]drica|inundaciones|"
-    r"lluvias|chuvas|enchentes|alagou|transbordou|desbordó)\b",
+    r"lluvias|chuvas|enchentes|alagou|transbordou|desbordó|invernal|"
+    r"ola\s+invernal|crecientes|avenida|riada|aguacero|aguaceros|cheia|cheias)\b",
     _re.IGNORECASE,
 )
 _WEATHER_PAGE      = _re.compile(r"Weather\s*\|\s*Forecast Conditions|Traffic\s*\|\s*Road Conditions", _re.I)
@@ -153,7 +154,8 @@ _PORTAL_PAGE       = _re.compile(
     _re.I,
 )
 _NON_ARTICLE       = _re.compile(
-    r"Watch .+ (News Program|Videos) Online|LIVE:\s*.+ News|Traffic\s*\|",
+    r"Watch .+ (News Program|Videos) Online|LIVE:\s*.+ News|Traffic\s*\||"
+    r"\bArchives\b\s*$",
     _re.I,
 )
 _FORECAST_ES_PT    = _re.compile(
@@ -171,6 +173,51 @@ _FIRE_NOT_FLOOD    = _re.compile(
     r"\b(incendio|wildfire|bushfire|forest\s+fire|incêndio)\b",
     _re.I,
 )
+_DISEASE_NOT_FLOOD = _re.compile(
+    r"\b(dengue|influenza|gripe\s+aviar|saramp[ií]on|polio|cólera|hepatitis|"
+    r"ébola|fiebre\s+amarilla|malaria|chikungunya|aftosa)\b",
+    _re.I,
+)
+_CRIME_NOT_FLOOD   = _re.compile(
+    r"\b(narco|narcovuelo|droga|cartel|balacera|asesin|homicid|secuestr|"
+    r"extors|crimen\s+organizado|guerrill|FARC|ELN|CJNG|Sinaloa)\b",
+    _re.I,
+)
+_MINING_NOT_FLOOD  = _re.compile(
+    r"\b(miner[íi]a\s+de\s+oro|mina\s+de\s+oro|minero\s+ilegal|minería\s+ilegal|"
+    r"aluvial\s+mining|garimpo|mine\s+disaster|tailings\s+dam|mine\s+tailings|"
+    r"mount\s+polley)\b",
+    _re.I,
+)
+_EARTHQUAKE_NOT_FLOOD = _re.compile(
+    r"\b(earthquake|seismic|seismograph|temblor|terremoto|sismo)\b",
+    _re.I,
+)
+_WATER_SCARCITY    = _re.compile(
+    r"\b(falta\s+de\s+agua|escasez\s+de\s+agua|sequ[íi]a|drought)\b",
+    _re.I,
+)
+_FOREIGN_FLOOD     = _re.compile(
+    r"\b(na\s+China|en\s+China|in\s+China|"
+    r"na\s+[IÍ]ndia|en\s+India|in\s+India|"
+    r"no\s+Paquistão|en\s+Pakistán|in\s+Pakistan|"
+    r"na\s+Alemanha|en\s+Alemania|in\s+Germany|"
+    r"na\s+Ucrânia|en\s+Ucrania|in\s+Ukraine|"
+    r"en\s+Bangladesh|in\s+Bangladesh|"
+    r"en\s+Filipinas|in\s+Philippines|"
+    r"en\s+Indonesia|in\s+Indonesia)\b",
+    _re.I,
+)
+# Domains where the model over-fires — require explicit flood vocabulary in title.
+# Also checked against the URL directly to handle domain-parsing artefacts
+# (e.g. lstrip("www.") strips leading 'w' so wayka.pe → ayka.pe in domain column).
+_STRICT_DOMAINS    = {
+    "idl-reporteros.pe", "wayka.pe", "ayka.pe",   # ayka.pe = wayka.pe with stripped 'w'
+    "letrap.com.ar", "cepredenac.org", "ojo-publico.com",
+    "eltiempo.com", "elespectador.com", "lasillavacia.com",
+    "texastribune.org", "meteored.com.ar",
+    "quedigital.com.ar", "clarin.com", "baltimoresun.com",
+}
 
 # ---------------------------------------------------------------------------
 # Text sanitisation for CSV output
@@ -237,6 +284,24 @@ def _post_filter_row(title: str, url: str, domain: str,
         return False, "climate_policy_not_event"
     if _FIRE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
         return False, "fire_not_flood"
+    if _DISEASE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "disease_not_flood"
+    if _CRIME_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "crime_not_flood"
+    if _MINING_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "mining_not_flood"
+    if _EARTHQUAKE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "earthquake_not_flood"
+    if _FOREIGN_FLOOD.search(title):
+        return False, "foreign_country_flood"
+    if _WATER_SCARCITY.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "water_scarcity_not_flood"
+    # Strict-domain articles must have explicit flood vocabulary in title.
+    # Check both the domain column and the URL to handle domain-parsing artefacts.
+    in_strict = any(d in domain.lower() for d in _STRICT_DOMAINS) or \
+                any(d in url.lower() for d in _STRICT_DOMAINS)
+    if in_strict and not _FLOOD_TERMS.search(title):
+        return False, "strict_domain_no_flood_title"
     # Reject model-only positives with zero keyword support
     if flood_hits == 0 and loc_hits == 0:
         return False, "zero_keyword_hits"
