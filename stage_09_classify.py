@@ -22,8 +22,10 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import logging
+import re as _re
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -120,6 +122,86 @@ def apply_nlp_gate(df: pd.DataFrame, nlp: "pd.DataFrame") -> pd.DataFrame:
     log.info("  model_is_event_article=True   : %d", n_model)
     log.info("  combined_is_event_article=True: %d  (-%d filtered by NLP gate)",
              n_combined, n_model - n_combined)
+    return df
+
+
+# ---------------------------------------------------------------------------
+# Post-classification filter — rule-based removal of systematic false positives
+# ---------------------------------------------------------------------------
+_COVID_TERMS = _re.compile(
+    r"\b(covid[-\s]?19|coronavirus|pandemia|cuarentena|contagios|vacuna(?:ci[oó]n)?)\b",
+    _re.IGNORECASE,
+)
+_FLOOD_TERMS = _re.compile(
+    r"\b(inundaci[oó]n|inundaç[aã]o|lluvia|crecida|desborde|huaico|enchente|"
+    r"alagamento|flood|riada|temporal|tormenta|deslizamiento|desbordamiento|"
+    r"precipitaci[oó]n|encharcamiento|emergencia\s+h[íi]drica)\b",
+    _re.IGNORECASE,
+)
+_WEATHER_PAGE   = _re.compile(r"Weather\s*\|\s*Forecast Conditions|Traffic\s*\|\s*Road Conditions", _re.I)
+_STAFF_PROFILE  = _re.compile(r"Staff Personalities", _re.I)
+_CEMADEN_ADMIN  = _re.compile(
+    r"licitaç[aã]o|mobiliário|água mineral|baterias|manutenção predial|"
+    r"Escolas participam|promove palestra|recebe estagiár|lança edital",
+    _re.I,
+)
+_PORTAL_PAGE    = _re.compile(
+    r"^Noticias\s*::\s*|Consejo de Representantes|Notas de Prensa COVID|"
+    r"\|\s*OCHA\s*$|Rumo aos \d+ anos",
+    _re.I,
+)
+_NON_ARTICLE    = _re.compile(
+    r"Watch .+ (News Program|Videos) Online|LIVE:\s*.+ News|Traffic\s*\|",
+    _re.I,
+)
+
+
+def _post_filter_row(title: str, url: str, domain: str) -> tuple:
+    """Return (keep: bool, reason: str). reason is empty string when kept."""
+    title  = title  or ""
+    url    = url    or ""
+    domain = domain or ""
+
+    if _WEATHER_PAGE.search(title):
+        return False, "weather_forecast_page"
+    if _STAFF_PROFILE.search(title):
+        return False, "journalist_profile"
+    if "/staff-personalities" in url.lower():
+        return False, "journalist_profile"
+    if _COVID_TERMS.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "covid_content"
+    if "cemaden" in domain.lower() and _CEMADEN_ADMIN.search(title):
+        return False, "cemaden_institutional"
+    if _PORTAL_PAGE.search(title):
+        return False, "institutional_portal"
+    if _NON_ARTICLE.search(title):
+        return False, "non_article_content"
+    return True, ""
+
+
+def apply_post_filter(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add post_filter_pass (bool) and post_filter_reason (str) columns.
+    Rows with post_filter_pass=True are considered verified flood event articles.
+    """
+    results = [
+        _post_filter_row(
+            str(r.get("page_title") or ""),
+            str(r.get("url")        or ""),
+            str(r.get("domain")     or ""),
+        )
+        for _, r in df.iterrows()
+    ]
+    passes, reasons = zip(*results) if results else ([], [])
+    df = df.copy()
+    df["post_filter_pass"]   = list(passes)
+    df["post_filter_reason"] = list(reasons)
+
+    n_pass = sum(passes)
+    log.info("Post-filter: %d / %d articles pass (%d rejected)", n_pass, len(df), len(df) - n_pass)
+    counts = Counter(r for r in reasons if r)
+    for reason, cnt in counts.most_common():
+        log.info("  %-30s : %d", reason, cnt)
     return df
 
 
@@ -264,6 +346,9 @@ def main() -> None:
 
     # --- Write CSV of model event articles ---
     if not args.no_save:
+        import csv as _csv
+        from urllib.parse import urlparse
+
         filter_col = "combined_is_event_article" if "combined_is_event_article" in df.columns \
                      else "model_is_event_article"
         event_df = df[df[filter_col].fillna(False)].copy()
@@ -278,36 +363,59 @@ def main() -> None:
 
         # Domain from URL if not already present
         if "domain" not in event_df.columns or event_df["domain"].isna().all():
-            from urllib.parse import urlparse
             event_df["domain"] = event_df["url"].fillna("").apply(
                 lambda u: urlparse(u).netloc.lstrip("www.").lower()
             )
 
-        # Select output columns (include what exists)
-        csv_cols = [
+        # Round probability for readability
+        event_df["model_flood_prob"] = event_df["model_flood_prob"].round(4)
+
+        # Scope tag for file names
+        flood_ids = df["flood_id"].unique()
+        scope = f"flood_{flood_ids[0]}" if len(flood_ids) == 1 else "multi"
+        if args.nlp_gate:
+            scope += "_nlp"
+
+        # Ordered column list (only include columns that exist)
+        base_cols = [
             "flood_id", "country", "url", "domain", "page_title",
             "pub_date", "pub_in_window", "language_detected",
             "model_flood_prob", "model_is_event_article",
             "is_event_article",
             "flood_term_hits", "impact_term_hits", "location_term_hits",
-            "word_count",
+            "word_count", "clean_text",
         ]
-        if "combined_is_event_article" in df.columns:
-            csv_cols += ["combined_is_event_article", "nlp_srl_complete", "nlp_dominant_frame"]
+        nlp_cols  = ["combined_is_event_article", "nlp_srl_complete", "nlp_dominant_frame"] \
+                    if "combined_is_event_article" in df.columns else []
+        all_cols  = base_cols + nlp_cols
 
-        out_cols  = [c for c in csv_cols if c in event_df.columns]
-        event_df  = event_df[out_cols].sort_values("model_flood_prob", ascending=False)
-        event_df.insert(0, "doc_num", range(1, len(event_df) + 1))
+        # --- 1. Full model-positive CSV (unfiltered, adds post_filter columns) ---
+        event_df  = apply_post_filter(event_df)
+        full_cols = [c for c in all_cols + ["post_filter_pass", "post_filter_reason"]
+                     if c in event_df.columns]
+        full_out  = event_df[full_cols].sort_values(
+            ["flood_id", "model_flood_prob"], ascending=[True, False]
+        ).copy()
+        full_out.insert(0, "doc_num", range(1, len(full_out) + 1))
+        full_path = OUTPUT_DIR / f"model_event_articles_{scope}.csv"
+        full_out.to_csv(full_path, index=False, quoting=_csv.QUOTE_ALL)
+        log.info("Full CSV  -> %s  (%d rows)", full_path, len(full_out))
 
-        import csv as _csv
-        scope = f"flood_{args.pilot and 'pilot' or 'all'}" if not args.pilot else "pilot"
-        flood_ids = df["flood_id"].unique()
-        scope = f"flood_{flood_ids[0]}" if len(flood_ids) == 1 else "multi"
-        if args.nlp_gate:
-            scope += "_nlp"
-        csv_path = OUTPUT_DIR / f"model_event_articles_{scope}.csv"
-        event_df.to_csv(csv_path, index=False, quoting=_csv.QUOTE_ALL)
-        log.info("CSV saved -> %s  (%d rows)", csv_path, len(event_df))
+        # --- 2. Verified CSV (post-filter pass only, clean columns for analysis) ---
+        verified  = event_df[event_df["post_filter_pass"]].copy()
+        ver_cols  = [c for c in all_cols if c in verified.columns]
+        verified  = verified[ver_cols].sort_values(
+            ["flood_id", "model_flood_prob"], ascending=[True, False]
+        ).copy()
+        verified.insert(0, "doc_num", range(1, len(verified) + 1))
+        ver_path  = OUTPUT_DIR / f"model_event_articles_{scope}_verified.csv"
+        verified.to_csv(ver_path, index=False, quoting=_csv.QUOTE_ALL)
+        log.info("Verified CSV -> %s  (%d rows, post-filter applied)", ver_path, len(verified))
+
+        log.info("")
+        log.info("Post-filter removed %d / %d model positives (%.0f%%)",
+                 len(full_out) - len(verified), len(full_out),
+                 100 * (len(full_out) - len(verified)) / max(len(full_out), 1))
 
 
 if __name__ == "__main__":
