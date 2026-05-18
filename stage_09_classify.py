@@ -135,28 +135,81 @@ _COVID_TERMS = _re.compile(
 _FLOOD_TERMS = _re.compile(
     r"\b(inundaci[oó]n|inundaç[aã]o|lluvia|crecida|desborde|huaico|enchente|"
     r"alagamento|flood|riada|temporal|tormenta|deslizamiento|desbordamiento|"
-    r"precipitaci[oó]n|encharcamiento|emergencia\s+h[íi]drica)\b",
+    r"precipitaci[oó]n|encharcamiento|emergencia\s+h[íi]drica|inundaciones|"
+    r"lluvias|chuvas|enchentes|alagou|transbordou|desbordó)\b",
     _re.IGNORECASE,
 )
-_WEATHER_PAGE   = _re.compile(r"Weather\s*\|\s*Forecast Conditions|Traffic\s*\|\s*Road Conditions", _re.I)
-_STAFF_PROFILE  = _re.compile(r"Staff Personalities", _re.I)
-_CEMADEN_ADMIN  = _re.compile(
+_WEATHER_PAGE      = _re.compile(r"Weather\s*\|\s*Forecast Conditions|Traffic\s*\|\s*Road Conditions", _re.I)
+_STAFF_PROFILE     = _re.compile(r"Staff Personalities", _re.I)
+_CEMADEN_ADMIN     = _re.compile(
     r"licitaç[aã]o|mobiliário|água mineral|baterias|manutenção predial|"
     r"Escolas participam|promove palestra|recebe estagiár|lança edital",
     _re.I,
 )
-_PORTAL_PAGE    = _re.compile(
+_CEMADEN_FORECAST  = _re.compile(r"Previsão de Risco Geo-Hidrológico", _re.I)
+_PORTAL_PAGE       = _re.compile(
     r"^Noticias\s*::\s*|Consejo de Representantes|Notas de Prensa COVID|"
     r"\|\s*OCHA\s*$|Rumo aos \d+ anos",
     _re.I,
 )
-_NON_ARTICLE    = _re.compile(
+_NON_ARTICLE       = _re.compile(
     r"Watch .+ (News Program|Videos) Online|LIVE:\s*.+ News|Traffic\s*\|",
     _re.I,
 )
+_FORECAST_ES_PT    = _re.compile(
+    r"\b(pronóstico|previsão do tempo|forecast\s+today|previsão.*semana|"
+    r"tempo.*próximos|previsiones?\s+del\s+tiempo|clima\s+de\s+hoy)\b",
+    _re.I,
+)
+_CLIMATE_POLICY    = _re.compile(
+    r"\b(cambio\s+climático|climate\s+change|mudança\s+climática|"
+    r"desarrollo\s+sostenible|planejamento\s+urbano|política\s+ambiental|"
+    r"greenhouse\s+gas|emisiones?\s+de\s+CO2)\b",
+    _re.I,
+)
+_FIRE_NOT_FLOOD    = _re.compile(
+    r"\b(incendio|wildfire|bushfire|forest\s+fire|incêndio)\b",
+    _re.I,
+)
+
+# ---------------------------------------------------------------------------
+# Text sanitisation for CSV output
+# ---------------------------------------------------------------------------
+_CTRL_CHARS    = _re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u200b\u00ad\ufeff]")
+_MULTI_SPACE   = _re.compile(r" {2,}")
+# Keep ASCII + Latin Extended-A/B + Greek + Cyrillic — strips CJK noise / box-drawing chars
+_NON_TEXT_CHARS = _re.compile(
+    r"[^\x09\x20-\x7e\u00a0-\u024f\u0370-\u03ff\u0400-\u04ff]"
+)
+_SANITIZE_MAX  = 1500  # max chars written to CSV clean_text column
 
 
-def _post_filter_row(title: str, url: str, domain: str) -> tuple:
+def _sanitize_text(t) -> str:
+    """
+    Clean extracted article text for safe CSV output:
+    - Fix mojibake (ftfy)
+    - Strip control characters and characters outside Latin/Greek/Cyrillic
+    - Replace double-quotes with apostrophes (prevents CSV cell boundary confusion)
+    - Flatten newlines/tabs to single space
+    - Truncate to _SANITIZE_MAX characters
+    """
+    if not isinstance(t, str) or not t:
+        return ""
+    try:
+        import ftfy as _ftfy
+        t = _ftfy.fix_text(t)
+    except ImportError:
+        pass
+    t = _CTRL_CHARS.sub("", t)           # strip control chars / zero-width
+    t = _NON_TEXT_CHARS.sub("", t)       # strip characters outside Latin+Greek+Cyrillic
+    t = t.replace('"', "'")              # double-quote → apostrophe (CSV safety)
+    t = _re.sub(r"[\r\n\t]+", " ", t)   # flatten newlines
+    t = _MULTI_SPACE.sub(" ", t)         # collapse spaces
+    return t.strip()[:_SANITIZE_MAX]
+
+
+def _post_filter_row(title: str, url: str, domain: str,
+                     flood_hits: int = 0, loc_hits: int = 0) -> tuple:
     """Return (keep: bool, reason: str). reason is empty string when kept."""
     title  = title  or ""
     url    = url    or ""
@@ -172,10 +225,21 @@ def _post_filter_row(title: str, url: str, domain: str) -> tuple:
         return False, "covid_content"
     if "cemaden" in domain.lower() and _CEMADEN_ADMIN.search(title):
         return False, "cemaden_institutional"
+    if _CEMADEN_FORECAST.search(title):
+        return False, "cemaden_forecast_bulletin"
     if _PORTAL_PAGE.search(title):
         return False, "institutional_portal"
     if _NON_ARTICLE.search(title):
         return False, "non_article_content"
+    if _FORECAST_ES_PT.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "weather_forecast_es_pt"
+    if _CLIMATE_POLICY.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "climate_policy_not_event"
+    if _FIRE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+        return False, "fire_not_flood"
+    # Reject model-only positives with zero keyword support
+    if flood_hits == 0 and loc_hits == 0:
+        return False, "zero_keyword_hits"
     return True, ""
 
 
@@ -186,9 +250,11 @@ def apply_post_filter(df: pd.DataFrame) -> pd.DataFrame:
     """
     results = [
         _post_filter_row(
-            str(r.get("page_title") or ""),
-            str(r.get("url")        or ""),
-            str(r.get("domain")     or ""),
+            str(r.get("page_title")      or ""),
+            str(r.get("url")             or ""),
+            str(r.get("domain")          or ""),
+            int(r.get("flood_term_hits") or 0),
+            int(r.get("location_term_hits") or 0),
         )
         for _, r in df.iterrows()
     ]
@@ -403,6 +469,12 @@ def main() -> None:
 
         # --- 2. Verified CSV (post-filter pass only, clean columns for analysis) ---
         verified  = event_df[event_df["post_filter_pass"]].copy()
+        # Deduplicate by URL within each flood (keep highest probability row)
+        verified  = (verified
+                     .sort_values("model_flood_prob", ascending=False)
+                     .drop_duplicates(subset=["flood_id", "url"], keep="first"))
+        if "clean_text" in verified.columns:
+            verified["clean_text"] = verified["clean_text"].apply(_sanitize_text)
         ver_cols  = [c for c in all_cols if c in verified.columns]
         verified  = verified[ver_cols].sort_values(
             ["flood_id", "model_flood_prob"], ascending=[True, False]
