@@ -73,7 +73,7 @@ fi
 echo ""
 echo "--- Stage: Fine-tune classifier ---"
 python classifier/finetune.py \
-    --iters 5 \
+    --iters 20 \
     --batch-size 16
 
 echo ""
