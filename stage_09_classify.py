@@ -53,7 +53,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-MODEL_DIR   = ROOT / "classifier" / "model_new"
+MODEL_DIR   = ROOT / "classifier" / "model"
 MAX_WORDS   = 300
 NLP_OUT_DIR = ROOT / "NLP-model" / "output"
 
