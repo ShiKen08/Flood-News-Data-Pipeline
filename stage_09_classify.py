@@ -231,10 +231,10 @@ _NON_TEXT_CHARS = _re.compile(
 _SANITIZE_MAX  = 1500  # max chars written to CSV clean_text column
 
 
-def _sanitize_text(t) -> str:
+def _sanitize_text(t: str | None) -> str:
     """
     Clean extracted article text for safe CSV output:
-    - Fix mojibake (ftfy)
+    - Fix mojibake (ftfy) — hard requirement, not optional
     - Strip control characters and characters outside Latin/Greek/Cyrillic
     - Replace double-quotes with apostrophes (prevents CSV cell boundary confusion)
     - Flatten newlines/tabs to single space
@@ -242,11 +242,8 @@ def _sanitize_text(t) -> str:
     """
     if not isinstance(t, str) or not t:
         return ""
-    try:
-        import ftfy as _ftfy
-        t = _ftfy.fix_text(t)
-    except ImportError:
-        pass
+    import ftfy as _ftfy  # hard import — fails loudly if ftfy not installed
+    t = _ftfy.fix_text(t)
     t = _CTRL_CHARS.sub("", t)           # strip control chars / zero-width
     t = _NON_TEXT_CHARS.sub("", t)       # strip characters outside Latin+Greek+Cyrillic
     t = t.replace('"', "'")              # double-quote → apostrophe (CSV safety)
@@ -256,11 +253,14 @@ def _sanitize_text(t) -> str:
 
 
 def _post_filter_row(title: str, url: str, domain: str,
-                     flood_hits: int = 0, loc_hits: int = 0) -> tuple:
+                     flood_hits: int = 0, loc_hits: int = 0,
+                     body: str = "") -> tuple[bool, str]:
     """Return (keep: bool, reason: str). reason is empty string when kept."""
     title  = title  or ""
     url    = url    or ""
     domain = domain or ""
+    # Check title + first 300 chars of body for content-based rules
+    title_body = f"{title} {body[:300]}"
 
     if _WEATHER_PAGE.search(title):
         return False, "weather_forecast_page"
@@ -282,17 +282,17 @@ def _post_filter_row(title: str, url: str, domain: str,
         return False, "weather_forecast_es_pt"
     if _CLIMATE_POLICY.search(title) and not _FLOOD_TERMS.search(title):
         return False, "climate_policy_not_event"
-    if _FIRE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+    if _FIRE_NOT_FLOOD.search(title_body) and not _FLOOD_TERMS.search(title_body):
         return False, "fire_not_flood"
-    if _DISEASE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+    if _DISEASE_NOT_FLOOD.search(title_body) and not _FLOOD_TERMS.search(title_body):
         return False, "disease_not_flood"
-    if _CRIME_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+    if _CRIME_NOT_FLOOD.search(title_body) and not _FLOOD_TERMS.search(title_body):
         return False, "crime_not_flood"
-    if _MINING_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+    if _MINING_NOT_FLOOD.search(title_body) and not _FLOOD_TERMS.search(title_body):
         return False, "mining_not_flood"
-    if _EARTHQUAKE_NOT_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
+    if _EARTHQUAKE_NOT_FLOOD.search(title_body) and not _FLOOD_TERMS.search(title_body):
         return False, "earthquake_not_flood"
-    if _FOREIGN_FLOOD.search(title):
+    if _FOREIGN_FLOOD.search(title) and not _FLOOD_TERMS.search(title):
         return False, "foreign_country_flood"
     if _WATER_SCARCITY.search(title) and not _FLOOD_TERMS.search(title):
         return False, "water_scarcity_not_flood"
@@ -320,6 +320,7 @@ def apply_post_filter(df: pd.DataFrame) -> pd.DataFrame:
             str(r.get("domain")          or ""),
             int(r.get("flood_term_hits") or 0),
             int(r.get("location_term_hits") or 0),
+            str(r.get("clean_text")      or ""),
         )
         for _, r in df.iterrows()
     ]

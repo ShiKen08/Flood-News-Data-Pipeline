@@ -95,7 +95,7 @@ def main() -> None:
     y_true = df["label"].tolist()
 
     log.info("Running inference on %d labeled examples...", len(texts))
-    y_prob = model.predict_proba(texts)[:, 1]
+    y_prob = np.array(model.predict_proba(texts)[:, 1])
     y_pred = (y_prob >= args.threshold).astype(int)
 
     df["y_prob"] = y_prob
