@@ -229,6 +229,13 @@ _MULTI_NEWLINE_RE = re.compile(r"\n{3,}")
 def _clean_one(raw: str) -> str:
     if not raw:
         return ""
+    # Repair mojibake before any other processing so keyword filters and the
+    # ML classifier see correct Unicode (e.g. "inundación" not "inundaci√≥n")
+    try:
+        import ftfy as _ftfy
+        raw = _ftfy.fix_text(raw)
+    except ImportError:
+        pass  # ftfy optional in stage_06v; hard-required in stage_09
     lines = raw.splitlines()
     out = []
     for line in lines:
