@@ -20,8 +20,17 @@ OUTPUT_DIR = ROOT / "output"
 
 MERGE_KEY = "flood_id"  # dedup key for all pipeline parquets
 
-# Parquets that should NOT be merged (stage_00 static lookups)
-SKIP_FILES = {"crawl_coverage.parquet", "language_assignments.parquet", "location_dictionary.parquet"}
+# Parquets that should NOT be merged — either static stage_00 lookups or
+# upstream inputs that are symlinked into batch_clean_* dirs for reading only
+SKIP_FILES = {
+    "crawl_coverage.parquet",
+    "language_assignments.parquet",
+    "location_dictionary.parquet",
+    "extracted_text.parquet",       # upstream input — never merge
+    "validated_pointers.parquet",   # upstream input — never merge
+    "event_query_specs.parquet",    # upstream input — never merge
+    "warc_fetch_log.parquet",       # upstream input — never merge
+}
 
 
 def merge_parquet(files: list[Path], out_path: Path) -> int:
