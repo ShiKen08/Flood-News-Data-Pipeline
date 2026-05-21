@@ -81,6 +81,12 @@ WINDOW_LONG_DURATION_THRESHOLD = 20
 ZERO_DURATION_TREAT_AS_DAYS    = 1    # treat 0-duration events as 1-day event
 NEAREST_CRAWL_MAX_GAP_DAYS = 120  # fallback: assign nearest post-window crawl if within this many days
 
+# LATE-WINDOW RULES  (--late-window flag in stage_00)
+# Query CC crawls 2-5 months after event — captures articles published promptly
+# but not indexed by CCBot until the next 1-3 crawl cycles
+WINDOW_LATE_SKIP_DAYS    = 60   # start late window this many days after event_end
+WINDOW_LATE_POST_DAYS    = 150  # end late window this many days after event_end
+
 # Events with duration = 0 are treated as 1-day events (do NOT collapse window)
 # Pilot runs primary variant (C) only — set to False to include A/B/D
 PILOT_PRIMARY_ONLY   = True

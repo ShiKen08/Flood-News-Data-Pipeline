@@ -57,6 +57,8 @@ from config import (
     TIER_3_LANGUAGES,
     NEAREST_CRAWL_MAX_GAP_DAYS,
     WINDOW_LONG_DURATION_THRESHOLD,
+    WINDOW_LATE_POST_DAYS,
+    WINDOW_LATE_SKIP_DAYS,
     WINDOW_POST_DAYS,
     WINDOW_POST_LONG_DAYS,
     WINDOW_PRE_DAYS,
@@ -122,16 +124,19 @@ def parse_crawl_windows(collinfo: list[dict]) -> list[dict]:
     return crawls
 
 
-def check_crawl_coverage(event_row: pd.Series, crawls: list[dict]) -> dict:
+def check_crawl_coverage(event_row: pd.Series, crawls: list[dict],
+                         late_window: bool = False) -> dict:
     """
     For a single event row, compute its window and check CC crawl coverage.
     Returns a dict with coverage_status, matching_crawls, window_start, window_end.
+
+    late_window=True: targets CC crawls 2-5 months post-event to capture articles
+    that were published promptly but not indexed by CCBot until later crawl cycles.
     """
     flood_id    = int(event_row[COL_FLOOD_ID])
     event_start = pd.to_datetime(event_row[COL_START_DATE]).to_pydatetime().replace(tzinfo=timezone.utc)
     duration    = int(event_row.get(COL_DURATION, 0) or 0)
 
-    # --- Stage 0b windowing rules (v1) ---
     if duration == 0:
         effective_duration = ZERO_DURATION_TREAT_AS_DAYS
     else:
@@ -139,14 +144,20 @@ def check_crawl_coverage(event_row: pd.Series, crawls: list[dict]) -> dict:
 
     event_end = event_start + timedelta(days=effective_duration - 1)
 
-    window_start = event_start - timedelta(days=WINDOW_PRE_DAYS)
-
-    if duration > WINDOW_LONG_DURATION_THRESHOLD:
-        window_end = event_end + timedelta(days=WINDOW_POST_LONG_DAYS)
-        window_note = f"Long event ({duration}d) — post window capped at +{WINDOW_POST_LONG_DAYS}d"
+    if late_window:
+        # Skip crawls from the immediate post-event period (already covered by standard run)
+        window_start = event_end + timedelta(days=WINDOW_LATE_SKIP_DAYS)
+        window_end   = event_end + timedelta(days=WINDOW_LATE_POST_DAYS)
+        window_note  = (f"Late window: +{WINDOW_LATE_SKIP_DAYS}d to +{WINDOW_LATE_POST_DAYS}d "
+                        f"after event_end — targets delayed CC indexing")
     else:
-        window_end = event_end + timedelta(days=WINDOW_POST_DAYS)
-        window_note = ""
+        window_start = event_start - timedelta(days=WINDOW_PRE_DAYS)
+        if duration > WINDOW_LONG_DURATION_THRESHOLD:
+            window_end = event_end + timedelta(days=WINDOW_POST_LONG_DAYS)
+            window_note = f"Long event ({duration}d) — post window capped at +{WINDOW_POST_LONG_DAYS}d"
+        else:
+            window_end = event_end + timedelta(days=WINDOW_POST_DAYS)
+            window_note = ""
 
     # --- Overlap check ---
     matching = []
@@ -203,11 +214,13 @@ def check_crawl_coverage(event_row: pd.Series, crawls: list[dict]) -> dict:
     }
 
 
-def run_crawl_lag_check(df: pd.DataFrame, crawls: list[dict]) -> pd.DataFrame:
-    log.info("--- Stage 0a: Crawl lag check ---")
+def run_crawl_lag_check(df: pd.DataFrame, crawls: list[dict],
+                        late_window: bool = False) -> pd.DataFrame:
+    mode = "LATE" if late_window else "STANDARD"
+    log.info(f"--- Stage 0a: Crawl lag check ({mode} window) ---")
     results = []
     for _, row in df.iterrows():
-        result = check_crawl_coverage(row, crawls)
+        result = check_crawl_coverage(row, crawls, late_window=late_window)
         status_label = result["coverage_status"]
         log.info(f"  Flood #{result['flood_id']:>3}  {status_label:<10}  {result['note']}")
         results.append(result)
@@ -218,9 +231,10 @@ def run_crawl_lag_check(df: pd.DataFrame, crawls: list[dict]) -> pd.DataFrame:
     if no_crawl:
         log.warning(f"NO_CRAWL events (will be excluded from query specs): {no_crawl}")
 
-    out_path = BASE_OUTPUT_DIR / "crawl_coverage.parquet"
+    fname    = "crawl_coverage_late.parquet" if late_window else "crawl_coverage.parquet"
+    out_path = BASE_OUTPUT_DIR / fname
     coverage_df.to_parquet(out_path, index=False)
-    log.info(f"Saved crawl_coverage -> {out_path}")
+    log.info(f"Saved {fname} -> {out_path}")
     return coverage_df
 
 
@@ -651,12 +665,19 @@ def main():
         help="Rebuild location_dictionary.parquet only (no network calls). Use after "
              "fixing parse_location_field without re-running the full pipeline."
     )
+    parser.add_argument(
+        "--late-window", action="store_true",
+        help=(f"Use delayed crawl window (+{WINDOW_LATE_SKIP_DAYS}d to +{WINDOW_LATE_POST_DAYS}d "
+              f"after event_end) to capture articles indexed by CCBot 2-5 months post-event. "
+              f"Writes crawl_coverage_late.parquet instead of crawl_coverage.parquet.")
+    )
     args = parser.parse_args()
 
     log.info("=" * 70)
     log.info("STAGE 00 — PRE-FLIGHT SETUP")
     log.info(f"Window rule version : {WINDOW_RULE_VERSION}")
     log.info(f"Mode                : {'ALL events' if args.all else 'PILOT events only'}")
+    log.info(f"Window type         : {'LATE (+{}-+{}d post-event)'.format(WINDOW_LATE_SKIP_DAYS, WINDOW_LATE_POST_DAYS) if args.late_window else 'STANDARD'}")
     log.info("=" * 70)
 
     # ------------------------------------------------------------------
@@ -693,7 +714,7 @@ def main():
     crawls   = parse_crawl_windows(collinfo)
     log.info(f"Parsed {len(crawls)} crawl windows from collinfo")
 
-    coverage_df = run_crawl_lag_check(df, crawls)
+    coverage_df = run_crawl_lag_check(df, crawls, late_window=args.late_window)
 
     # Summary
     summary = coverage_df["coverage_status"].value_counts().to_dict()

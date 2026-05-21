@@ -90,8 +90,11 @@ def load_domain_list() -> dict:
 
 def load_stage00_outputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Load the three parquet files produced by stage_00."""
+    import os as _os
+    cc_fname = ("crawl_coverage_late.parquet"
+                if _os.getenv("PIPELINE_LATE_WINDOW") else "crawl_coverage.parquet")
     paths = {
-        "crawl_coverage":       BASE_OUTPUT_DIR / "crawl_coverage.parquet",
+        "crawl_coverage":       BASE_OUTPUT_DIR / cc_fname,
         "language_assignments": BASE_OUTPUT_DIR / "language_assignments.parquet",
         "location_dictionary":  BASE_OUTPUT_DIR / "location_dictionary.parquet",
     }
