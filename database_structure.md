@@ -7,10 +7,13 @@
 
 ## Overview
 
-The pipeline transforms two raw inputs — a curated flood event registry and a web archive — into a structured analytical dataset of verified flood news articles. Data flows through nine sequential stages, each producing an intermediate file. The primary key linking all datasets is `flood_id`.
+The full pipeline has two phases. **Phase 1 (flood-pipeline)** extracts and verifies flood news articles from Common Crawl through nine sequential stages. **Phase 2 (NLP-model)** takes the verified articles and applies NLP analysis to score each article for actionability, source authority, news framing, and semantic clustering. The primary key linking all datasets across both phases is `flood_id` / `article_id`.
 
 ```
 EM-DAT Flood Registry (269 events)
+        │
+        ▼
+Stage 00 → crawl_coverage, language_assignments, location_dictionary
         │
         ▼
 Stage 01 → event_query_specs      (search parameters per flood)
@@ -22,19 +25,38 @@ Stage 02 → cc_index_hits          (Common Crawl URL candidates)
 Stage 03 → validated_pointers     (deduplicated, valid WARC pointers)
         │
         ▼
-Stage 04 → WARC downloads         (raw HTML archives)
+Stage 04 → WARC downloads         (raw HTML archives, cached locally)
         │
         ▼
-Stage 05 → extracted_text         (plain text from HTML)
+Stage 05 → extracted_text         (plain text from HTML via trafilatura)
         │
         ▼
 Stage 06 → clean_text             (deduplicated, keyword-filtered articles)
         │
         ▼
-Stage 09 → model_event_articles   (ML-classified articles)
+Stage 09 → model_event_articles   (SetFit ML classifier + post-filter)
         │
         ▼
-     verified_articles_clean.csv  (final analytical dataset — 388 articles)
+  verified_articles_clean.csv     (388 verified articles — pipeline output)
+        │
+        ▼  ◄─── NLP-model submodule begins here
+        │
+  NLP: preprocessing              (sentence splitting, language normalisation)
+        │
+        ▼
+  NLP: actionability              (imperative scoring, short/long-term, SRL, tense)
+        │
+        ▼
+  NLP: authority                  (source scope, credibility tier, Global N/S)
+        │
+        ▼
+  NLP: framing                    (Entman 1993 — impact/response/accountability/recovery)
+        │
+        ▼
+  NLP: clustering                 (LaBSE embeddings, UMAP, BERTopic topic modelling)
+        │
+        ▼
+  enriched.csv                    (final analytical dataset with all NLP scores)
 ```
 
 ---
@@ -59,7 +81,7 @@ Stage 09 → model_event_articles   (ML-classified articles)
 | `Language_ISO_639_3` | String | Primary language(s) of the country |
 | `Local_Languages` | String | Additional local languages |
 
-**Distribution:** 38 of 269 floods (14%) yielded verified articles; 231 floods had no coverage in the pipeline (see Missingness section).
+**Distribution:** 25 of 269 floods (9%) yielded verified articles in the latest model run; 244 floods have no articles (see Missingness section).
 
 ---
 
@@ -275,49 +297,58 @@ The analytical dataset shared with the research group. Contains only verified fl
 
 ---
 
-## 5. Missingness: Why 231 Floods Have No Articles
+## 5. Missingness: Why 244 Floods Have No Articles
 
 | Dropout stage | Floods | Explanation |
 |---------------|--------|-------------|
-| No CC extraction (never crawled) | 218 | Flood not included in a batch run, or CC index returned 0 hits for those event/date/keyword combinations |
-| Extracted but model rejected all | 13 | Articles scored high by ML (mean prob 0.955) but rejected by post-filter `strict_domain_no_flood_title` (mainly texastribune.org, eltiempo.com archive pages) |
-| **Passed — in final dataset** | **38** | **14% of all 269 floods** |
+| 0 CC hits (queried, nothing returned) | 192 | All 269 floods were queried. CC index returned no matching URLs for these events despite CC having crawled the time window |
+| Got hits but failed extraction | 26 | URLs found but WARC download / text extraction produced nothing usable |
+| Extracted but model/filter rejected all | 26 | Clean text produced but ML classifier or post-filter rejected every article |
+| **Passed — in final dataset** | **25** | **9% of all 269 floods** |
 
-The `output/missingness_analysis.csv` file records the dropout stage for all 269 floods.
+The `output/missingness_analysis.csv` file records the dropout stage for all 269 floods. See `missingness_report.md` for the full statistical analysis (MCAR/MAR/MNAR tests).
 
 ---
 
 ## 6. Key Relationships Between Files
 
 ```
-verified_floods.csv (269 rows)
+flood_crawl.csv / verified_floods.csv   (269 flood events — master registry)
     │ flood_id (PK)
-    ├──► event_query_specs.parquet       (flood_id FK)
-    ├──► cc_index_hits.parquet           (flood_id FK)
-    │         │ hit_id
+    ├──► event_query_specs.parquet       (flood_id FK — one row per flood×crawl query)
+    ├──► cc_index_hits.parquet           (flood_id FK — CC URL candidates)
+    │         │
     │         ▼
     │    validated_pointers.parquet      (flood_id FK, pointer_id PK)
-    │         │ pointer_id
+    │         │
     │         ▼
-    │    clean_text_cluster.parquet      (flood_id FK, doc_id PK)
+    │    clean_text_cluster.parquet      (flood_id FK, doc_id PK — 12,175 articles)
     │         │ url
     │         ▼
-    │    model_event_articles_multi.csv  (flood_id FK)
-    │         │ url
+    │    model_event_articles_multi.csv  (flood_id FK — all ML-scored articles)
+    │         │ url / article_id
     │         ▼
-    └──► verified_articles_clean.csv     (flood_id FK, article_id PK)
+    └──► verified_articles_clean.csv     (flood_id FK, article_id PK — 388 articles)
+                │
+                │  ◄── NLP-model takes this as input
+                │ article_id / flood_id
+                ▼
+         NLP-model/output/enriched.csv   (article_id PK — full NLP scores)
 ```
 
-The `url` column serves as a secondary join key between `clean_text_cluster.parquet`, `model_event_articles_multi.csv`, and `verified_articles_clean.csv`.
+Join keys:
+- `flood_id` links EM-DAT events across all pipeline files
+- `url` links `clean_text_cluster` → `model_event_articles_multi` → `verified_articles_clean`
+- `article_id` links `verified_articles_clean` → `enriched.csv`
 
 ---
 
-## 7. ML Classifier
+## 7. ML Classifier (Stage 09)
 
 **Model:** SetFit fine-tuned on `paraphrase-multilingual-mpnet-base-v2` (HuggingFace)  
-**Training data:** 1,904 manually and Claude-labeled examples across 4 annotation batches  
-- Batch 1–3: hand-labeled by team members  
-- Batch 4: 430 examples (Claude-labeled), covering flood IDs 228–268  
+**Training data:** 1,904 manually and Claude-labeled examples across 4 annotation batches
+- Batch 1–3: hand-labeled by team members
+- Batch 4: 430 examples (Claude-labeled), covering flood IDs 228–268
 
 **Label distribution:** 822 positive (flood event articles) / 1,082 negative  
 **Architecture:** Sentence-transformer backbone + logistic regression classification head  
@@ -326,4 +357,99 @@ The `url` column serves as a secondary join key between `clean_text_cluster.parq
 
 ---
 
-*Generated: 2026-05-22 | Pipeline repository: flood-pipeline (main branch)*
+## 8. NLP Analysis Phase (NLP-model submodule)
+
+**Repository:** `github.com/Lenap0911/NLP-model`  
+**Input:** `verified_articles_clean.csv` (388 articles, 25 floods)  
+**Output:** `NLP-model/output/enriched.csv` (same 388 rows + all NLP score columns)  
+**Entry point:** `python run_nlp_pipeline.py --input data/verified_articles_clean.csv`
+
+The NLP pipeline runs four analytical modules in sequence:
+
+### 8a. Preprocessing (`nlp/preprocessing.py`)
+Prepares text for downstream analysis.
+- Sentence splitting using spaCy sentencizer
+- Language normalisation (ISO 639-3 → spaCy model mapping)
+- Produces article-level and sentence-level dataframes
+
+### 8b. Actionability (`nlp/actionability.py`)
+Scores each article for actionability across multiple dimensions, grounded in Mostafiz et al. (2022), Zade et al. (2018), and Jurafsky (2014) semantic role labelling.
+
+| Output column | Type | Description |
+|--------------|------|-------------|
+| `imperative_score` | Float | Count of imperative sentences (direct instructions) |
+| `imperative_count` | Integer | Raw imperative sentence count |
+| `short_term_score` | Float | Short-term actionability — immediate survival actions (evacuate, prepare) |
+| `short_term_count` | Integer | Raw short-term keyword count |
+| `long_term_score` | Float | Long-term actionability — recovery/resilience actions (rebuild, insure) |
+| `long_term_count` | Integer | Raw long-term keyword count |
+| `spatial_score` | Float | Geographic specificity of actionable content (location mentions in action sentences) |
+| `spatial_count` | Integer | Raw spatial reference count |
+| `actionability_score` | Float | Composite actionability score (weighted combination of above) |
+| `has_agent` | Boolean | SRL: article contains an identifiable agent (WHO) |
+| `has_action` | Boolean | SRL: article contains a concrete action (WHAT) |
+| `has_location` | Boolean | SRL: article contains a location reference (WHERE) |
+| `srl_complete` | Boolean | All three SRL dimensions present (agent + action + location) |
+| `top_locations` | String | Named location entities found in actionable sentences |
+| `top_orgs` | String | Named organisation entities |
+| `past_tense` | Integer | Count of past-tense sentences |
+| `present_tense` | Integer | Count of present-tense sentences |
+| `future_tense` | Integer | Count of future-tense sentences |
+| `past_tense_ratio` | Float | Proportion of past-tense sentences (high = descriptive/reporting bias) |
+
+### 8c. Authority (`nlp/authority.py`)
+Classifies the source authority of each article based on its domain, grounded in Gordon (2000) and Khawaja et al. (2025) Global North/South media framing.
+
+| Output column | Type | Description |
+|--------------|------|-------------|
+| `scope` | String | `government` \| `national` \| `regional` \| `local` \| `ngo` |
+| `scope_score` | Float | Numeric authority weight per scope tier |
+| `credibility_tier` | String | Credibility classification of the source domain |
+| `authority_score` | Float | Composite source authority score |
+| `global_region` | String | `Global North` \| `Global South` (based on country, from config) |
+
+### 8d. Framing (`nlp/framing.py`)
+Detects dominant news frame per article using Entman's (1993) four-frame model applied to multilingual keyword lexicons (EN/ES/PT).
+
+| Output column | Type | Description |
+|--------------|------|-------------|
+| `frame_impact_score` | Float | Emphasis on casualties, damage, displacement |
+| `frame_response_score` | Float | Emphasis on rescue, evacuation, aid delivery |
+| `frame_accountability_score` | Float | Emphasis on government failure, policy, warnings missed |
+| `frame_recovery_score` | Float | Emphasis on reconstruction, resilience, long-term planning |
+| `dominant_frame` | String | Highest-scoring frame for the article |
+| `frame_diversity` | Float | Entropy across all four frame scores (high = multi-frame article) |
+
+### 8e. Clustering (`nlp/clustering.py`)
+Generates multilingual semantic embeddings and clusters articles by topic using BERTopic.
+
+| Output column | Type | Description |
+|--------------|------|-------------|
+| `embed_text` | String | Combined text used for embedding (title + first sentences) |
+| `umap_cluster` | Integer | UMAP 2D cluster assignment |
+| `topic_id` | Integer | BERTopic topic label (−1 = outlier) |
+
+**Embedding model:** LaBSE (Language-Agnostic BERT Sentence Embeddings) — produces language-neutral 768-dim vectors, enabling cross-lingual comparison of EN/ES/PT articles  
+**Cached at:** `NLP-model/output/labse_embeddings_cache.npz`
+
+### Final output — `NLP-model/output/enriched.csv`
+
+One row per article (388 rows). All columns from `verified_articles_clean.csv` plus every NLP score column listed above. This is the dataset used for the final quantitative analysis comparing actionability across languages, source types, and Global North/South contexts.
+
+---
+
+## 9. Complementary Data Collection (`NLP-model/complementary/`)
+
+A secondary, targeted web scraping pipeline that supplements Common Crawl with direct RSS polling and Wayback Machine archive scraping. Designed to fill coverage gaps for floods with 0 CC hits.
+
+**Components:**
+- `scraper/rss_poller.py` — polls RSS feeds from approved regional outlets (e.g. G1 Brazil, Agencia EFE, El Tiempo Colombia)
+- `scraper/archive_scraper.py` — retrieves articles via Wayback Machine CDX API
+- `scraper/news_scraper.py` — direct HTTP scraping with trafilatura extraction
+- `config/outlets.json` — curated list of approved news domains per country
+
+**Output:** `complementary/output/` — supplementary articles in the same schema as `verified_articles_clean.csv`, ready to be merged and run through the NLP pipeline.
+
+---
+
+*Generated: 2026-05-22 | Pipeline: flood-pipeline (main) + NLP-model submodule (Lenap0911/NLP-model)*
