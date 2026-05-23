@@ -470,7 +470,12 @@ def main() -> None:
 
     # --- Save parquet ---
     if not args.no_save:
-        df.to_parquet(parquet_path, index=False)
+        # Drop raw_text before writing to reduce memory pressure — it's already in
+        # the upstream clean_text.parquet from stage_06v and doesn't need to be
+        # duplicated here with the added model columns.
+        save_df = df.drop(columns=["raw_text"], errors="ignore")
+        save_df.to_parquet(parquet_path, index=False)
+        del save_df
         log.info("")
         log.info("clean_text.parquet updated with model columns.")
     else:

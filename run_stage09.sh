@@ -15,7 +15,7 @@
 #SBATCH --time=4:00:00
 #SBATCH --partition=rome
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=64G
+#SBATCH --mem=128G
 #SBATCH --account=cpuuva006
 
 set -e
