@@ -20,6 +20,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import gc
 import importlib.util
 import logging
 import re as _re
@@ -364,11 +365,13 @@ def prepare_texts(df: pd.DataFrame) -> list[str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run ML flood article classifier")
-    parser.add_argument("--threshold",  type=float, default=0.50,    help="Probability threshold (default 0.50)")
-    parser.add_argument("--pilot",      action="store_true",          help="Restrict to PILOT_FLOOD_IDS")
-    parser.add_argument("--batch-size", type=int,   default=64,       help="Inference batch size (default 64)")
-    parser.add_argument("--no-save",    action="store_true",          help="Dry-run: print stats only")
-    parser.add_argument("--nlp-gate",   action="store_true",
+    parser.add_argument("--threshold",       type=float, default=0.50, help="Probability threshold (default 0.50)")
+    parser.add_argument("--pilot",           action="store_true",      help="Restrict to PILOT_FLOOD_IDS")
+    parser.add_argument("--batch-size",      type=int,   default=64,   help="Inference batch size (default 64)")
+    parser.add_argument("--no-save",         action="store_true",      help="Dry-run: print stats only")
+    parser.add_argument("--flood-id-start",  type=int,   default=None, help="Process only floods >= this ID (for splitting large runs)")
+    parser.add_argument("--flood-id-end",    type=int,   default=None, help="Process only floods <= this ID (for splitting large runs)")
+    parser.add_argument("--nlp-gate",        action="store_true",
                         help="Combine classifier with NLP-model signals (srl_complete + dominant_frame)")
     args = parser.parse_args()
 
@@ -376,14 +379,29 @@ def main() -> None:
     log.info("Stage 09 — ML Article Classification")
     log.info("=" * 60)
 
-    # --- Load data ---
+    # --- Load data (exclude raw_text to reduce peak memory) ---
     parquet_path = OUTPUT_DIR / "clean_text.parquet"
     if not parquet_path.exists():
         log.error("clean_text.parquet not found — run stage_06v first")
         sys.exit(1)
 
-    df = pd.read_parquet(parquet_path)
-    log.info("Loaded clean_text.parquet: %d rows", len(df))
+    try:
+        import pyarrow.parquet as _pq
+        _schema = _pq.read_schema(parquet_path)
+        _load_cols = [c for c in _schema.names if c != "raw_text"]
+    except Exception:
+        _load_cols = None  # fallback: load all columns
+
+    df = pd.read_parquet(parquet_path, columns=_load_cols)
+    log.info("Loaded clean_text.parquet: %d rows, %d columns (raw_text excluded)",
+             len(df), len(df.columns))
+
+    # --- Flood-ID range filter (for splitting large runs across multiple SLURM jobs) ---
+    if args.flood_id_start is not None or args.flood_id_end is not None:
+        lo = args.flood_id_start or df["flood_id"].min()
+        hi = args.flood_id_end   or df["flood_id"].max()
+        df = df[df["flood_id"].between(lo, hi)].copy()
+        log.info("Flood-ID range %d–%d: %d rows", lo, hi, len(df))
 
     # --- Pilot filter ---
     pilot_ids = getattr(_cfg, "PILOT_FLOOD_IDS", None)
@@ -408,6 +426,13 @@ def main() -> None:
     log.info("Classifying %d articles (batch_size=%d, threshold=%.2f)...",
              n, args.batch_size, args.threshold)
 
+    try:
+        import torch as _torch
+        _no_grad = _torch.no_grad()
+        _no_grad.__enter__()
+    except ImportError:
+        _no_grad = None
+
     all_probs: list[float] = []
     for start in range(0, n, args.batch_size):
         batch = texts[start : start + args.batch_size]
@@ -418,9 +443,18 @@ def main() -> None:
             elapsed = time.time() - t0
             rate    = done / elapsed if elapsed > 0 else 0
             log.info("  %d / %d  (%.0f art/s)", done, n, rate)
+        # Release any lingering tensors every 50 batches
+        if (start // args.batch_size) % 50 == 49:
+            gc.collect()
+
+    if _no_grad is not None:
+        _no_grad.__exit__(None, None, None)
+    del texts
+    gc.collect()
 
     df_with_text["model_flood_prob"]       = np.array(all_probs, dtype=np.float32)
     df_with_text["model_is_event_article"] = df_with_text["model_flood_prob"] >= args.threshold
+    del all_probs
 
     # Drop old model columns to avoid _x/_y suffix conflicts on re-run
     for col in ["model_flood_prob", "model_is_event_article"]:
@@ -434,6 +468,8 @@ def main() -> None:
         how="left",
     )
     df["model_is_event_article"] = df["model_is_event_article"].fillna(False)
+    del df_with_text
+    gc.collect()
 
     # --- Optional NLP gate ---
     if args.nlp_gate:
@@ -469,15 +505,16 @@ def main() -> None:
             log.info("    Flood %3d : %d", fid, cnt)
 
     # --- Save parquet ---
-    if not args.no_save:
-        # Drop raw_text before writing to reduce memory pressure — it's already in
-        # the upstream clean_text.parquet from stage_06v and doesn't need to be
-        # duplicated here with the added model columns.
-        save_df = df.drop(columns=["raw_text"], errors="ignore")
-        save_df.to_parquet(parquet_path, index=False)
-        del save_df
+    _split_mode = args.flood_id_start is not None or args.flood_id_end is not None
+    if not args.no_save and not _split_mode:
+        # Only overwrite clean_text.parquet in full-run mode to avoid partial overwrites.
+        # raw_text was already excluded on load so no need to drop it again.
+        df.to_parquet(parquet_path, index=False)
+        gc.collect()
         log.info("")
         log.info("clean_text.parquet updated with model columns.")
+    elif _split_mode:
+        log.info("Split mode: skipping clean_text.parquet overwrite (CSVs only).")
     else:
         log.info("--no-save: parquet not written")
 
@@ -509,7 +546,14 @@ def main() -> None:
 
         # Scope tag for file names
         flood_ids = df["flood_id"].unique()
-        scope = f"flood_{flood_ids[0]}" if len(flood_ids) == 1 else "multi"
+        if args.flood_id_start is not None or args.flood_id_end is not None:
+            lo = args.flood_id_start or int(df["flood_id"].min())
+            hi = args.flood_id_end   or int(df["flood_id"].max())
+            scope = f"multi_{lo}_{hi}"
+        elif len(flood_ids) == 1:
+            scope = f"flood_{flood_ids[0]}"
+        else:
+            scope = "multi"
         if args.nlp_gate:
             scope += "_nlp"
 
