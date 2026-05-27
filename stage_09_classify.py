@@ -486,7 +486,7 @@ def main() -> None:
 
     log.info("")
     log.info("=== Stage 09 Results ===")
-    log.info("  Articles classified           : %d", len(df_with_text))
+    log.info("  Articles classified           : %d", n)
     log.info("  model_is_event_article=True   : %d  (%.1f%%)",
              n_model, 100 * n_model / max(len(df), 1))
     if "combined_is_event_article" in df.columns:
