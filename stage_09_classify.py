@@ -453,6 +453,16 @@ def main() -> None:
     del texts
     gc.collect()
 
+    # Free transformer weights — inference is done, model is no longer needed.
+    # Reclaims ~1–2 GB before the merge and CSV write phases.
+    del model
+    gc.collect()
+    try:
+        import torch as _torch
+        _torch.cuda.empty_cache()
+    except ImportError:
+        pass
+
     df_with_text["model_flood_prob"]       = np.array(all_probs, dtype=np.float32)
     df_with_text["model_is_event_article"] = df_with_text["model_flood_prob"] >= args.threshold
     del all_probs
