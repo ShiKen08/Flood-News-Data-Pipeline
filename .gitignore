@@ -14,6 +14,8 @@ raw_index_responses/
 # --- Trained model weights (too large for git — use scp to transfer) ---
 classifier/model/
 classifier/model_new/
+classifier/model_old_labse/
+classifier/model_v2_backup/
 
 # --- Large file types ---
 *.warc
@@ -60,3 +62,6 @@ Thumbs.db
 
 # --- Project files not for repo ---
 *.pdf
+*.docx
+*.pptx
+*.xlsx

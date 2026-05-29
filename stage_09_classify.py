@@ -24,6 +24,7 @@ import gc
 import importlib.util
 import logging
 import re as _re
+import regex as _rgx
 import sys
 import time
 from collections import Counter
@@ -129,17 +130,17 @@ def apply_nlp_gate(df: pd.DataFrame, nlp: "pd.DataFrame") -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Post-classification filter — rule-based removal of systematic false positives
 # ---------------------------------------------------------------------------
-_COVID_TERMS = _re.compile(
+_COVID_TERMS = _rgx.compile(
     r"\b(covid[-\s]?19|coronavirus|pandemia|cuarentena|contagios|vacuna(?:ci[oó]n)?)\b",
-    _re.IGNORECASE,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_FLOOD_TERMS = _re.compile(
+_FLOOD_TERMS = _rgx.compile(
     r"\b(inundaci[oó]n|inundaç[aã]o|lluvia|crecida|desborde|huaico|enchente|"
     r"alagamento|flood|riada|temporal|tormenta|deslizamiento|desbordamiento|"
     r"precipitaci[oó]n|encharcamiento|emergencia\s+h[íi]drica|inundaciones|"
     r"lluvias|chuvas|enchentes|alagou|transbordou|desbordó|invernal|"
     r"ola\s+invernal|crecientes|avenida|riada|aguacero|aguaceros|cheia|cheias)\b",
-    _re.IGNORECASE,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
 _WEATHER_PAGE      = _re.compile(r"Weather\s*\|\s*Forecast Conditions|Traffic\s*\|\s*Road Conditions", _re.I)
 _STAFF_PROFILE     = _re.compile(r"Staff Personalities", _re.I)
@@ -148,7 +149,7 @@ _CEMADEN_ADMIN     = _re.compile(
     r"Escolas participam|promove palestra|recebe estagiár|lança edital",
     _re.I,
 )
-_CEMADEN_FORECAST  = _re.compile(r"Previsão de Risco Geo-Hidrológico", _re.I)
+_CEMADEN_FORECAST  = _rgx.compile(r"Previsão de Risco Geo-Hidrológico", _rgx.IGNORECASE | _rgx.UNICODE)
 _PORTAL_PAGE       = _re.compile(
     r"^Noticias\s*::\s*|Consejo de Representantes|Notas de Prensa COVID|"
     r"\|\s*OCHA\s*$|Rumo aos \d+ anos",
@@ -159,46 +160,46 @@ _NON_ARTICLE       = _re.compile(
     r"\bArchives\b\s*$",
     _re.I,
 )
-_FORECAST_ES_PT    = _re.compile(
+_FORECAST_ES_PT    = _rgx.compile(
     r"\b(pronóstico|previsão do tempo|forecast\s+today|previsão.*semana|"
     r"tempo.*próximos|previsiones?\s+del\s+tiempo|clima\s+de\s+hoy)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_CLIMATE_POLICY    = _re.compile(
+_CLIMATE_POLICY    = _rgx.compile(
     r"\b(cambio\s+climático|climate\s+change|mudança\s+climática|"
     r"desarrollo\s+sostenible|planejamento\s+urbano|política\s+ambiental|"
     r"greenhouse\s+gas|emisiones?\s+de\s+CO2)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_FIRE_NOT_FLOOD    = _re.compile(
+_FIRE_NOT_FLOOD    = _rgx.compile(
     r"\b(incendio|wildfire|bushfire|forest\s+fire|incêndio)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_DISEASE_NOT_FLOOD = _re.compile(
+_DISEASE_NOT_FLOOD = _rgx.compile(
     r"\b(dengue|influenza|gripe\s+aviar|saramp[ií]on|polio|cólera|hepatitis|"
     r"ébola|fiebre\s+amarilla|malaria|chikungunya|aftosa)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_CRIME_NOT_FLOOD   = _re.compile(
+_CRIME_NOT_FLOOD   = _rgx.compile(
     r"\b(narco|narcovuelo|droga|cartel|balacera|asesin|homicid|secuestr|"
     r"extors|crimen\s+organizado|guerrill|FARC|ELN|CJNG|Sinaloa)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_MINING_NOT_FLOOD  = _re.compile(
+_MINING_NOT_FLOOD  = _rgx.compile(
     r"\b(miner[íi]a\s+de\s+oro|mina\s+de\s+oro|minero\s+ilegal|minería\s+ilegal|"
     r"aluvial\s+mining|garimpo|mine\s+disaster|tailings\s+dam|mine\s+tailings|"
     r"mount\s+polley)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
 _EARTHQUAKE_NOT_FLOOD = _re.compile(
     r"\b(earthquake|seismic|seismograph|temblor|terremoto|sismo)\b",
     _re.I,
 )
-_WATER_SCARCITY    = _re.compile(
+_WATER_SCARCITY    = _rgx.compile(
     r"\b(falta\s+de\s+agua|escasez\s+de\s+agua|sequ[íi]a|drought)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
-_FOREIGN_FLOOD     = _re.compile(
+_FOREIGN_FLOOD     = _rgx.compile(
     r"\b(na\s+China|en\s+China|in\s+China|"
     r"na\s+[IÍ]ndia|en\s+India|in\s+India|"
     r"no\s+Paquistão|en\s+Pakistán|in\s+Pakistan|"
@@ -207,7 +208,7 @@ _FOREIGN_FLOOD     = _re.compile(
     r"en\s+Bangladesh|in\s+Bangladesh|"
     r"en\s+Filipinas|in\s+Philippines|"
     r"en\s+Indonesia|in\s+Indonesia)\b",
-    _re.I,
+    _rgx.IGNORECASE | _rgx.UNICODE,
 )
 # Domains where the model over-fires — require explicit flood vocabulary in title.
 # Also checked against the URL directly to handle domain-parsing artefacts
@@ -523,9 +524,28 @@ def main() -> None:
         import csv as _csv
         from urllib.parse import urlparse
 
+        # Resolve all df-dependent values before freeing the full dataframe
         filter_col = "combined_is_event_article" if "combined_is_event_article" in df.columns \
                      else "model_is_event_article"
+        nlp_cols   = ["combined_is_event_article", "nlp_srl_complete", "nlp_dominant_frame"] \
+                     if "combined_is_event_article" in df.columns else []
+
+        flood_ids = df["flood_id"].unique()
+        if args.flood_id_start is not None or args.flood_id_end is not None:
+            lo = args.flood_id_start or int(df["flood_id"].min())
+            hi = args.flood_id_end   or int(df["flood_id"].max())
+            scope = f"multi_{lo}_{hi}"
+        elif len(flood_ids) == 1:
+            scope = f"flood_{flood_ids[0]}"
+        else:
+            scope = "multi"
+        if args.nlp_gate:
+            scope += "_nlp"
+
+        # Extract positives then free the 13k-row full dataframe immediately
         event_df = df[df[filter_col].fillna(False)].copy()
+        del df
+        gc.collect()
 
         # Load country metadata
         flood_csv = ROOT / "data" / "flood_crawl.csv"
@@ -544,19 +564,6 @@ def main() -> None:
         # Round probability for readability
         event_df["model_flood_prob"] = event_df["model_flood_prob"].round(4)
 
-        # Scope tag for file names
-        flood_ids = df["flood_id"].unique()
-        if args.flood_id_start is not None or args.flood_id_end is not None:
-            lo = args.flood_id_start or int(df["flood_id"].min())
-            hi = args.flood_id_end   or int(df["flood_id"].max())
-            scope = f"multi_{lo}_{hi}"
-        elif len(flood_ids) == 1:
-            scope = f"flood_{flood_ids[0]}"
-        else:
-            scope = "multi"
-        if args.nlp_gate:
-            scope += "_nlp"
-
         # Ordered column list (only include columns that exist)
         base_cols = [
             "flood_id", "country", "url", "domain", "page_title",
@@ -566,9 +573,7 @@ def main() -> None:
             "flood_term_hits", "impact_term_hits", "location_term_hits",
             "word_count", "clean_text",
         ]
-        nlp_cols  = ["combined_is_event_article", "nlp_srl_complete", "nlp_dominant_frame"] \
-                    if "combined_is_event_article" in df.columns else []
-        all_cols  = base_cols + nlp_cols
+        all_cols = base_cols + nlp_cols
 
         # --- 1. Full model-positive CSV (unfiltered, adds post_filter columns) ---
         event_df  = apply_post_filter(event_df)
@@ -581,9 +586,15 @@ def main() -> None:
         full_path = OUTPUT_DIR / f"model_event_articles_{scope}.csv"
         full_out.to_csv(full_path, index=False, quoting=_csv.QUOTE_ALL)
         log.info("Full CSV  -> %s  (%d rows)", full_path, len(full_out))
+        n_full = len(full_out)
+        del full_out
+        gc.collect()
 
         # --- 2. Verified CSV (post-filter pass only, clean columns for analysis) ---
-        verified  = event_df[event_df["post_filter_pass"]].copy()
+        verified = event_df[event_df["post_filter_pass"]].copy()
+        del event_df
+        gc.collect()
+
         # Deduplicate by URL within each flood (keep highest probability row)
         verified  = (verified
                      .sort_values("model_flood_prob", ascending=False)
@@ -601,8 +612,8 @@ def main() -> None:
 
         log.info("")
         log.info("Post-filter removed %d / %d model positives (%.0f%%)",
-                 len(full_out) - len(verified), len(full_out),
-                 100 * (len(full_out) - len(verified)) / max(len(full_out), 1))
+                 n_full - len(verified), n_full,
+                 100 * (n_full - len(verified)) / max(n_full, 1))
 
 
 if __name__ == "__main__":
