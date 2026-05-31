@@ -364,6 +364,149 @@ def prepare_texts(df: pd.DataFrame) -> list[str]:
     return df.apply(_row, axis=1).tolist()
 
 
+def _run_write_only(args) -> None:
+    """
+    --write-only mode: load model_scores.parquet (written by --infer-only) and
+    merge with the full clean_text.parquet to produce the verified CSV outputs.
+    No model is loaded — peak RAM is just two dataframes.
+    """
+    import csv as _csv
+    from urllib.parse import urlparse
+
+    scores_path  = OUTPUT_DIR / "model_scores.parquet"
+    parquet_path = OUTPUT_DIR / "clean_text.parquet"
+
+    log.info("=" * 60)
+    log.info("Stage 09 — Write-only (CSV from pre-computed scores)")
+    log.info("=" * 60)
+
+    if not scores_path.exists():
+        log.error("model_scores.parquet not found — run with --infer-only first")
+        sys.exit(1)
+    if not parquet_path.exists():
+        log.error("clean_text.parquet not found — run stage_06v first")
+        sys.exit(1)
+
+    # Load scores (tiny: 3 cols × 13k rows)
+    scores = pd.read_parquet(scores_path)
+    log.info("Loaded scores: %d rows (%d positives)",
+             len(scores), scores["model_is_event_article"].sum())
+
+    # Load full parquet — no model in memory, so this is fine
+    try:
+        import pyarrow.parquet as _pq
+        _schema = _pq.read_schema(parquet_path)
+        _load_cols = [c for c in _schema.names if c != "raw_text"]
+    except Exception:
+        _load_cols = None
+    df = pd.read_parquet(parquet_path, columns=_load_cols)
+    log.info("Loaded clean_text.parquet: %d rows", len(df))
+
+    # Merge scores onto full data
+    for col in ["model_flood_prob", "model_is_event_article"]:
+        if col in df.columns:
+            df = df.drop(columns=[col])
+    df = df.merge(scores, on="doc_id", how="left")
+    df["model_is_event_article"] = df["model_is_event_article"].fillna(False)
+    del scores
+    gc.collect()
+
+    # Apply NLP gate if requested
+    if args.nlp_gate:
+        nlp = load_nlp_enrichment()
+        if nlp is not None:
+            df = apply_nlp_gate(df, nlp)
+        else:
+            log.warning("--nlp-gate: no enriched CSVs found — skipping gate")
+
+    # Summary
+    n_pos = df["model_is_event_article"].sum()
+    log.info("model_is_event_article=True: %d  (%.1f%%)", n_pos, 100 * n_pos / max(len(df), 1))
+    if "flood_id" in df.columns:
+        per = df.groupby("flood_id")["model_is_event_article"].sum().astype(int)
+        for fid, cnt in per.items():
+            if cnt > 0:
+                log.info("  Flood %3d : %d", fid, cnt)
+
+    # Scope tag
+    flood_ids = df["flood_id"].unique()
+    scope = "multi" if len(flood_ids) > 1 else f"flood_{flood_ids[0]}"
+    if args.nlp_gate:
+        scope += "_nlp"
+
+    filter_col = "combined_is_event_article" if "combined_is_event_article" in df.columns \
+                 else "model_is_event_article"
+    nlp_cols   = ["combined_is_event_article", "nlp_srl_complete", "nlp_dominant_frame"] \
+                 if "combined_is_event_article" in df.columns else []
+
+    # Extract positives then free full df
+    event_df = df[df[filter_col].fillna(False)].copy()
+    del df
+    gc.collect()
+
+    # Country metadata
+    flood_csv = ROOT / "data" / "flood_crawl.csv"
+    if flood_csv.exists():
+        meta = pd.read_csv(flood_csv)[["Flood_ID", "Country"]].rename(
+            columns={"Flood_ID": "flood_id", "Country": "country"}
+        )
+        event_df = event_df.merge(meta, on="flood_id", how="left")
+
+    if "domain" not in event_df.columns or event_df["domain"].isna().all():
+        event_df["domain"] = event_df["url"].fillna("").apply(
+            lambda u: urlparse(u).netloc.lstrip("www.").lower()
+        )
+    if "model_flood_prob" in event_df.columns:
+        event_df["model_flood_prob"] = event_df["model_flood_prob"].round(4)
+
+    base_cols = [
+        "flood_id", "country", "url", "domain", "page_title",
+        "pub_date", "pub_in_window", "language_detected",
+        "model_flood_prob", "model_is_event_article",
+        "is_event_article",
+        "flood_term_hits", "impact_term_hits", "location_term_hits",
+        "word_count", "clean_text",
+    ]
+    all_cols = base_cols + nlp_cols
+
+    # Full CSV
+    event_df  = apply_post_filter(event_df)
+    full_cols = [c for c in all_cols + ["post_filter_pass", "post_filter_reason"]
+                 if c in event_df.columns]
+    full_out  = event_df[full_cols].sort_values(
+        ["flood_id", "model_flood_prob"], ascending=[True, False]
+    ).copy()
+    full_out.insert(0, "doc_num", range(1, len(full_out) + 1))
+    full_path = OUTPUT_DIR / f"model_event_articles_{scope}.csv"
+    full_out.to_csv(full_path, index=False, quoting=_csv.QUOTE_ALL)
+    log.info("Full CSV  -> %s  (%d rows)", full_path, len(full_out))
+    n_full = len(full_out)
+    del full_out
+    gc.collect()
+
+    # Verified CSV
+    verified = event_df[event_df["post_filter_pass"]].copy()
+    del event_df
+    gc.collect()
+
+    verified = (verified
+                .sort_values("model_flood_prob", ascending=False)
+                .drop_duplicates(subset=["flood_id", "url"], keep="first"))
+    if "clean_text" in verified.columns:
+        verified["clean_text"] = verified["clean_text"].apply(_sanitize_text)
+    ver_cols = [c for c in all_cols if c in verified.columns]
+    verified = verified[ver_cols].sort_values(
+        ["flood_id", "model_flood_prob"], ascending=[True, False]
+    ).copy()
+    verified.insert(0, "doc_num", range(1, len(verified) + 1))
+    ver_path = OUTPUT_DIR / f"model_event_articles_{scope}_verified.csv"
+    verified.to_csv(ver_path, index=False, quoting=_csv.QUOTE_ALL)
+    log.info("Verified CSV -> %s  (%d rows)", ver_path, len(verified))
+    log.info("Post-filter removed %d / %d positives (%.0f%%)",
+             n_full - len(verified), n_full,
+             100 * (n_full - len(verified)) / max(n_full, 1))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run ML flood article classifier")
     parser.add_argument("--threshold",       type=float, default=0.50, help="Probability threshold (default 0.50)")
@@ -374,35 +517,64 @@ def main() -> None:
     parser.add_argument("--flood-id-end",    type=int,   default=None, help="Process only floods <= this ID (for splitting large runs)")
     parser.add_argument("--nlp-gate",        action="store_true",
                         help="Combine classifier with NLP-model signals (srl_complete + dominant_frame)")
+    parser.add_argument("--infer-only",      action="store_true",
+                        help="Run inference only; save scores to output/model_scores.parquet and exit. "
+                             "Use with --write-only in a separate job to avoid OOM on CSV write.")
+    parser.add_argument("--write-only",      action="store_true",
+                        help="Skip inference; load output/model_scores.parquet and write CSVs only.")
     args = parser.parse_args()
+
+    if args.infer_only and args.write_only:
+        log.error("--infer-only and --write-only are mutually exclusive")
+        sys.exit(1)
+
+    if args.write_only:
+        _run_write_only(args)
+        return
 
     log.info("=" * 60)
     log.info("Stage 09 — ML Article Classification")
     log.info("=" * 60)
 
-    # --- Load data (exclude raw_text to reduce peak memory) ---
+    # --- Load data ---
     parquet_path = OUTPUT_DIR / "clean_text.parquet"
     if not parquet_path.exists():
         log.error("clean_text.parquet not found — run stage_06v first")
         sys.exit(1)
 
-    try:
-        import pyarrow.parquet as _pq
-        _schema = _pq.read_schema(parquet_path)
-        _load_cols = [c for c in _schema.names if c != "raw_text"]
-    except Exception:
-        _load_cols = None  # fallback: load all columns
+    # Build pyarrow filter for flood-ID range (pushes filter into parquet reader
+    # so only relevant rows are read into RAM — critical for --infer-only splits).
+    _pq_filters = None
+    if args.flood_id_start is not None or args.flood_id_end is not None:
+        _lo_filter = args.flood_id_start or 1
+        _hi_filter = args.flood_id_end   or 999999
+        _pq_filters = [("flood_id", ">=", _lo_filter), ("flood_id", "<=", _hi_filter)]
+        log.info("Parquet filter: flood_id %d–%d", _lo_filter, _hi_filter)
 
-    df = pd.read_parquet(parquet_path, columns=_load_cols)
-    log.info("Loaded clean_text.parquet: %d rows, %d columns (raw_text excluded)",
+    # In --infer-only mode load only the 4 columns needed for inference.
+    # This keeps the dataframe small (no full clean_text column) so that
+    # model + df fits comfortably in 16GB instead of requiring 32GB+.
+    if args.infer_only:
+        _load_cols = ["doc_id", "flood_id", "page_title", "clean_text"]
+        log.info("--infer-only: loading 4 inference columns only")
+    else:
+        try:
+            import pyarrow.parquet as _pq
+            _schema = _pq.read_schema(parquet_path)
+            _load_cols = [c for c in _schema.names if c != "raw_text"]
+        except Exception:
+            _load_cols = None  # fallback: load all columns
+
+    df = pd.read_parquet(parquet_path, columns=_load_cols, filters=_pq_filters)
+    log.info("Loaded clean_text.parquet: %d rows, %d columns",
              len(df), len(df.columns))
 
-    # --- Flood-ID range filter (for splitting large runs across multiple SLURM jobs) ---
+    # --- Flood-ID range (safety re-check after load) ---
     if args.flood_id_start is not None or args.flood_id_end is not None:
-        lo = args.flood_id_start or df["flood_id"].min()
-        hi = args.flood_id_end   or df["flood_id"].max()
+        lo = args.flood_id_start or int(df["flood_id"].min())
+        hi = args.flood_id_end   or int(df["flood_id"].max())
         df = df[df["flood_id"].between(lo, hi)].copy()
-        log.info("Flood-ID range %d–%d: %d rows", lo, hi, len(df))
+        log.info("Flood-ID range %d–%d: %d rows after filter", lo, hi, len(df))
 
     # --- Pilot filter ---
     pilot_ids = getattr(_cfg, "PILOT_FLOOD_IDS", None)
@@ -481,6 +653,19 @@ def main() -> None:
     df["model_is_event_article"] = df["model_is_event_article"].fillna(False)
     del df_with_text
     gc.collect()
+
+    # --- Infer-only: save scores parquet and exit ---
+    # The model is already freed above. Saving only 3 columns keeps memory minimal
+    # and lets a separate --write-only job handle CSV output without the model in RAM.
+    if args.infer_only:
+        scores_path = OUTPUT_DIR / "model_scores.parquet"
+        scores_df = df[["doc_id", "model_flood_prob", "model_is_event_article"]].copy()
+        scores_df.to_parquet(scores_path, index=False)
+        n_pos = scores_df["model_is_event_article"].sum()
+        log.info("--infer-only: scores saved to %s (%d rows, %d positives)",
+                 scores_path, len(scores_df), n_pos)
+        log.info("Run next:  python stage_09_classify.py --write-only  (or sbatch run_stage09_write.sh)")
+        return
 
     # --- Optional NLP gate ---
     if args.nlp_gate:
