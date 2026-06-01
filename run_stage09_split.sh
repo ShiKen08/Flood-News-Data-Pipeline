@@ -1,59 +1,52 @@
 #!/bin/bash
 # ============================================================
-# Flood Pipeline — Stage 09 ML Classification (split SLURM jobs)
+# Flood Pipeline — Stage 09 ML Classification (SLURM array)
 #
-# Splits the 269 floods across 4 parallel jobs to avoid OOM.
-# Each job writes its own verified CSV; merge with:
+# Splits 269 floods into 14 batches of 20 floods each.
+# Each job loads ~1k rows + 2GB model → well under 16GB.
+# PyArrow filter pushdown ensures only the batch rows are read.
+#
+# Submit all 14 jobs with one command:
+#   sbatch run_stage09_split.sh
+#
+# Monitor:
+#   squeue -u $USER
+#
+# After all jobs COMPLETED, merge outputs:
 #   python3 scripts/merge_stage09_splits.py
-#
-# Submit all 4 jobs at once:
-#   bash run_stage09_split.sh
-#
-# Or submit a single range manually:
-#   sbatch --export=ALL,START=1,END=65     run_stage09_split.sh
-#   sbatch --export=ALL,START=66,END=130   run_stage09_split.sh
-#   sbatch --export=ALL,START=131,END=200  run_stage09_split.sh
-#   sbatch --export=ALL,START=201,END=269  run_stage09_split.sh
 # ============================================================
 
-#SBATCH --job-name=flood_s09
-#SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/stage09_split_%j.out
-#SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/stage09_split_%j.err
-#SBATCH --time=2:00:00
+#SBATCH --job-name=s09_split
+#SBATCH --output=/home/scur0742/Flood-News-Data-Pipeline/logs/s09_split_%A_%a.out
+#SBATCH --error=/home/scur0742/Flood-News-Data-Pipeline/logs/s09_split_%A_%a.err
+#SBATCH --array=0-13
+#SBATCH --time=1:00:00
 #SBATCH --partition=rome
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=32G
+#SBATCH --mem=16G
 #SBATCH --account=cpuuva006
 
 set -e
 
 cd /home/scur0742/Flood-News-Data-Pipeline
-
 source /home/scur0742/venv-agent/bin/activate
 
+START=$(( SLURM_ARRAY_TASK_ID * 20 + 1 ))
+END=$(( (SLURM_ARRAY_TASK_ID + 1) * 20 ))
+(( END > 269 )) && END=269
+
 echo "=============================="
+echo "Stage 09 — array task ${SLURM_ARRAY_TASK_ID} / floods ${START}–${END}"
 echo "Running on $(hostname)"
-echo "Python: $(which python)"
-echo "Flood range: ${START:-1} to ${END:-269}"
 echo "Start time: $(date)"
 echo "=============================="
 
 python stage_09_classify.py \
-    --flood-id-start "${START:-1}" \
-    --flood-id-end   "${END:-269}"
+    --flood-id-start "$START" \
+    --flood-id-end   "$END"
 
 echo ""
 echo "=============================="
-echo "Stage 09 split complete (floods ${START:-1}-${END:-269})"
+echo "Task ${SLURM_ARRAY_TASK_ID} complete (floods ${START}–${END})"
 echo "End time: $(date)"
 echo "=============================="
-
-# ---- If run as a script (not sbatch), submit all 4 jobs ----
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]] && [[ -z "$SLURM_JOB_ID" ]]; then
-    echo "Submitting 4 parallel stage_09 split jobs..."
-    sbatch --export=ALL,START=1,END=65     run_stage09_split.sh
-    sbatch --export=ALL,START=66,END=130   run_stage09_split.sh
-    sbatch --export=ALL,START=131,END=200  run_stage09_split.sh
-    sbatch --export=ALL,START=201,END=269  run_stage09_split.sh
-    echo "Submitted. Monitor with: squeue -u \$USER"
-fi
