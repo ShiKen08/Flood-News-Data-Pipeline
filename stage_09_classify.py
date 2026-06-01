@@ -419,6 +419,11 @@ def main() -> None:
         df = df[df["flood_id"].isin(pilot_ids)]
         log.info("Pilot scope (%s): %d rows", pilot_ids, len(df))
 
+    # --- Early exit for empty batches (flood IDs may not be contiguous) ---
+    if len(df) == 0:
+        log.info("No rows in this flood-ID range — nothing to classify, exiting cleanly.")
+        sys.exit(0)
+
     # --- Need text to classify ---
     has_text = df["clean_text"].notna() & (df["clean_text"].str.len() > 50)
     no_text  = (~has_text).sum()
