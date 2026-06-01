@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-Merge the 4 split CSVs from run_stage09_split.sh into combined output files.
+Merge split CSVs from run_stage09_split.sh into combined output files.
 
 Run after all stage_09 split jobs complete:
     python3 scripts/merge_stage09_splits.py
+    python3 scripts/merge_stage09_splits.py --tag late_batch
 """
 
+import argparse
 import csv
 import sys
 from pathlib import Path
@@ -14,9 +16,6 @@ import pandas as pd
 
 ROOT = Path(__file__).parent.parent
 OUTPUT_DIR = ROOT / "output"
-
-SPLIT_PATTERN = "model_event_articles_multi_*_*_verified.csv"
-FULL_PATTERN  = "model_event_articles_multi_*_*.csv"
 
 
 def merge_csvs(pattern: str, out_name: str) -> int:
@@ -38,12 +37,10 @@ def merge_csvs(pattern: str, out_name: str) -> int:
             ["flood_id", "model_flood_prob"], ascending=[True, False]
         )
 
-    # Reassign doc_num
+    # Reassign doc_num (drop old per-split numbering first)
+    if "doc_num" in combined.columns:
+        combined = combined.drop(columns=["doc_num"])
     combined.insert(0, "doc_num", range(1, len(combined) + 1))
-    if "doc_num" in combined.columns[1:]:
-        cols = list(combined.columns)
-        cols = [c for i, c in enumerate(cols) if c != "doc_num" or i == 0]
-        combined = combined[cols]
 
     out_path = OUTPUT_DIR / out_name
     combined.to_csv(out_path, index=False, quoting=csv.QUOTE_ALL)
@@ -52,24 +49,31 @@ def merge_csvs(pattern: str, out_name: str) -> int:
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Merge stage_09 split CSVs")
+    parser.add_argument(
+        "--tag", default="", help="Name tag appended to output files (e.g. late_batch)"
+    )
+    args = parser.parse_args()
+
+    suffix = f"_{args.tag}" if args.tag else ""
+
     print("=" * 60)
     print("Merging stage_09 split outputs")
     print("=" * 60)
 
     n_verified = merge_csvs(
         "model_event_articles_multi_*_*_verified.csv",
-        "model_event_articles_multi_verified.csv",
+        f"model_event_articles_multi_verified{suffix}.csv",
     )
     n_full = merge_csvs(
-        # full files don't have _verified suffix and don't end with a number
-        # pattern: model_event_articles_multi_1_65.csv etc.
         "model_event_articles_multi_[0-9]*_[0-9]*.csv",
-        "model_event_articles_multi.csv",
+        f"model_event_articles_multi{suffix}.csv",
     )
 
     print()
     print(f"Done — {n_verified} verified rows, {n_full} full rows")
-    print("Next: run cleaning pipeline on model_event_articles_multi_verified.csv")
+    out = f"model_event_articles_multi_verified{suffix}.csv"
+    print(f"Next: run cleaning pipeline on {out}")
 
 
 if __name__ == "__main__":
