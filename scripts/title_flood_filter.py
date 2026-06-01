@@ -91,6 +91,8 @@ def main() -> None:
     dropped = df[~df["flood_title"]].drop(columns=["flood_title"]).copy()
 
     # Reassign doc_num
+    if "doc_num" in keep.columns:
+        keep = keep.drop(columns=["doc_num"])
     keep.insert(0, "doc_num", range(1, len(keep) + 1))
 
     keep.to_csv(out_path, index=False, quoting=csv.QUOTE_ALL)
