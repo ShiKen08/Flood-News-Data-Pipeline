@@ -27,7 +27,7 @@ _FLOOD_TITLE = re.compile(
     # --- Portuguese ---
     r"inundaç[aã]o|inundações|enchente|enchentes|alagamento|alagamentos|"
     r"cheia|cheias|enxurrada|enxurradas|"
-    r"chuvas?|temporal|temporais|"
+    r"temporal|temporais|"
     r"deslizamento|deslizamentos|desabamento|desabamentos|desabou|deslizou|"
     r"barragem.rompe|rompimento.de.barragem|ruptura.de.barragem|"
     r"cota.de.alerta|n[íi]vel.do.rio|rio.transbordou|rio.desbordou|"
@@ -37,14 +37,14 @@ _FLOOD_TITLE = re.compile(
     # --- Spanish ---
     r"inundaci[oó]n|inundaciones|encharcamiento|desbordamiento|"
     r"crecida|crecidas|desborde|huaico|huaicos|"
-    r"lluvias?|"
+    r"lluvia[s]?.*(afecta|deja|causa|mata|dej[oó]|caus[oó])|"
     r"deslizamiento|deslizamientos|alud|avalancha|"
     r"alerta.roja|alerta.naranja|"
     r"emergencia.invernal|emergencia.por.lluvia|temporada.de.lluvias|"
     r"evacuaci[oó]n.por|afectados.por.lluvia|"
     r"desbord[oó].el.r[íi]o|r[íi]o.desbord|r[íi]o.creci[oó]|"
-    r"declaratoria.de.desastre|estado.de.emergencia|"
-    r"sitios.inundados|zonas.inundadas|familias.afectadas"
+    r"declaratoria.de.desastre|estado.de.emergencia.*(lluvia|inundac)|"
+    r"sitios.inundados|zonas.inundadas|familias.afectadas.*(lluvia|inundac)"
     r")\b",
     re.IGNORECASE | re.UNICODE,
 )
