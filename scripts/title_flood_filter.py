@@ -27,8 +27,8 @@ _FLOOD_TITLE = re.compile(
     # --- Portuguese ---
     r"inundaç[aã]o|inundações|enchente|enchentes|alagamento|alagamentos|"
     r"cheia|cheias|enxurrada|enxurradas|"
-    r"chuva[s]? forte|chuva[s]? intensa|temporal|chuva[s]? deixa|"
-    r"deslizamento|desabamento|desabou|deslizou|"
+    r"chuvas?|temporal|temporais|"
+    r"deslizamento|deslizamentos|desabamento|desabamentos|desabou|deslizou|"
     r"barragem.rompe|rompimento.de.barragem|ruptura.de.barragem|"
     r"cota.de.alerta|n[íi]vel.do.rio|rio.transbordou|rio.desbordou|"
     r"situa[cç][aã]o.de.emerg[eê]ncia|calamidade.p[úu]blica|"
@@ -37,14 +37,14 @@ _FLOOD_TITLE = re.compile(
     # --- Spanish ---
     r"inundaci[oó]n|inundaciones|encharcamiento|desbordamiento|"
     r"crecida|crecidas|desborde|huaico|huaicos|"
-    r"lluvia[s]?.afecta|lluvia[s]?.deja|lluvia[s]?.causa|lluvia[s]?.mata|"
-    r"deslizamiento|alud|avalancha|"
-    r"alerta.roja|alerta.naranja|alerta.amarilla.*(inundac|lluvia|rio)|"
-    r"emergencia.invernal|emergencia.por.lluvia|"
+    r"lluvias?|"
+    r"deslizamiento|deslizamientos|alud|avalancha|"
+    r"alerta.roja|alerta.naranja|"
+    r"emergencia.invernal|emergencia.por.lluvia|temporada.de.lluvias|"
     r"evacuaci[oó]n.por|afectados.por.lluvia|"
     r"desbord[oó].el.r[íi]o|r[íi]o.desbord|r[íi]o.creci[oó]|"
-    r"declaratoria.de.desastre|estado.de.emergencia.*(lluvia|inundac)|"
-    r"sitios.inundados|zonas.inundadas|familias.afectadas.*(lluvia|inundac)"
+    r"declaratoria.de.desastre|estado.de.emergencia|"
+    r"sitios.inundados|zonas.inundadas|familias.afectadas"
     r")\b",
     re.IGNORECASE | re.UNICODE,
 )
@@ -52,12 +52,16 @@ _FLOOD_TITLE = re.compile(
 # Terms that look flood-related but are NOT (override the above)
 _NOT_FLOOD_TITLE = re.compile(
     r"\b("
-    r"hurac[aá]n|hurricane|ciclone|tif[oó]n|typhoon|tornado|"      # wind storms ≠ floods
-    r"barragem.da.vale|brumadinho|mariana.*samarco|samarco.*mariana|"  # mining dam collapse
+    r"hurac[aá]n|hurricane|ciclone|tif[oó]n|typhoon|tornado|"       # wind storms ≠ floods
+    r"barragem.da.vale|brumadinho|"                                  # mining dam collapse
     r"seca|drought|escasez.de.agua|falta.de.agua|"                  # drought
-    r"inc[eê]ndio|wildfire|queimada|inc[eê]ndios.florestais|"       # fire
+    r"inc[eê]ndio|wildfire|queimada|inc[eê]ndios.florestais|"        # fire
     r"derrame.de.petr[oó]leo|vazamento.de.[oó]leo|mancha.de.[oó]leo|"  # oil spill
-    r"terremoto|sismo|temblor|earthquake|tsunami"                   # seismic
+    r"terremoto|sismo|temblor|earthquake|tsunami|"                   # seismic
+    r"not[íi]cias.do.dia|noticias.del.d[íi]a|"                      # news digests
+    r"virtual.library|shelter.listing|"                              # portal pages
+    r"carnaval|eleic[õo]es|elecci[oó]n|pol[íi]tica|futebol|copa.do.mundo|"  # off-topic
+    r"concurso.nacional|bolsa.de.estudos|mestrado|doutorado"         # institutional
     r")\b",
     re.IGNORECASE | re.UNICODE,
 )
